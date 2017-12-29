@@ -1,0 +1,4 @@
+[submodule "apis/models"]
+	path = apis/models
+	url = git@git.coding.net:Dark_L/models.git
+	branch = master
