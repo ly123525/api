@@ -19,14 +19,16 @@ module V1
 
     mount ::V1::User::UsersAPI
     
-    namespace :doc do
-      formatter :json, ::API::Base::DOCFormatter
-      add_swagger_documentation doc_version: 'v1',
-      info: {
-        title: 'API 文档'
-      }
-      before do
-        header "Cache-control", "maxage=0"
+    if ENV['SERVER_ENV']=='development'
+      namespace :doc do
+        formatter :json, ::API::Base::DOCFormatter
+        add_swagger_documentation doc_version: 'v1',
+        info: {
+          title: 'API 文档'
+        }
+        before do
+          header "Cache-control", "maxage=0"
+        end
       end
     end
   end
