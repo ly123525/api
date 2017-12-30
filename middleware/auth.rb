@@ -21,7 +21,7 @@ module API
       query = params.sort.map do |k, v|
         "#{k}=#{v}" if v.to_s.present?
       end.compact.join('&')
-      Digest::MD5.hexdigest(query + ENV['API_SECRET']).upcase
+      Digest::MD5.hexdigest(ENV['API_SECRET'] + query).upcase
     end
 
     def verify?(params)
