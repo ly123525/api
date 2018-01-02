@@ -31,6 +31,11 @@ I18n.load_path += Dir[File.expand_path(File.dirname(__FILE__)) + "/config/locale
 I18n.config.available_locales += ["zh-CN"]
 I18n.default_locale = :"zh-CN"
 
+# 设置时区
+# http://api.rubyonrails.org/classes/ActiveRecord/Timestamp.html
+ActiveRecord::Base.time_zone_aware_attributes = true 
+ActiveRecord::Base.default_timezone = :local
+
 # 缓存机制
 use Rack::ETag
 # 连接池
