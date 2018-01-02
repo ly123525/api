@@ -10,13 +10,13 @@ gem 'grape', '1.0.1'
 gem 'grape-entity', '0.6.0'
 gem 'mysql2', '0.3.21'
 # 状态机，工作流
-gem 'aasm', '4.0.8'
+gem 'aasm', '4.11.8'
 # 项目部署
 gem 'capistrano', '3.4.0'
 gem 'capistrano-bundler', '1.1.3'
 gem 'capistrano-rvm', '0.1.2'
 # gem 'rspec', '3.1.0'
-# doc
+# api doc
 gem 'grape-swagger', '0.27.0'
 # 软删除
 gem "paranoia", "2.2"
@@ -27,7 +27,7 @@ gem 'require_all', '1.3.3'
 # 控制台
 gem 'rack-console', '1.3.1'
 
-group :development, :testing do
+group :development, :test do
   gem 'pry_debug', '0.0.1'
   gem 'pry-nav', '0.2.4'
 end
