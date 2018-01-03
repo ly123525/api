@@ -10,7 +10,7 @@ gem 'grape', '1.0.1'
 gem 'grape-entity', '0.6.0'
 gem 'mysql2', '0.3.21'
 # 状态机，工作流
-gem 'aasm', '4.11.8'
+gem 'aasm', '4.12.3'
 # 项目部署
 gem 'capistrano', '3.4.0'
 gem 'capistrano-bundler', '1.1.3'

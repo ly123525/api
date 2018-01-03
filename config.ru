@@ -1,14 +1,20 @@
 require 'active_record'
 require 'active_support'
+require 'yaml'
 require 'grape'
 require 'grape-entity'
 require 'require_all'
 require 'grape-swagger'
 require 'rack/cors'
+require 'aasm'
+require 'paranoia'
+require 'rack-console'
+require "./lib/connection"
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
   require 'pry-nav'
 end
+
 
 # 预加载
 require_all 'apis', 'lib', 'middleware'

@@ -9,7 +9,7 @@ module API
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
     end
 
-    private
+    private if ENV['SERVER_ENV']=='production'
     # 签名算法
     # 请求来源(身份)是否合法？
     # 防篡改？
