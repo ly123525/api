@@ -25,4 +25,4 @@ namespace :deploy do
     end
   end
 end
-
+after "deploy", "deploy:passenger:restart"

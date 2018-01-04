@@ -8,5 +8,3 @@ set :deploy_user, 'master'
 server '39.106.190.128', user: 'master', roles: %w{web app db}, port: 22, primary: true
 
 set :deploy_to, "/srv/www/api"
-
-after "deploy", "deploy:passenger:restart"
