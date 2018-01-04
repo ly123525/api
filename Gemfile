@@ -15,6 +15,7 @@ gem 'aasm', '4.12.3'
 gem 'capistrano', '3.4.0'
 gem 'capistrano-bundler', '1.1.3'
 gem 'capistrano-rvm', '0.1.2'
+gem 'capistrano-git-submodule-strategy', '~> 0.1', :github => 'ekho/capistrano-git-submodule-strategy'
 # gem 'rspec', '3.1.0'
 # api doc
 gem 'grape-swagger', '0.27.0'

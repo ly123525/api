@@ -5,6 +5,8 @@ set :application, 'api'
 
 set :scm, :git
 set :repo_url, 'git@git.coding.net:Dark_L/api.git'
+set :git_strategy, Capistrano::Git::SubmoduleStrategy
+set :git_keep_meta, true
 
 set :keep_releases, 5
 
