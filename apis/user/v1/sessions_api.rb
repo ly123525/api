@@ -29,8 +29,7 @@ module V1
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               user = ::Account::User.find_or_create_by!(phone: params[:phone])
               app_error("验证码已超出今日上限", "Captcha out of gauge") if user.login_captchas.today.count>=::Account::Captcha::TODAY_MAX_COUNT
-              captcha = self.today.where(phone: phone).sorted.first
-              app_error("获取验证码过于频繁，请稍后再试", "Captcha out of gauge") if captcha.present? and (captcha.created_at+1.minute)>=Time.now
+              app_error("获取验证码过于频繁，请稍后再试", "Please try again later") if ::Account::Captchas::LoginCaptcha.frequent?(params[:phone])
               captcha = ::Account::Captchas::LoginCaptcha.generate!(user.phone)
               { tips: "验证码已发送，请注意查收#{captcha.code}", user_uuid: user.uuid }
             rescue Exception => ex
