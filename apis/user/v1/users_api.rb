@@ -11,6 +11,7 @@ module V1
           end
           get :personal_center do
             begin
+              binding.pry
               user = ::Account::User.find_uuid(params[:user_uuid])
               present user, with: ::V1::Entities::User::PersonalCenter
             rescue Exception => ex
