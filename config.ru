@@ -39,8 +39,8 @@ I18n.default_locale = :"zh-CN"
 
 # 设置时区
 # http://api.rubyonrails.org/classes/ActiveRecord/Timestamp.html
-ActiveRecord::Base.time_zone_aware_attributes = true 
-ActiveRecord::Base.default_timezone = :local
+# ActiveRecord::Base.time_zone_aware_attributes = true
+# ActiveRecord::Base.default_timezone = :local
 
 # 缓存机制
 use Rack::ETag
