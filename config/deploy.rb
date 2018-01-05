@@ -15,7 +15,7 @@ set :linked_dirs, %w{bin log tmp}
 
 set :use_sudo, false
 
-et :bundle_flags, '--no-binstubs'
+set :bundle_flags, '--no-binstubs'
 
 namespace :deploy do
   namespace :passenger do
