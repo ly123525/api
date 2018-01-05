@@ -4,18 +4,7 @@ module V1
       namespace :user do
         resources :users do
           
-          desc "个人中心" ,
-          headers: {
-            signature: {
-              description: '验证签名',
-              required: true
-            },
-            timestamp: {
-              description: '时间戳',
-              required: true
-            }
-          },
-          consumes: [ 'application/x-www-form-urlencoded' ]
+          desc "个人中心"
           params do
             requires :user_uuid, type: String, desc: '用户UUID'
             requires :token, type: String, desc: '用户访问令牌'
