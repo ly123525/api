@@ -6,5 +6,4 @@ require 'capistrano/deploy'
 require 'capistrano/rvm'
 require 'capistrano/git-submodule-strategy'
 require 'capistrano/bundler'
-require 'capistrano-passenger'
 
