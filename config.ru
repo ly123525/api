@@ -9,6 +9,7 @@ require 'rack/cors'
 require 'aasm'
 require 'paranoia'
 require 'rack-console'
+require 'mysql2'
 require "./lib/connection"
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
