@@ -8,6 +8,8 @@ set :repo_url, 'git@git.coding.net:Dark_L/api.git'
 set :git_strategy, Capistrano::Git::SubmoduleStrategy
 set :git_keep_meta, true
 
+set :passenger_restart_with_touch, true
+
 set :keep_releases, 5
 
 set :linked_files, %w{config/database.yml}
