@@ -129,7 +129,7 @@ DEPENDENCIES
   grape-entity (= 0.6.0)
   grape-swagger (= 0.27.0)
   mail (= 2.6.4)
-  mysql2 (= 0.3.21)
+  mysql2
   paranoia (= 2.2)
   pry-nav (= 0.2.4)
   pry_debug (= 0.0.1)
