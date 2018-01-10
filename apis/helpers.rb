@@ -12,6 +12,13 @@ module Helpers
     app_error("系统错误", "Server error", 500)
   end
 
+  module User
+    def authenticate
+      app_error("无效用户，请重新登录!", "Failed to find the user", 401) if params[:user_uuid].blank? or params[:token].blank?
+    end
+    
+  end
+  
   # def validate_user
 #     begin
 #       user_token = User.find_user_token(params[:user_uuid], request)
