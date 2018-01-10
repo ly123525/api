@@ -19,6 +19,7 @@ module V1
 
     mount ::V1::User::UsersAPI
     mount ::V1::User::SessionsAPI
+    mount ::V1::User::AddressesAPI
     
     if ENV['SERVER_ENV']=='development'
       namespace :doc do
