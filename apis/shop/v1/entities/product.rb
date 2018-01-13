@@ -42,9 +42,6 @@ module V1
         expose :detail_url do |m, o|
           'www.baidu.com'
         end
-        expose :purchasable do |m, o|
-          true
-        end
         expose :need_to_choose_style do | m, o |
           true
         end

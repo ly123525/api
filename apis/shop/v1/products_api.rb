@@ -26,8 +26,7 @@ module V1
               max_quantity: 10, 
               sku: '商品编号：5245',
               original_price: "¥ 50.20",
-              price: "¥ 32.20",
-              purchasable: true
+              price: "¥ 32.20"
             }
           end
         end
