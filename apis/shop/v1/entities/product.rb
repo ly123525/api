@@ -33,6 +33,12 @@ module V1
             {lable: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
           ]
         end
+        expose :style_name do |m, o|
+          "红色 41码"
+        end
+        expose :max_quantity do |m, o|
+          10
+        end 
         expose :detail_url do |m, o|
           'www.baidu.com'
         end
@@ -116,23 +122,6 @@ module V1
               ]
             }
           ]
-        end
-        expose :style_selected do | m, o |
-          {
-            uuid: "ENOIGNE-UEIONGE", 
-            name: "已选: 红色 41码",
-            image: 'http://img.mshishang.com/pics/2015/1118/20151118021532201.jpg',
-            images: ['http://img.mshishang.com/pics/2015/1118/20151118021532201.jpg', 'http://img.mshishang.com/pics/2015/1118/20151118021458225.jpg', 'http://img.mshishang.com/pics/2015/1118/20151118021533631.jpg', 'http://img.mshishang.com/pics/2015/1118/20151118021535767.jpg'],
-            inventory: "库存: 12件",
-            inventory_count: 12, 
-            original_price: "¥ 50.20",
-            price: "¥ 32.20",
-            promotion_infos:
-            [
-              {lable: "优惠", desc: '使用余额支付，每单减2元', scheme: nil},
-              {lable: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
-            ]
-          }
         end
         expose :shop_url do | m, o |
           'www.baidu.com'
