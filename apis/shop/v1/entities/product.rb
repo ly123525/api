@@ -156,7 +156,7 @@ module V1
                 scheme: nil
               }
             ]
-          end
+          }
         end
         expose :share do 
           expose :url do |m, o|
