@@ -94,7 +94,6 @@ module V1
           end
           delete do
             begin
-              binding.pry
               user = ::Account::User.find_uuid(params[:user_uuid])
               user.addresses.find_uuid(params[:uuid]).destroy!
             rescue ActiveRecord::RecordNotFound
