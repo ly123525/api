@@ -26,7 +26,28 @@ module V1
               max_quantity: 10, 
               sku: '商品编号：5245',
               original_price: "¥ 50.20",
-              price: "¥ 32.20"
+              price: "¥ 32.20",
+              styles:
+              [
+                {
+                  category_name: "颜色",
+                  lables: 
+                  [
+                    {lable: "红色", usable: true, selected: true},
+                    {lable: "蓝色", usable: false, selected: false},
+                    {lable: "黄色", usable: false, selected: false}
+                  ]
+                },
+                {
+                  category_name: "尺码",
+                  lables: 
+                  [
+                    {lable: "40", usable: false, selected: false},
+                    {lable: "41", usable: true, selected: true},
+                    {lable: "42", usable: false, selected: false}
+                  ]
+                }
+              ]
             }
           end
         end
