@@ -27,7 +27,9 @@ gem 'mail', '2.6.4'
 gem 'require_all', '1.3.3'
 # 控制台
 gem 'rack-console', '1.3.1'
-
+# aliyun oss 文件上传
+gem 'carrierwave-aliyun', '0.9.0'
+gem 'mini_magick', '4.0.2'
 
 group :development, :test do
   gem 'pry_debug', '0.0.1'

@@ -16,7 +16,6 @@ module V1
           desc "选择款式"
           params do
             optional :user_uuid, type: String, desc: "用户 UUID"
-            requires :style_uuid, type: String, desc: "商品款式 UUID"
             optional :lables, type: Array[String], desc: "url 参数：lables[]=红色&lables[]=41码"
           end
           get :style do
@@ -27,6 +26,7 @@ module V1
               sku: '商品编号：5245',
               original_price: "¥ 50.20",
               price: "¥ 32.20",
+              style_name: "红色 41码",
               styles:
               [
                 {
