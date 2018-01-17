@@ -15,6 +15,10 @@ class BaseUploader < CarrierWave::Uploader::Base
   def store_dir
     "#{model.created_at.strftime("%Y%m")}"
   end
+  
+  def style_url style_name
+    url(thumb: "?x-oss-process=style/#{style_name}")
+  end
 
   protected
   def secure_token

@@ -11,8 +11,8 @@ module V1
           end
           get :personal_center do
             begin
-              user = ::Account::User.find_uuid(params[:user_uuid])
-              present user, with: ::V1::Entities::User::PersonalCenter
+              authenticate_user
+              present @session_user, with: ::V1::Entities::User::PersonalCenter
             rescue Exception => ex
               server_error(ex)
             end
@@ -26,8 +26,8 @@ module V1
           end
           patch :set_head_image do
             begin
-              user = ::Account::User.find_uuid(params[:user_uuid])
-              picture = Picture.find_or_create_by(imageable: user)
+              authenticate_user
+              picture = ::Picture.find_or_create_by(imageable: @session_user)
               picture.update!(image: params[:image])
               nil
             rescue Exception => ex

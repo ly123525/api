@@ -4,18 +4,6 @@ module V1
       namespace :user do 
         resources :sessions do
           
-          helpers do
-            def valid_phone?
-              return if params[:phone].blank?
-              (params[:phone] =~ /^1\d{10}$/).present?
-            end
-            
-            def valid_captcha?
-              return if params[:captcha].blank?
-              (params[:captcha] =~ /^\d{4}$/).present?
-            end
-          end
-          
           desc "获取登录短信验证码"
           params do
             requires :phone, type: String, desc: "手机号"

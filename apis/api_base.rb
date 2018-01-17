@@ -26,6 +26,6 @@ module API
     error_formatter :json, ::API::Base::ErrorFormatter
     
     use ::API::Auth
-    mount ::V1::Base
+    mount ::API::V1
   end
 end

@@ -3,7 +3,9 @@ module V1
     module User 
       class PersonalCenter < Grape::Entity
         expose :nickname
-        expose :image
+        expose :image do |m, o|
+          m.picture.image.style_url('120w') rescue nil
+        end
         expose :sex
         expose :birthday
         expose :motto
