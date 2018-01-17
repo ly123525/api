@@ -3,5 +3,6 @@
 !/log/.keep
 /tmp
 /vendor
+/uploads
 database.yml
 

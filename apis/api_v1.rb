@@ -1,9 +1,9 @@
-module V1
-  class Base < Grape::API
+module API
+  class V1 < Grape::API
 
     version 'v1', :path
 
-    helpers ::Helpers
+    helpers ::APIHelpers
 
     content_type :json, 'application/json; charset=utf8'
     content_type :xml, "text/xml"
