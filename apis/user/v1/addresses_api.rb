@@ -100,12 +100,12 @@ module V1
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '收货地址 UUID'
           end
-          patch do
+          post :use do
             begin
-              user = ::Account::User.find_uuid(params[:user_uuid])
-              user.addresses.find_uuid(params[:uuid]).patch!
-            rescue ActiveRecord::RecordNotFound
-              app_uuid_error
+              authenticate_user
+              address = @session_user.addresses.find_uuid(params[:uuid])
+              user_extra = ::Account::UserExtra.find_or_create_by(user: @session_user)
+              user_extra.update!(address: address)
             rescue Exception => ex
               server_error(ex)
             end

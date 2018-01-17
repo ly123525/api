@@ -9,6 +9,9 @@ module V1
         expose :address 
         expose :mobile 
         expose :is_default
+        expose :current_used do |m, o|
+          m.user_extra.pluck(:id).present?
+        end
       end
     end
   end
