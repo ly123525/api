@@ -103,6 +103,22 @@ module V1
             end
           end
           
+          desc "使用地址"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '收货地址 UUID'
+          end
+          patch do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid])
+              user.addresses.find_uuid(params[:uuid]).patch!
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
           
         
         end
