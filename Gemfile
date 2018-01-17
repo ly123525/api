@@ -28,6 +28,7 @@ gem 'require_all', '1.3.3'
 # 控制台
 gem 'rack-console', '1.3.1'
 
+
 group :development, :test do
   gem 'pry_debug', '0.0.1'
   gem 'pry-nav', '0.2.4'
