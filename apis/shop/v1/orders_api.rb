@@ -9,6 +9,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :style_uuid, type: String, desc: '商品款式 UUID'
+            optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
           end
           get :to_be_confirmed do
             {
