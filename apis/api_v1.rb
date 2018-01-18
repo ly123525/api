@@ -19,8 +19,10 @@ module API
 
     mount ::V1::User::UsersAPI
     mount ::V1::User::SessionsAPI
-    mount ::V1::Shop::ProductsAPI
     mount ::V1::User::AddressesAPI
+    
+    mount ::V1::Shop::ProductsAPI
+    mount ::V1::Shop::OrdersAPI
     
     if ENV['SERVER_ENV']=='development'
       namespace :doc do

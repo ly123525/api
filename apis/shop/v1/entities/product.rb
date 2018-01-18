@@ -126,7 +126,7 @@ module V1
             logo: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1516322006&di=65ee9624697c83b5dcb3292b347d2462&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c2ac57beb18d0000012e7eaa6d19.jpg',
             sales_volume: '已拼单：300件',
             product_count: '商品数量：300件',
-            url: 'www.baidu.com',
+            scheme: 'www.baidu.com',
           }
         end
         expose :products_for_choice do |m, o|
