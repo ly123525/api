@@ -27,7 +27,8 @@ module V1
                 title: '恒都 澳洲牛腩块 500克/袋 草饲牛肉 包邮',
                 style_name: '红色 41码',
                 price: '¥ 30.00',
-                quantity: 'x5',
+                quantity_str: 'x5',
+                quantity: 5,
                 max_quantity: 20
               },
               # coupon: 
@@ -41,6 +42,20 @@ module V1
                 pay_scheme: 'www.baidu.com',
               }
             }
+          end
+          
+          desc "订单列表"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :category, type: String, desc: '按分类查询'
+          end
+          get do
+            [
+              {
+                
+              }
+            ]
           end
         end
       end
