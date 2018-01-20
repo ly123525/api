@@ -48,6 +48,7 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
+            requires :page, type: String, default: 1, desc: '页码'
             optional :category, type: String, desc: "按分类查询，默认为全部，{awaiting_payment: '待付款', scrape_together: '拼单中', waiting_for_delivery: '待发货', waiting_for_received: '待收货', waiting_evaluation: '待评价'}"
           end
           get do
