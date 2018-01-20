@@ -90,6 +90,36 @@ module V1
               ]
             }
           end
+          
+          desc "去催催"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '订单 UUID'
+          end
+          post :hasten do
+            
+          end
+          
+          desc "确认收货"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '订单 UUID'
+          end
+          patch :confirmed do
+            
+          end
+          
+          desc "移除"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '订单 UUID'
+          end
+          delete do
+            
+          end
         end
       end
       
