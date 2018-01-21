@@ -1,4 +1,4 @@
-require "carrierwave"
+# require "carrierwave"
 require "carrierwave-aliyun"
 require "carrierwave/orm/activerecord"
 
