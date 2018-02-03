@@ -1,15 +1,15 @@
 module V1
   module Entities
-    module Shop                  
+    module Mall                  
       class Lable < Grape::Entity
-        expose :lable
+        expose :label
         expose :usable
         expose :selected
       end
                   
       class Style < Grape::Entity
         expose :category_name
-        expose :lables, using: V1::Entities::Shop::Lable
+        expose :labels, using: V1::Entities::Mall::Lable
       end
     end
   end

@@ -10,6 +10,6 @@ set :bundle_without, ['test']
 # 开发、静默
 set :bundle_flags, '--deployment --quiet'
 
-server '39.106.190.128', user: 'master', roles: %w{web app db}, port: 22, primary: true
+server '39.107.86.17', user: 'master', roles: %w{web app db}, port: 22, primary: true
 
 set :deploy_to, "/srv/www/api"

@@ -1,5 +1,5 @@
 module V1
-  module Shop
+  module Mall
     class OrdersAPI < Grape::API
       namespace :shop do
         resources :orders do
@@ -34,9 +34,9 @@ module V1
               # coupon: 
               settlement: {
                 infos: [
-                  {lable: '商品金额', desc: '¥150.00'},
-                  {lable: '优惠', desc: '- ¥20.00'},
-                  {lable: '运费', desc: '+ ¥5.00'}
+                  {label: '商品金额', desc: '¥150.00'},
+                  {label: '优惠', desc: '- ¥20.00'},
+                  {label: '运费', desc: '+ ¥5.00'}
                 ],
                 pay_amount: '¥20.00',
                 pay_scheme: 'www.baidu.com',

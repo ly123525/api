@@ -10,13 +10,10 @@ require 'aasm'
 require 'paranoia'
 require 'rack-console'
 require 'mysql2'
-require "./lib/connection"
-require "./lib/carrierwave"
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
   require 'pry-nav'
 end
-
 
 # 预加载
 require_all 'apis', 'lib', 'middleware'

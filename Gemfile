@@ -31,6 +31,11 @@ gem 'rack-console', '1.3.1'
 gem 'carrierwave-aliyun', '0.9.0'
 gem 'mini_magick', '4.0.2'
 
+# 阿里云短信
+gem 'aliyun-cloud_sms'
+# 微信支付
+gem 'wx_pay'
+
 group :development, :test do
   gem 'pry_debug', '0.0.1'
   gem 'pry-nav', '0.2.4'

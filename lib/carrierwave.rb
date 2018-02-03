@@ -4,11 +4,11 @@ require "carrierwave/orm/activerecord"
 
 CarrierWave.configure do |config|
   config.storage = :aliyun
-  config.aliyun_access_id = ENV['OSS_ACCESS_ID']
-  config.aliyun_access_key = ENV['OSS_ACCESS_KEY']
-  config.aliyun_bucket = ENV['OSS_BUCKET']
+  config.aliyun_access_id = ENV['ALI_ACCESS_ID']
+  config.aliyun_access_key = ENV['ALI_ACCESS_SECRET']
+  config.aliyun_bucket = ENV['ALI_OSS_BUCKET']
   config.aliyun_internal = false
-  config.aliyun_area = ENV['OSS_REGION']
+  config.aliyun_area = ENV['ALI_OSS_REGION']
   # config.aliyun_host = "https://foo.bar.com"
 end
 
