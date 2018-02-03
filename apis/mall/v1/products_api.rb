@@ -10,7 +10,6 @@ module V1
             requires :style_uuid, type: String, desc: '商品款式 UUID'
           end
           get do
-            binding.pry
             style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
             present style.product, with: ::V1::Entities::Mall::Product, style: style
           end
