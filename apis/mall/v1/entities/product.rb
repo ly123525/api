@@ -1,7 +1,7 @@
 module V1
   module Entities
     module Mall
-      class Products < Grape::Entity
+      class ProductsByStyles < Grape::Entity
         expose :image do |m, o|
           m.pictures.sorted.last.image.style_url('480w') rescue nil
         end
@@ -9,10 +9,10 @@ module V1
           m.product.name + " " + m.name
         end
         expose :original_price do |m, o|
-          m.original_price
+          "¥ " + m.original_price.to_s
         end
         expose :price do |m, o|
-          m.price
+          "¥ " + m.price.to_s
         end
         expose :scheme do |m, o|
           "lvsent://gogo.cn/shop/products?style_uuid=#{m.uuid}"
@@ -21,27 +21,57 @@ module V1
       
       class ProductsForChoice < Grape::Entity
         expose :category_bar
-        expose :products, using: ::V1::Entities::Mall::Products
+        expose :products_by_styles, using: ::V1::Entities::Mall::ProductsByStyles
       end
       
-      class Product < Grape::Entity
-        expose :uuid do |m, o|
-          o[:style].uuid
+      class SimpleProduct < Grape::Entity
+        expose :style_uuid do |m, o|
+          o[:style].uuid rescue nil
         end
-        expose :banners do |m, o|
-          o[:style].pictures.map{|picture| picture.image.style_url('480w') } rescue nil
+        expose :image do |m, o|
+          o[:style].pictures.sorted.last.image.style_url('480w') rescue nil
         end
-        expose :title do |m, o|
-          m.name + " " + o[:style].name
+        expose :max_quantity do |m, o|
+          100
         end
-        expose :slogan do |m, o|
-          {content: m.slogan, scheme: nil} if m.slogan.present?
+        expose :sku do |m, o|
+          "商品编号：#{o[:style].sku}" rescue nil
         end
         expose :original_price do |m, o|
-          o[:style].original_price
+          "¥ " + o[:style].original_price.to_s rescue nil
         end
         expose :price do |m, o|
-          o[:style].price
+          "¥ " + o[:style].price.to_s rescue nil
+        end
+        expose :style_name do |m, o|
+          o[:style].name rescue nil
+        end
+        expose :styles do |m, o|
+          o[:styles_for_choice]
+        end
+      end
+      
+      class ProductByStyle < Grape::Entity
+        expose :uuid do |m, o|
+          m.product.uuid
+        end
+        expose :style_uuid do |m, o|
+          m.uuid
+        end
+        expose :banners do |m, o|
+          m.pictures.map{|picture| picture.image.style_url('480w') } rescue nil
+        end
+        expose :title do |m, o|
+          m.product.name + " " + m.name
+        end
+        expose :slogan do |m, o|
+          {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
+        end
+        expose :original_price do |m, o|
+          "¥ " + m.original_price.to_s
+        end
+        expose :price do |m, o|
+          "¥ " + m.price.to_s
         end
         expose :service_note do |m, o|
           [
@@ -50,7 +80,7 @@ module V1
           ]
         end
         expose :sold_count do |m, o|
-          "已拼#{m.sold_count+m.fake_sold_count}件 #{m.mini_purchase_quantity}件起拼"
+          "已拼#{m.product.sold_count+m.product.fake_sold_count}件 #{m.product.mini_purchase_quantity}件起拼"
         end
         expose :promotion_infos do |m, o|
           [
@@ -58,42 +88,49 @@ module V1
             {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
           ]
         end
+        expose :sku do |m, o|
+          "商品编号：#{m.sku}"
+        end
         expose :style_name do |m, o|
-          o[:style].name
+          m.name
         end
         expose :max_quantity do |m, o|
           100
         end 
         expose :detail_url do |m, o|
-          if m.details_url.present?
-            m.details_url
+          if m.product.details_url.present?
+            m.product.details_url
           else
-            "http://39.107.86.17:8080/#/mall/products/details?uuid=#{o[:style].uuid}"
+            "http://39.107.86.17:8080/#/mall/products/details?uuid=#{m.uuid}"
           end
         end
         expose :need_to_choose_style do | m, o |
-          m.styles.size!=1
+          m.product.styles.size!=1
         end
         expose :group_user_size do |m, o|
-          m.fighting_orders.size.to_s
+          m.product.fighting_orders.size.to_s
         end
         expose :groups, using: ::V1::Entities::Mall::FightGroups do |m, o|
-          m.fight_groups.waiting.not_expired.sorted
+          m.product.fight_groups.waiting.not_expired.sorted
         end
         expose :comments_count do |m, o|
-          m.comments.count
+          m.product.comments.count
         end
         expose :rate_good do |m, o|
-          "#{m.rate_good}%"
+          "#{m.product.rate_good}%"
         end
         expose :comments, using: ::V1::Entities::Mall::Comments do |m, o|
-          m.comments.sorted.limit(4)
+          m.product.comments.sorted.limit(4)
         end
         expose :styles do |m, o|
-          m.styles_for_choice(o[:style].labels)
+          m.product.styles_for_choice(m.labels)
         end
-        expose :shop, using: ::V1::Entities::Mall::Shop
-        expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice
+        expose :shop, using: ::V1::Entities::Mall::Shop do |m, o|
+          m.product.shop
+        end
+        expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
+          {category_bar: nil, products_by_styles: ::Mall::Style.recommended.sorted.limit(10)}
+        end
         expose :share do 
           expose :url do |m, o|
             

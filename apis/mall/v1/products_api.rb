@@ -10,46 +10,31 @@ module V1
             requires :style_uuid, type: String, desc: '商品款式 UUID'
           end
           get do
-            style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
-            present style.product, with: ::V1::Entities::Mall::Product, style: style
+            begin
+              style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
+              present style, with: ::V1::Entities::Mall::ProductByStyle
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
           end
           
           desc "选择款式"
           params do
             optional :user_uuid, type: String, desc: "用户 UUID"
+            requires :uuid, type: String, desc: '商品 UUID'
             optional :labels, type: Array[String], desc: "url 参数：labels[]=红色&labels[]=41码"
           end
           get :style do
-            {
-              uuid: "ENOIGNE-UEIONGE",
-              image: 'http://img.mshishang.com/pics/2015/1118/20151118021532201.jpg',
-              max_quantity: 10,
-              sku: '商品编号：5245',
-              original_price: "¥ 50.20",
-              price: "¥ 32.20",
-              style_name: "红色 41码",
-              styles:
-              [
-                {
-                  category_name: "颜色",
-                  labels: 
-                  [
-                    {label: "红色", usable: true, selected: true},
-                    {label: "蓝色", usable: false, selected: false},
-                    {label: "黄色", usable: false, selected: false}
-                  ]
-                },
-                {
-                  category_name: "尺码",
-                  labels: 
-                  [
-                    {label: "40", usable: false, selected: false},
-                    {label: "41", usable: true, selected: true},
-                    {label: "42", usable: false, selected: false}
-                  ]
-                }
-              ]
-            }
+            begin
+              product = ::Mall::Product.find_uuid(params[:uuid])
+              style = product.get_style_by_labels(params[:labels])
+              styles_for_choice = product.styles_for_choice(params[:labels])
+              present product, with: ::V1::Entities::Mall::SimpleProduct, style: style, styles_for_choice: styles_for_choice
+            rescue Exception => ex
+              server_error(ex)
+            end
           end
         end
       end
