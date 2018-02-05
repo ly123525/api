@@ -29,7 +29,7 @@ module V1
           o[:style].uuid rescue nil
         end
         expose :image do |m, o|
-          o[:style].pictures.sorted.last.image.style_url('480w') rescue nil
+          o[:style].pictures.sorted.last.image.style_url('180w') rescue nil
         end
         expose :max_quantity do |m, o|
           100
@@ -48,6 +48,27 @@ module V1
         end
         expose :styles do |m, o|
           o[:styles_for_choice]
+        end
+      end
+      
+      class ProductsByStyle < Grape::Entity
+        expose :style_uuid do |m, o|
+          m.uuid rescue nil
+        end
+        expose :image do |m, o|
+          m.pictures.sorted.last.image.style_url('240w') rescue nil
+        end
+        expose :original_price do |m, o|
+          "¥ " + o[:style].original_price.to_s rescue nil
+        end
+        expose :price do |m, o|
+          "¥ " + o[:style].price.to_s rescue nil
+        end
+        expose :title do |m, o|
+          m.product.name + " " + m.name
+        end
+        expose :black_label do |m, o|
+          "已失效" if m.deleted?
         end
       end
       
