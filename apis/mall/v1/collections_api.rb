@@ -31,7 +31,7 @@ module V1
           get do
             begin
               authenticate_user
-              present @session_user.mall_styles, with: ::V1::Entities::Mall::ProductsByStyle
+              present @session_user.mall_styles, with: ::V1::Entities::Mall::ProductsByStyles
             rescue Exception => ex
               server_error(ex)
             end

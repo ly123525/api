@@ -28,12 +28,12 @@ module V1
           
         end
         expose :section do |m, o|
-          [{name: "优惠券", scheme: nil, icon: 'http://img.zcool.cn/community/01bc79594e5a9ba8012193a32be580.jpg', dot_display: true },
-          {name: "地址管理", scheme: nil, icon: 'http://img.zcool.cn/community/01bc79594e5a9ba8012193a32be580.jpg', dot_display: false },
-          {name: "足迹", scheme: nil, icon: 'http://img.zcool.cn/community/01bc79594e5a9ba8012193a32be580.jpg', dot_display: false },
-          {name: "官方客服", scheme: nil, icon: 'http://img.zcool.cn/community/01bc79594e5a9ba8012193a32be580.jpg', dot_display: false },
-          {name: "设置", scheme: nil, icon: 'http://img.zcool.cn/community/01bc79594e5a9ba8012193a32be580.jpg', dot_display: false },
-          {name: "收藏", scheme: nil, icon: 'http://img.zcool.cn/community/01bc79594e5a9ba8012193a32be580.jpg', dot_display: true }]
+          [{name: "优惠券", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/coupon_icon.png', dot_display: true },
+          {name: "地址管理", scheme: 'http://39.107.86.17/#/account/addresses', icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/address_icon.png', dot_display: false },
+          {name: "足迹", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/history_icon.png', dot_display: false },
+          {name: "官方客服", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/official_service_icon.png', dot_display: false },
+          {name: "收藏", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/collect_icon.png', dot_display: true },
+          {name: "设置", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/setting_icon.png', dot_display: false }]
         end
       end
     end
