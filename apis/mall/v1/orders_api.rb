@@ -1,7 +1,7 @@
 module V1
   module Mall
     class OrdersAPI < Grape::API
-      namespace :shop do
+      namespace :mall do
         resources :orders do
           
           desc "待确认"

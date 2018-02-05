@@ -1,7 +1,7 @@
 module V1
   module Mall
     class ProductsAPI < Grape::API
-      namespace :shop do
+      namespace :mall do
         resources :products do
           
           desc "商品详情"
