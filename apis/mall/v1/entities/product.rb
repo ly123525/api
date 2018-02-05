@@ -132,7 +132,7 @@ module V1
           {category_bar: nil, products_by_styles: ::Mall::Style.recommended.sorted.limit(10)}
         end
         expose :collected do |m , o|
-          o[user] && m.product.collections.where(user: o[user]).count>0
+          o[:user] && m.product.collections.where(user: o[:user]).count>0
         end
         expose :share do 
           expose :url do |m, o|
