@@ -35,7 +35,8 @@ module V1
               app_error("验证码格式错误，应为4位数字", "Invalid captcha") unless valid_captcha?
               user = ::Account::User.find_or_create_by!(phone: params[:phone])
               app_error("验证码错误", "Invalid captcha") unless user.valid_login_captcha?(params[:captcha])
-              {user_uuid: user.uuid, token: user.login!.token}
+              token = user.login!.token
+              present user, with: ::V1::Entities::User::UserForLogin, token: token
             rescue Exception => ex
               server_error(ex)
             end
