@@ -9,7 +9,7 @@ module V1
         expose :image do |m, o|
           m.picture.image.style_url('120w') rescue 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/head.png?x-oss-process=style/160w'
         end
-        expose :
+        # expose :
       end
       
       class PersonalCenter < Grape::Entity
@@ -43,7 +43,7 @@ module V1
           {name: "地址管理", scheme: 'http://39.107.86.17:8080/#/account/addresses', icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/address_icon.png', dot_display: false },
           {name: "足迹", scheme: 'http://39.107.86.17:8080/#/account/addresses?inner=true', icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/history_icon.png', dot_display: false },
           {name: "官方客服", scheme: 'https://39.107.86.17:8080/#/account/addresses?inner=true', icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/official_service_icon.png', dot_display: false },
-          {name: "收藏", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/collect_icon.png', dot_display: true },
+          {name: "收藏", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64('http://www.baidu.com'), icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/collect_icon.png', dot_display: true },
           {name: "设置", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/setting_icon.png', dot_display: false }]
         end
       end
