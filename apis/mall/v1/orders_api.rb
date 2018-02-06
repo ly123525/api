@@ -12,36 +12,15 @@ module V1
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
           end
           get :to_be_confirmed do
-            {
-              address: {
-                consignee: '收货人：LI',
-                receiving_address: '北京市 通州区 通州北苑'
-              },
-              shop: {
-                name: '店铺名称',
-                logo: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1516322006&di=65ee9624697c83b5dcb3292b347d2462&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c2ac57beb18d0000012e7eaa6d19.jpg',
-                scheme: 'www.baidu.com',
-              },
-              product: {
-                image: 'http://img.mshishang.com/pics/2015/1118/20151118021532201.jpg',
-                title: '恒都 澳洲牛腩块 500克/袋 草饲牛肉 包邮',
-                style_name: '红色 41码',
-                price: '¥ 30.00',
-                quantity_str: 'x5',
-                quantity: 5,
-                max_quantity: 20
-              },
-              # coupon: 
-              settlement: {
-                infos: [
-                  {label: '商品金额', desc: '¥150.00'},
-                  {label: '优惠', desc: '- ¥20.00'},
-                  {label: '运费', desc: '+ ¥5.00'}
-                ],
-                pay_amount: '¥20.00',
-                pay_scheme: 'www.baidu.com',
-              }
-            }
+            begin
+              authenticate_user
+              style = ::Mall::Style.find_uuid(params[:style_uuid])
+              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity]
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
           end
           
           desc "订单列表"
@@ -79,14 +58,14 @@ module V1
                   confirmable: true,
                   inviting_friends_info: nil
                   # 立即支付
-#                   再次购买
-#                   查看物流
-#                   去评价
-#
-#                   邀请好友
-#                   去催催
-#                   确认收货
-#                   删除订单
+                  #                   再次购买
+                  #                   查看物流
+                  #                   去评价
+                  #
+                  #                   邀请好友
+                  #                   去催催
+                  #                   确认收货
+                  #                   删除订单
                 }
               ]
             }

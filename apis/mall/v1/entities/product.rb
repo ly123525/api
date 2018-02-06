@@ -17,20 +17,32 @@ module V1
         expose :price do |m, o|
           "¥ " + m.price.to_s
         end
+        expose :scheme do |m, o|
+          "lvsent://gogo.cn/shop/products?style_uuid=#{m.uuid}"
+        end
       end
       
       class ProductsByStyles < SimpleProduct
         expose :black_label do |m, o|
           "已失效" if m.deleted?
         end
-        expose :scheme do |m, o|
-          "lvsent://gogo.cn/shop/products?style_uuid=#{m.uuid}"
-        end
       end
       
       class ProductsForChoice < Grape::Entity
         expose :category_bar
         expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles
+      end
+      
+      class ProductForOrder < SimpleProduct
+        expose :quantity_str do |m, o|
+          "x" + o[:quantity].to_s
+        end
+        expose :quantity do |m, o|
+          o[:quantity]
+        end
+        expose :max_quantity do |m, o|
+          100
+        end
       end
       
       class ProductForChoice < Grape::Entity

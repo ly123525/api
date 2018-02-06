@@ -9,7 +9,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '商铺 UUID'
-            optional :style_uuid, type: String, desc: '商品 UUID'
+            optional :style_uuid, type: String, desc: '商品款式 UUID'
           end
           get :service do
             begin
