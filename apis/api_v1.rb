@@ -21,6 +21,7 @@ module API
     mount ::V1::User::SessionsAPI
     mount ::V1::User::AddressesAPI
     
+    mount ::V1::Mall::ShopsAPI
     mount ::V1::Mall::ProductsAPI
     mount ::V1::Mall::OrdersAPI
     mount ::V1::Mall::CollectionsAPI
