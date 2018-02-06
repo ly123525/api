@@ -1,6 +1,6 @@
 module V1
   module Entities
-    module Mall                  
+    module Mall                 
       class Shop < Grape::Entity
         expose :name
         expose :logo do |m, o|
@@ -14,6 +14,14 @@ module V1
         end
         expose :scheme do |m, o|
           "http://39.107.86.17/#/mall/shops?uuid=#{m.uuid}"
+        end
+      end
+      
+      class ShopForService < Grape::Entity
+        expose :name
+        expose :hx_user_name
+        expose :product, using: ::V1::Entities::Mall::SimpleProduct do |m, o|
+          o[:product]
         end
       end
     end

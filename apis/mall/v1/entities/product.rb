@@ -1,12 +1,15 @@
 module V1
   module Entities
     module Mall
-      class ProductsByStyles < Grape::Entity
+      class SimpleProduct < Grape::Entity
         expose :image do |m, o|
           m.pictures.sorted.last.image.style_url('480w') rescue nil
         end
         expose :title do |m, o|
-          m.product.name + " " + m.name
+          m.product.name
+        end
+        expose :style_name do |m, o|
+          m.name
         end
         expose :original_price do |m, o|
           "¥ " + m.original_price.to_s
@@ -14,6 +17,9 @@ module V1
         expose :price do |m, o|
           "¥ " + m.price.to_s
         end
+      end
+      
+      class ProductsByStyles < SimpleProduct
         expose :black_label do |m, o|
           "已失效" if m.deleted?
         end
@@ -27,7 +33,7 @@ module V1
         expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles
       end
       
-      class SimpleProduct < Grape::Entity
+      class ProductForChoice < Grape::Entity
         expose :style_uuid do |m, o|
           o[:style].uuid rescue nil
         end

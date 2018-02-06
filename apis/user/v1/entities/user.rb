@@ -9,7 +9,8 @@ module V1
         expose :image do |m, o|
           m.picture.image.style_url('120w') rescue 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/head.png?x-oss-process=style/160w'
         end
-        # expose :
+        expose :hx_user_name
+        expose :hx_password
       end
       
       class PersonalCenter < Grape::Entity

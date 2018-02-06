@@ -36,6 +36,9 @@ gem 'aliyun-cloud_sms'
 # 微信支付
 gem 'wx_pay'
 
+# 环信
+gem 'easemob', '0.3.4'
+
 group :development, :test do
   gem 'pry_debug', '0.0.1'
   gem 'pry-nav', '0.2.4'
