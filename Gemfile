@@ -38,6 +38,10 @@ gem 'wx_pay'
 
 # 环信
 gem 'easemob', '0.3.4'
+# HTTP/REST API client library
+gem 'faraday', '~> 0.14.0'
+# 友盟
+gem 'umeng', '~> 0.2.1'
 
 group :development, :test do
   gem 'pry_debug', '0.0.1'

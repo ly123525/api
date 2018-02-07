@@ -2,7 +2,7 @@ module V1
   module Entities
     module Mall   
       class SimpleShop < Grape::Entity
-        expose :uuid
+        expose :hx_user_name
         expose :name
         expose :logo do |m, o|
           m.picture.image.style_url('120w') rescue nil
@@ -23,7 +23,6 @@ module V1
       
       class ShopForService < Grape::Entity
         expose :name
-        expose :hx_user_name
         expose :product, using: ::V1::Entities::Mall::SimpleProduct do |m, o|
           o[:product]
         end
