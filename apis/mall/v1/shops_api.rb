@@ -14,7 +14,7 @@ module V1
           get :service do
             begin
               authenticate_user
-              shop = ::Mall::Shop.where(hx_user_name: params[:shop_hx_user_name])
+              shop = ::Mall::Shop.where(hx_user_name: params[:shop_hx_user_name]).first || raise(ActiveRecord::RecordNotFound)
               product = shop.styles.find_uuid(params[:style_uuid]) rescue nil
               @session_user.hx_register
               present shop, with: ::V1::Entities::Mall::ShopForService, product: product

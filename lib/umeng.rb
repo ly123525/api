@@ -7,13 +7,6 @@
 #     class << self
 #       # 广播
 #       def push_broadcast opts={}
-#         queue = {plantform_type: 'iOS', data: {title: 'title',content: 'content',information_id: 'information_id',paragraph_id: 'paragraph_id',notification_type: 'information',information_type: 'editor_chosen'}}
-#         abs = {
-#           production_mode: queue_hash[:queue_hash],
-#           display_type: queue_hash[:display_type],
-#           content: queue_hash[:data][:content],
-#           key_value: queue_hash[:data]
-#         }
 #         $umeng_ios.push_broadcast(abs)
 #         $umeng_android.push_broadcast(abs)
 #       end
