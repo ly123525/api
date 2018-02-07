@@ -73,6 +73,23 @@ module V1
               server_error(ex)
             end
           end
+          
+          desc "友盟 Token 绑定"
+          params do
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :umeng_token, type: String, desc: '友盟 token'
+          end
+          patch :umeng_token do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid])
+              user.update!(umeng_token: params[:umeng_token])
+              nil
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
         end
       end
       
