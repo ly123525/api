@@ -14,6 +14,9 @@ module V1
         expose :address, using: ::V1::Entities::Mall::Address do |m, o|
           m.user_extra.address
         end
+        expose :address_scheme do |m, o|
+          'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64('http://39.107.86.17:8080/#/account/addresses')
+        end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
           o[:style].product.shop
         end
