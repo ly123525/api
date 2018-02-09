@@ -14,7 +14,13 @@ module Umeng
         }
       end
       
+      # opts{title, body, scheme}
       def ios_opts opts={}
+        {
+          key_value: {"content": opts},
+          production_mode: true,
+          description: opts[:title]
+        }
       end
       
       # 广播
