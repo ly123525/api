@@ -45,7 +45,7 @@ module V1
             "已完成"
           end
         end
-        expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem
+        expose :order_items, as: :products, using: ::V1::Entities::Mall::ProductByOrderItem
         expose :pay_amount do |m, o|
           "实付 ¥#{m.total_fee}"
         end
