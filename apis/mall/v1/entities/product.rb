@@ -1,6 +1,27 @@
 module V1
   module Entities
     module Mall
+      class ProductByOrderItem < Grape::Entity
+        expose :image do |m, o|
+          m.picture.image.style_url('160w') rescue nil
+        end
+        expose :title do |m, o|
+          m.product_name
+        end
+        expose :style_name do |m, o|
+          m.style_name
+        end
+        expose :price do |m, o|
+          "¥ " + m.total_price.to_s
+        end
+        expose :quantity_str do |m, o|
+          "x#{m.quantity}"
+        end
+        expose :scheme do |m, o|
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
+        end
+      end
+            
       class SimpleProduct < Grape::Entity
         expose :image do |m, o|
           m.pictures.sorted.last.image.style_url('480w') rescue nil
@@ -18,7 +39,7 @@ module V1
           "¥ " + m.price.to_s
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/shop/products?style_uuid=#{m.uuid}"
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
         end
       end
       
