@@ -12,7 +12,7 @@ module V1
       
       class OrderToBeConfirmed < Grape::Entity
         expose :address, using: ::V1::Entities::Mall::Address do |m, o|
-          m.user_extra.address
+          m.user_extra.try(:address)
         end
         expose :address_scheme do |m, o|
           'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64('http://39.107.86.17:8080/#/account/addresses')
