@@ -29,8 +29,8 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :buy_method, type: String, default: 'fight_group', desc: '购买方式', values: ['fight_group', 'buy_now']
-            
             requires :style_uuid, type: String, desc: '商品款式 UUID'
+            optional :fight_group_uuid, type: String, desc: '团购分组的 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
             optional :remark, type: String, desc: '备注'
           end
@@ -41,7 +41,7 @@ module V1
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
               app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
-              order = ::Mall::Order.generate!(params[:buy_method], @session_user, style, params[:quantity], params[:remark])
+              order = ::Mall::Order.generate!(params[:buy_method], fight_group_uuid: fight_group_uuid, @session_user, style, params[:quantity], params[:remark])
               {scheme: 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{order.uuid}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
