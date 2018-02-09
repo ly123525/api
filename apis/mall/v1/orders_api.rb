@@ -29,6 +29,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :buy_method, type: String, default: 'fight_group', desc: '购买方式', values: ['fight_group', 'buy_now']
+            
             requires :style_uuid, type: String, desc: '商品款式 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
             optional :remark, type: String, desc: '备注'
