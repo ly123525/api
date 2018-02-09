@@ -8,6 +8,7 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
+            requires :buy_method, type: String, default: 'fight_group', desc: '购买方式', values: ['fight_group', 'buy_now']
             requires :style_uuid, type: String, desc: '商品款式 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
           end
@@ -15,7 +16,7 @@ module V1
             begin
               authenticate_user
               style = ::Mall::Style.find_uuid(params[:style_uuid])
-              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity]
+              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method]
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

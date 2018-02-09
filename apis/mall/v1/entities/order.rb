@@ -24,7 +24,7 @@ module V1
           o[:style]
         end
         expose :settlement do |m, o|
-          m.settlement_info(o[:style], o[:quantity])
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
         end
       end
     end
