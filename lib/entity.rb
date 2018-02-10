@@ -1,3 +1,4 @@
+require 'grape-entity'
 module API
   module Entities
     Grape::Entity.class_eval do
