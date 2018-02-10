@@ -66,6 +66,22 @@ module V1
             end
           end
           
+          desc "订单详情"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '用户访问令牌'
+          end
+          get :show do
+            begin
+              authenticate_user
+              order = @session_user.orders.find_uuid(params[:uuid])
+              
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
+          
           desc "去催催"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'

@@ -26,6 +26,8 @@ module API
     mount ::V1::Mall::OrdersAPI
     mount ::V1::Mall::CollectionsAPI
     
+    mount ::V1::Choice::ArticlesAPI
+    
     if ENV['SERVER_ENV']=='development'
       namespace :doc do
         formatter :json, ::API::Base::DOCFormatter
