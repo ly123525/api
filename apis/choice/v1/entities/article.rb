@@ -17,6 +17,14 @@ module V1
         expose :laud_good_count do |m, o|
           m.good_lauds.count
         end
+        expose :share do |m, o|
+          {
+            url: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}"),
+            image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
+            title: m.title,
+            summary: m.summary
+          }
+        end
         expose :scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}")
         end
