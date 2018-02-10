@@ -10,8 +10,10 @@ module V1
           end
           get do
             begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              article_ids = user.good_lauds.pluck(:article_id)
               articles = ::Choice::Article.visible.sorted
-              present articles, with: ::V1::Entities::Choice::Articles
+              present articles, with: ::V1::Entities::Choice::Articles, article_ids: article_ids
             rescue Exception => ex
               server_error(ex)
             end
@@ -22,7 +24,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '文章 UUID'
-            optional :cancelled, type: Boolan, default: false, desc: 'true为取消点赞'
+            optional :cancelled, type: Boolean, default: false, desc: 'true为取消点赞'
           end
           put :good do
             begin
@@ -31,7 +33,7 @@ module V1
               if params[:cancelled]
                 article.lauds.where(user: @session_user).destroy_all rescue nil
               else
-                article.lauds.find_or_create_by(user: @session_user).update(type: ::Choice::Lauds::Good)
+                article.lauds.find_or_create_by(user: @session_user).update(type: ::Choice::Lauds::Good.name)
               end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -45,7 +47,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '文章 UUID'
-            optional :cancelled, type: Boolan, default: false, desc: 'true为取消点差'
+            optional :cancelled, type: Boolean, default: false, desc: 'true为取消点差'
           end
           put :bad do
             begin
@@ -54,7 +56,7 @@ module V1
               if params[:cancelled]
                 article.lauds.where(user: @session_user).destroy_all rescue nil
               else
-                article.lauds.find_or_create_by(user: @session_user).update(type: ::Choice::Lauds::Bad)
+                article.lauds.find_or_create_by(user: @session_user).update(type: ::Choice::Lauds::Bad.name)
               end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error

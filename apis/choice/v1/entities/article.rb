@@ -17,6 +17,9 @@ module V1
         expose :laud_good_count do |m, o|
           m.good_lauds.count
         end
+        expose :laud_good do |m, o|
+          o[:article_ids].include?(m.id)
+        end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :share do |m, o|
           {

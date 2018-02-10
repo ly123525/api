@@ -10,7 +10,7 @@ module V1
           m.user.picture.image.style_url('120w') rescue nil
         end
         expose :remainder do |m, o|
-          '还差#{m.residual_quantity}人'
+          "还差#{m.residual_quantity}人"
         end
         expose :remaining_time do |m, o|
           m.expired_at.localtime-Time.now
