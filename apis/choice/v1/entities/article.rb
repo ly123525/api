@@ -2,6 +2,7 @@ module V1
   module Entities
     module Choice
       class Articles < Grape::Entity
+        expose :uuid
         expose :title
         expose :summary
         with_options(format_with: :timestamp) {expose :created_at}
@@ -23,7 +24,7 @@ module V1
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :share do |m, o|
           {
-            url: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}"),
+            url: "http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}",
             image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             title: m.title,
             summary: m.summary
