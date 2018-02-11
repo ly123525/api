@@ -90,6 +90,24 @@ module V1
               server_error(ex)
             end
           end
+          
+          desc "意见反馈"
+          params do
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :token, type: String, desc: '友盟 token'
+            requires :content, type: String, desc: '内容'
+          end
+          post :feedback do
+            begin
+              authenticate_user
+              @session_user.feedbacks.create(content: params[:content])
+              { tips: '感谢您的宝贵意见' }
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
         end
       end
       
