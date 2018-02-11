@@ -12,7 +12,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               article_ids = user.good_lauds.pluck(:article_id)
-              articles = ::Choice::Article.visible.sorted
+              articles = ::Choice::Article.visible.sorted.page(params[:page]).per(10)
               present articles, with: ::V1::Entities::Choice::Articles, article_ids: article_ids
             rescue Exception => ex
               server_error(ex)
@@ -24,7 +24,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '文章 UUID'
-            optional :cancelled, type: Boolean, default: false, desc: 'true为取消点赞'
+            requires :cancelled, type: Boolean, default: false, desc: 'true为取消点赞'
           end
           put :good do
             begin
