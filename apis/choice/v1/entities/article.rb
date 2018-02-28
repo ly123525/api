@@ -1,6 +1,40 @@
 module V1
   module Entities
     module Choice
+      class Article < Grape::Entity
+        expose :uuid
+        expose :title
+        expose :details
+        expose :comments, using: ::V1::Entities::Choice::Comments do |m, o|
+          m.comments.limit(2)
+        end
+        expose :comments_count do |m, o|
+          m.comments.count
+        end
+        expose :laud_good_count do |m, o|
+          m.good_lauds.count
+        end
+        expose :laud_good do |m, o|
+          o[:good_article_ids].include?(m.id)
+        end
+        expose :laud_bad_count do |m, o|
+          m.bad_lauds.count
+        end
+        expose :laud_bad do |m,o|
+          o[:bad_article_ids].include?(m.id)
+        end
+        expose :images do |m, o|
+          m.pictures.map{|picture| picture.image.style_url('480w') } rescue nil
+        end
+        expose :shop, using: ::V1::Entities::Mall::Shop
+        expose :collection_or_not do |m, o|
+          o[:user_ids].include?(o[:user_id])
+        end
+        expose :collections_count do |m, o|
+            m.collections.count
+        end
+      end
+
       class Articles < Grape::Entity
         expose :uuid
         expose :title

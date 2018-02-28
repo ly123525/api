@@ -83,6 +83,28 @@ module V1
               server_error(ex)
             end
           end
+
+          desc "详情页"
+          params do
+            requires :uuid, type: String, desc: '文章 UUID'
+          end
+
+          get 'detail'  do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              article = ::Choice::Article.find_uuid(params[:uuid]) rescue nil
+              good_article_ids = user.good_lauds.pluck(:article_id) rescue []
+              bad_article_ids = user.bad_lauds.pluck(:article_id) rescue []
+              user_ids = article.collections.pluck(:user_id) rescue []
+              user_id = user.id rescue nil
+              present article, with: ::V1::Entities::Choice::Article, good_article_ids: good_article_ids, bad_article_ids: bad_article_ids, user_ids: user_ids, user_id: user_id
+              rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
+
         end
       end
       
