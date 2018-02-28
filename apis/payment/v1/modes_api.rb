@@ -1,4 +1,4 @@
-module A1
+module V1
   module Payment
     class ModesAPI < Grape::API
       namespace :payment do
@@ -26,21 +26,23 @@ module A1
             requires :trade_type, type: String , default: 'APP', values: ['APP', 'JSAPI'], desc: '交易类型'
           end
           post 'wechat_pay' do
-            authenticate_user
             begin
+              authenticate_user
+              order = @session_user.orders.find_uuid(params[:order_uuid])
+              payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_WECHAT)
               pay_params = {
-                body:             '商品：我要卖机油'[0..63],
-                out_trade_no:     'EE232',
-                total_fee:        100,
-                spbill_create_ip: request.remote_id,
+                # body:             '商品：我要卖机油'[0..63],
+                body: payment.trade_no,
+                out_trade_no:     payment.trade_no,
+                total_fee:        (payment.total_fee*100).to_i.to_s,
+                spbill_create_ip: request.ip,
                 notify_url:       ENV['WX_PAY_NOTIFY_URL'],
                 trade_type:       params[:trade_type],
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
-                time_expire:      Time.now+1.hour
+                time_expire:      order.expired_at
               }
               ret = WxPay::Service.invoke_unifiedorder pay_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
-    
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
               r = case params[:trade_type]
               when 'APP' then WxPay::Service::generate_app_pay_req(app_params)
@@ -50,30 +52,9 @@ module A1
               r[:package_value] = package
               r
             rescue ActiveRecord::RecordNotFound
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:对象找不到".red
               app_uuid_error
-            rescue Payment::TradeTypeException => ex
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:无效的交易类型".red
-              app_error("无效的交易类型", ex.message)
-            rescue OrderNoPay => ex
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:订单不能被支付".red
-              app_error("订单不能被支付", ex.message)
-            rescue Payment::CategoryUndefinedException => ex
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:订单类型错误".red
-              app_error("订单类型错误", ex.message)
-            rescue Payment::AmountMismatchException => ex
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:订单金额不正确".red
-              app_error("订单金额不正确", ex.message)
-            rescue Payment::PayMethodUnavailableException => ex
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:支付方式不可用".red
-              app_error("支付方式不可用", ex.message)
             rescue Exception => ex
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Exception:系统错误".red
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Message:#{ex.message}".red
-              puts "API_V10::PaymentsAPI::property::wechat_pay====>Backgrace:#{ex.backtrace}".red
               server_error(ex)
-            ensure
-              puts "API_V10::PaymentsAPI::property::wechat_pay==>END--------------------------------------------------------------------------------------------------".green
             end
           end
           

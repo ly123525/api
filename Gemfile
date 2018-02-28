@@ -31,6 +31,9 @@ gem 'rack-console', '1.3.1'
 gem 'carrierwave-aliyun', '0.9.0'
 gem 'mini_magick', '4.0.2'
 
+gem 'colorize', '0.7.5'
+# 缓存
+gem 'redis', '4.0.1'
 # 分页
 gem 'kaminari', '1.1.1'
 
@@ -38,6 +41,8 @@ gem 'kaminari', '1.1.1'
 gem 'aliyun-cloud_sms'
 # 微信支付
 gem 'wx_pay'
+# 微信授权、获取用户信息、二维码、小程序码
+gem 'weixin_authorize', '1.6.4'
 
 # 环信
 gem 'easemob', '0.3.4'

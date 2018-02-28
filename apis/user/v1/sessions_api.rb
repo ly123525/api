@@ -36,12 +36,30 @@ module V1
               user = ::Account::User.find_or_create_by!(phone: params[:phone])
               app_error("验证码错误", "Invalid captcha") unless user.valid_login_captcha?(params[:captcha])
               token = user.login!.token
+              client_info_record(request, token)
               present user, with: ::V1::Entities::User::UserForLogin, token: token
             rescue Exception => ex
               server_error(ex)
             end
           end
           
+          desc '微信 OAuth2'
+          params do
+            requires :code, type: String, desc: "access_token 票据"
+          end
+          post :wechat_mp_oauth2 do
+            begin
+              access_info = $wx_mp_auth.get_oauth_access_token(params[:code])
+              app_error("获取用户授权失败", 'WX oauth2 access denied') unless access_info.ok?
+              user_info = $wx_mp_auth.get_oauth_userinfo(access_info.result['openid'], access_info.result['access_token'])
+              app_error("获取用户信息失败", 'WX user info access denied') unless user_info.ok?
+              user_and_token = ::Account::User.wx_unionid_login!(user_info.result)
+              client_info_record(request, user_and_token[1])
+              present user_and_token[0], with: ::V1::Entities::User::UserForLogin, token: user_and_token[1]
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
         end
       end
     end

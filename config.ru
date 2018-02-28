@@ -14,6 +14,9 @@ require 'mysql2'
 require 'easemob'
 require 'umeng/client'
 require 'kaminari'
+require 'colorize'
+require "redis"
+require "weixin_authorize"
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
   require 'pry-nav'
