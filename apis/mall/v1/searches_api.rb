@@ -12,8 +12,10 @@ module V1
           get :history do
             begin
               authenticate_user
-              search = ::Searches::MallSearch.order(created_at: :desc)
-              # search.map
+              { 
+                histories: ::Searches::MallSearch.order(created_at: :desc).pluck(:content),
+                recommends: ::SeawrchRecommend.all.pluck(:content)
+              }
             rescue Exception => ex
               server_error(ex)
             end
