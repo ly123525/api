@@ -2,6 +2,3 @@
 	path = apis/models
 	url = git@git.coding.net:Dark_L/models.git
 	branch = master
-[submodule "models"]
-	path = models
-	url = git@git.coding.net:Dark_L/models.git
