@@ -79,7 +79,7 @@ module V1
           'lvsent://gogo.cn/mall/orders/waiting_evaluation' if m.received? and !m.evaluated?
         end
         expose :pay_center_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{m.uuid}") if m.created?
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{m.uuid}").delete("=") if m.created?
         end
         expose :removeable do |m, o|
           m.removeable?
