@@ -44,6 +44,15 @@ module V1
         end
       end
 
+      class ChoiceArticles < Grape::Entity
+        expose :uuid
+        expose :title
+        expose :shop, using: ::V1::Entities::Mall::Shop
+        expose :images do |m, o|
+          m.pictures.map{|picture| picture.image.style_url('480w') } rescue nil
+        end
+      end
+
       class Articles < Grape::Entity
         expose :uuid
         expose :title

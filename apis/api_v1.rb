@@ -30,7 +30,8 @@ module API
     mount ::V1::Mall::SearchesAPI
     
     mount ::V1::Choice::ArticlesAPI
-    
+    mount ::V1::Choice::CollectionsAPI
+    mount ::V1::Choice::CommentsAPI
     if ENV['SERVER_ENV']=='development'
       namespace :doc do
         formatter :json, ::API::Base::DOCFormatter
