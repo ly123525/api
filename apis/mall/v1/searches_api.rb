@@ -27,7 +27,6 @@ module V1
           end
           get do
             begin
-              binding.pry
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               user.mall_searches.find_or_create_by(params[:keywords]) rescue nil
               styles = ::Mall::Style.joins(:product).search(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
