@@ -8,7 +8,7 @@ module V1
           m.picture.image.style_url('120w') rescue nil
         end
         expose :scheme do |m, o| 
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/mall/shops?uuid=#{m.uuid}").delete("=")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/mall/shops?uuid=#{m.uuid}")
         end
       end
                     

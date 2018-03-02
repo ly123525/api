@@ -42,7 +42,7 @@ module V1
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
               app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
               order = ::Mall::Order.generate!(params[:buy_method], params[:fight_group_uuid], @session_user, style, params[:quantity], params[:remark])
-              {scheme: 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{order.uuid}").delete("=")}
+              {scheme: 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{order.uuid}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
