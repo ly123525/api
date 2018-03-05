@@ -24,7 +24,7 @@ module V1
             end
           end
           
-          desc "公鸡下蛋"
+          desc "下单"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'

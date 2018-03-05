@@ -46,6 +46,26 @@ module V1
             "已完成"
           end
         end
+        expose :pay_remaining_time do |m, o|
+          m.expired_at.localtime-Time.now
+        end
+        expose :status_tips do |m, o|
+          if m.closed?
+            "交易关闭"
+          elsif m.created?
+            "待支付"
+          elsif m.fight_group.present? && m.fight_group.waiting?
+            "邀请好友拼单"
+          elsif m.paid?
+            "等待卖家发货"
+          elsif m.delivered?
+            "已发货"
+          elsif m.received?
+            "客官，给个评价吧~"
+          else
+            "已完成"
+          end
+        end
       end
       
       class Orders < Grape::Entity
