@@ -22,7 +22,7 @@ module V1
         end
       end
             
-      class SimpleProduct < Grape::Entity
+      class SimpleProductByStyle < Grape::Entity
         expose :image do |m, o|
           m.pictures.sorted.last.image.style_url('480w') rescue nil
         end
@@ -43,7 +43,7 @@ module V1
         end
       end
       
-      class ProductsByStyles < SimpleProduct
+      class ProductsByStyles < SimpleProductByStyle
         expose :black_label do |m, o|
           "已失效" if m.deleted?
         end
@@ -54,7 +54,7 @@ module V1
         expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles
       end
       
-      class ProductForOrder < SimpleProduct
+      class ProductForOrder < SimpleProductByStyle
         expose :quantity_str do |m, o|
           "x" + o[:quantity].to_s
         end

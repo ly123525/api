@@ -140,37 +140,36 @@ module V1
           end
           patch :cancel do
             # begin
-              # authenticate_user
-#               order = @session_user.orders.find_uuid(params[:uuid])
-#               app_error("该订单无法取消", "Please choose the receiving address") unless order.created?
-#               order.close!
-#               order.update()
-#               nil
+            # authenticate_user
+            #               order = @session_user.orders.find_uuid(params[:uuid])
+            #               app_error("该订单无法取消", "Please choose the receiving address") unless order.created?
+            #               order.close!
+            #               order.update()
+            #               nil
             # rescue ActiveRecord::RecordNotFound
-#               app_uuid_error
-#             rescue Exception => ex
-#               server_error(ex)
-#             end
+            #               app_uuid_error
+            #             rescue Exception => ex
+            #               server_error(ex)
+            #             end
           end
           
           desc "支付成功后，分享页"
           params do 
             requires :uuid, type: String, desc: '订单 UUID'
-          end  
-          get :share do
-            order = ::Mall::Order.find_uuid(params[:uuid]) rescue nil
-            if order.fight_group
+          end
+          get :pay_result do
+            begin
+              order = ::Mall::Order.find_uuid(params[:uuid])
               fight_group = order.fight_group
-              product = fight_group.product
-              present :order, with: ::V1::Entities::Mall::OrderFightGroup, product: product, fight_group: fight_group
-            else
-              product = order.order_items.first
-              present :order, with: ::V1::Entities::Mall::OrderNoFightGroup, product: product
-            end  
+              present :order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
           end  
         end
       end
-      
     end
   end
 end

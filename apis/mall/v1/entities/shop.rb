@@ -23,7 +23,7 @@ module V1
       
       class ShopForService < Grape::Entity
         expose :name
-        expose :product, using: ::V1::Entities::Mall::SimpleProduct do |m, o|
+        expose :product, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
           o[:product]
         end
       end

@@ -1,6 +1,12 @@
 module V1
   module Entities
     module User
+      class SimpleUser < Grape::Entity
+        expose :name
+        expose :image do |m, o|
+          m.picture.image.style_url('120w') rescue 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/head.png?x-oss-process=style/160w'
+        end
+      end  
       class UserForLogin < Grape::Entity
         expose :uuid
         expose :token do |m, o|

@@ -16,19 +16,15 @@ module V1
           m.expired_at.localtime-Time.now
         end
       end 
+        
       
-      class FightGroup < FightGroups
-        expose :status  
-      end   
-      
-      class SuccessFightGroup < Grape::Entity
-        expose :avatar do |m, o|
-          m.picture.image.style_url('120w') rescue 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/head.png?x-oss-process=style/160w'
-        end
-        expose :updated_at    
-        expose :product, using: ::V1::Entities::Mall::SimpleProduct do |m, o|
-          o[:product]
-        end   
+      class FightGroup < Grape::Entity
+        expose :status
+        with_options(format_with: :timestamp) {expose :updated_at}
+        expose :product,  using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
+          m.style
+        end  
+        expose :participants, using: ::V1::Entities::User::SimpleUser   
       end
         
     end

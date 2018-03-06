@@ -131,40 +131,38 @@ module V1
         expose :orders, using: ::V1::Entities::Mall::Orders
       end
       
-      class ShareOrderFightGroup < Grape::Entity
+      class OrderPayResult < Grape::Entity
         expose :title do |m, o|
-          m.name
-        end  
-        expose :image do |m, o|
-          m.image.prcture.image.style_url('160w') rescue nil
-        end  
-        expose :url do |m, o|
-          'www.baidu.com'
-        end  
-        expose :description do |m, o|
-          m.details.truncate(100)
-        end  
-      end  
-      
-      class OrderFightGroup < Grape::Entity
-        expose :fight_group, using: ::V1::Entities::Mall::FightGroup do |m, o|
-          o[:fight_group]
+          if o[:fight_group]
+            "还差#{o[:fight_group].residual_quantity}人，赶快邀请好友拼单吧～"
+          end
         end
-        expose :share, using: ::V1::Entities::Mall::ShareOrderFightGroup do |m, o|
-          o[:product]
-        end  
-      end
-      
-      class OrderNoFightGroup < Grape::Entity
+        expose :desc do |m, o|
+          if o[:fight_group]
+            "拼单人满后立即发货"
+          end
+        end
+        expose :remaining_time do |m, o|
+          o[:fight_group].expired_at.localtime-Time.now
+        end
         expose :share do |m, o|
-          {
-            title: o[:product].name,
-            image: o[:product].image.picture.image.style_url('160w'),
-            url: "http://39.107.86.17:8080/#/mall/products?uuid=#{o[:product].uuid}",
-            description: o[:product].details.truncate(100)
-          } 
+          if o[:fight_group]
+            {
+              title: '我在全民拼选购了商品，赶紧来拼单吧',
+              image: (o[:fight_group].style.prcture.image.style_url('300w') rescue nil),
+              url: 'http://www.baidu.com',
+              description: '快来拼单吧'
+            }
+          else
+            {
+              title: '我在全民拼选购了商品，赶紧来拼单吧',
+              image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
+              url: 'http://39.107.86.17:8080/#/commdoity',
+              description: '快来拼单吧'
+            }
+          end
         end
-      end    
+      end 
         
     end
   end
