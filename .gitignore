@@ -6,4 +6,4 @@
 /uploads
 database.yml
 /.idea/
-
+.DS_Store
