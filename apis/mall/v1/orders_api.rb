@@ -152,6 +152,22 @@ module V1
 #               server_error(ex)
 #             end
           end
+          
+          desc "支付成功后，分享页"
+          params do 
+            requires :uuid, type: String, desc: '订单 UUID'
+          end  
+          get :share do
+            order = ::Mall::Order.find_uuid(params[:uuid]) rescue nil
+            if order.fight_group
+              fight_group = order.fight_group
+              product = fight_group.product
+              present :order, with: ::V1::Entities::Mall::OrderFightGroup, product: product, fight_group: fight_group
+            else
+              product = order.order_items.first
+              present :order, with: ::V1::Entities::Mall::OrderNoFightGroup, product: product
+            end  
+          end  
         end
       end
       

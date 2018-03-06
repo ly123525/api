@@ -130,6 +130,42 @@ module V1
       class OrderList < Grape::Entity
         expose :orders, using: ::V1::Entities::Mall::Orders
       end
+      
+      class ShareOrderFightGroup < Grape::Entity
+        expose :title do |m, o|
+          m.name
+        end  
+        expose :image do |m, o|
+          m.image.prcture.image.style_url('160w') rescue nil
+        end  
+        expose :url do |m, o|
+          'www.baidu.com'
+        end  
+        expose :description do |m, o|
+          m.details.truncate(100)
+        end  
+      end  
+      
+      class OrderFightGroup < Grape::Entity
+        expose :fight_group, using: ::V1::Entities::Mall::FightGroup do |m, o|
+          o[:fight_group]
+        end
+        expose :share, using: ::V1::Entities::Mall::ShareOrderFightGroup do |m, o|
+          o[:product]
+        end  
+      end
+      
+      class OrderNoFightGroup < Grape::Entity
+        expose :share do |m, o|
+          {
+            title: o[:product].name,
+            image: o[:product].image.picture.image.style_url('160w'),
+            url: "http://39.107.86.17:8080/#/mall/products?uuid=#{o[:product].uuid}",
+            description: o[:product].details.truncate(100)
+          } 
+        end
+      end    
+        
     end
   end
 end

@@ -15,15 +15,20 @@ module V1
         expose :remaining_time do |m, o|
           m.expired_at.localtime-Time.now
         end
-        expose :status
-      end
+      end 
       
-      class SuccessFightGroups < Grape::Entity
+      class FightGroup < FightGroups
+        expose :status  
+      end   
+      
+      class SuccessFightGroup < Grape::Entity
         expose :avatar do |m, o|
           m.picture.image.style_url('120w') rescue 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/head.png?x-oss-process=style/160w'
         end
         expose :updated_at    
-        expose :product, using: ::V1::Entities::Mall::SimpleProduct  
+        expose :product, using: ::V1::Entities::Mall::SimpleProduct do |m, o|
+          o[:product]
+        end   
       end
         
     end
