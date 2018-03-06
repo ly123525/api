@@ -24,9 +24,11 @@ module V1
           end
           delete :history do
             begin
-              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              user.mall_searches.destroy_all
+              user = ::Account::User.find_uuid(params[:user_uuid])
+              user.mall_searches.destroy_all 
               true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
             rescue Exception => ex
               server_error(ex)
             end

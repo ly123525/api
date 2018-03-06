@@ -1,17 +1,8 @@
 module V1
   module Entities
     module Mall
-      class Address < Grape::Entity
-        expose :consignee do |m, o|
-          "收货人：#{m.name}"
-        end
-        expose :receiving_address do |m, o|
-          "#{m.province} #{m.city} #{m.region} #{m.address}"
-        end
-      end
-      
       class OrderToBeConfirmed < Grape::Entity
-        expose :address, using: ::V1::Entities::Mall::Address do |m, o|
+        expose :address, using: ::V1::Entities::User::Address do |m, o|
           m.user_extra.try(:address)
         end
         expose :address_scheme do |m, o|
@@ -33,7 +24,7 @@ module V1
           if m.closed?
             "交易关闭"
           elsif m.created?
-            "待支付" 
+            "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中..."
           elsif m.paid?
@@ -52,20 +43,34 @@ module V1
         expose :status_tips do |m, o|
           if m.closed?
             "交易关闭"
-          elsif m.created?
-            "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
             "邀请好友拼单"
           elsif m.paid?
-            "等待卖家发货"
+            "正在准备货品"
           elsif m.delivered?
-            "已发货"
+            "自发货日起，15日后系统将自动确认收货"
           elsif m.received?
             "客官，给个评价吧~"
-          else
-            "已完成"
           end
         end
+        expose :express_company
+        expose :express_info do |m, o|
+          if m.delivered?
+            "点击查看物流信息"
+          elsif m.received? or m.evaluated?
+            "感谢您在全民拼购物，欢迎您再次光临！"
+          end
+        end
+        expose :express_at do |m, o|
+          if m.delivered?
+            Time.now.localtime.strftime('%Y-%m-%d')
+          end
+        end
+        expose :consignee
+        expose :mobile
+        expose :receiving_address
+        expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem
+        # expose :im_scheme
       end
       
       class Orders < Grape::Entity

@@ -21,9 +21,10 @@ module API
     mount ::V1::User::SessionsAPI
     mount ::V1::User::AddressesAPI
     
-    mount ::V1::Payment::ModesAPI
+    mount ::V1::IM::UsersAPI
     
-    mount ::V1::Mall::ShopsAPI
+    mount ::V1::Payment::ModesAPI
+
     mount ::V1::Mall::ProductsAPI
     mount ::V1::Mall::OrdersAPI
     mount ::V1::Mall::CollectionsAPI
@@ -32,6 +33,7 @@ module API
     mount ::V1::Choice::ArticlesAPI
     mount ::V1::Choice::CollectionsAPI
     mount ::V1::Choice::CommentsAPI
+    
     if ENV['SERVER_ENV']=='development'
       namespace :doc do
         formatter :json, ::API::Base::DOCFormatter
