@@ -18,7 +18,7 @@ module V1
                 chat_obj = ::Account::User.where(im_user_name: params[:im_user_name]).first
               end
               @session_user.chats.add_im_chats_obj(chat_obj)
-              { im_nickname: chat_obj.try(:name), im_image: (chat_obj.picture.image.style_url('120w') rescue nil) }
+              { im_nickname: chat_obj.try(:im_nickname), im_image: (chat_obj.picture.image.style_url('120w') rescue nil) }
             rescue Exception => ex
               server_error(ex)
             end
