@@ -34,9 +34,9 @@ module V1
               authenticate_user
               @session_user.chats.map do |chat|
                 {
-                  im_nickname: chat.itme.im_nickname, 
-                  im_image: (chat.itme.picture.image.style_url('120w') rescue nil),
-                  im_user_name: chat.itme.im_user_name
+                  im_nickname: chat.invitee.im_nickname, 
+                  im_image: (chat.invitee.picture.image.style_url('120w') rescue nil),
+                  im_user_name: chat.invitee.im_user_name
                 }
               end
             rescue Exception => ex
