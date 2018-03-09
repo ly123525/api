@@ -29,6 +29,15 @@ module V1
           o[:product]
         end
       end
+      
+      class HomePageOfShop < SimpleShop
+        expose :collections_count do |m, o|
+          m.collections.count  
+        end
+        expose :styles, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
+          o[:styles]
+        end    
+      end  
     end
   end
 end
