@@ -5,6 +5,8 @@ module V1
         resources :services do 
           desc "订单服务单生成"
           params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :order_uuid, type: String, desc: '订单UUID'
             requires :type_of, type: String, values: ['RefundService','ReturnAllService']
             requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
@@ -31,6 +33,8 @@ module V1
           end
           desc "子订单服务单生成"
           params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :order_item_uuid, type: String, desc: '子订单UUID'
             requires :type_of, type: String, values: ['RefundService','ReturnAllService']
             requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
@@ -55,6 +59,8 @@ module V1
           end
           desc "售后详情,选择快递"
           params do 
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
           end        
           get :express do
@@ -69,6 +75,8 @@ module V1
           end
           desc "售后服务提交快递编号"
           params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
             requires :express, type: String, values: ['圆通','申通', '中通','顺丰','韵达','EMS', '宅急送', '天天' ] ,desc: '快递名称'
             requires :express_number, type: String, desc: '快递编号'
@@ -88,6 +96,8 @@ module V1
           end
           desc "售后详情页"
           params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
           end  
           get do
@@ -103,6 +113,8 @@ module V1
           end
           desc "取消申请"
           params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID' 
           end
           delete do
@@ -119,6 +131,8 @@ module V1
           end
           desc "修改申诉"
           params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
             requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
