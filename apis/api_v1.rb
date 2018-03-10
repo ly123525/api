@@ -30,6 +30,9 @@ module API
     mount ::V1::Mall::CollectionsAPI
     mount ::V1::Mall::SearchesAPI
     mount ::V1::Mall::FightGroupsAPI
+    mount ::V1::Mall::ServicesAPI
+    mount ::V1::Mall::ShopsAPI
+    mount ::V1::Mall::IndexsAPI
     
     mount ::V1::Choice::ArticlesAPI
     mount ::V1::Choice::CollectionsAPI
