@@ -3,7 +3,7 @@ module V1
     module Mall
       class Sections < Grape::Entity
         expose :title_bar do |m, o|
-          m.picture.image.style_url('400w') rescue nil
+          {image: m.picture.try(:image).try(:style_url,'400w'), scheme: nil}
         end
         expose :style do |m, o|
           m.type.underscore.split('/').last

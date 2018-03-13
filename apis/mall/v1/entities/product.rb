@@ -191,20 +191,6 @@ module V1
           end
         end
       end
-      class ProductsForMallIndex < Grape::Entity
-        expose :image do |m, o|
-          m.picture.image.style_url('160w') rescue nil
-        end
-        expose :title do |m, o|
-          m.name
-        end  
-        expose  :price do |m, o|
-          "￥"+m.styles.recommended.last.price.to_s rescue nil
-        end  
-        expose  :scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?uuid=#{m.uuid}"
-        end  
-      end  
     end
   end
 end
