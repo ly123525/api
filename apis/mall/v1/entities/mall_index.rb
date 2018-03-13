@@ -19,7 +19,7 @@ module V1
         end
         expose :channels do
           expose :background do |m, o|
-            m.channel_background
+            m.channel_background.style_url('400w') rescue nil 
           end  
           expose :items, using: ::V1::Entities::Mall::Channels do |m, o|
             m.channels
