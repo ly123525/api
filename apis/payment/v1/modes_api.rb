@@ -35,7 +35,7 @@ module V1
                 body: payment.trade_no,
                 out_trade_no:     Time.now.to_i,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
-                spbill_create_ip: request.ip,
+                spbill_create_ip: '127.0.0.1',
                 notify_url:       ENV['WX_OPEN_PAY_NOTIFY_URL'],
                 trade_type:       params[:trade_type],
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
@@ -57,7 +57,24 @@ module V1
               server_error(ex)
             end
           end
+          
+          desc "支付异步回调通知"
+          params do 
             
+          end
+          post :wechat_pay_notify do
+            result = Hash.from_xml(request.body.read)["xml"]
+            if WxPay::Sign.verify?(result)
+              order_no = result['out_trade_no']
+              payment=::Payment.find_by!(trade_no: order_no)
+              payment.update!(paid: true, payment_at: Time.now)
+              order = ::Mall::Order.find_by!(number: order_no)
+              order.pay
+              {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
+            else
+              {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
+            end
+          end      
         end
       end
     end
