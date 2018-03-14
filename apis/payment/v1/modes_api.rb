@@ -71,6 +71,7 @@ module V1
               payment.item.pay
               {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
             else
+              logger.info('false')
               {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
             end
           end      
