@@ -33,7 +33,7 @@ module V1
               pay_params = {
                 # body:             '商品：我要卖机油'[0..63],
                 body: payment.trade_no,
-                out_trade_no:     Time.now.to_i,
+                out_trade_no:     payment.trade_no,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
                 spbill_create_ip: request.ip,
                 notify_url:       ENV['WX_OPEN_PAY_NOTIFY_URL'],
@@ -65,11 +65,9 @@ module V1
           post :wechat_pay_notify do
             result = Hash.from_xml(request.body.read)["xml"]
             if WxPay::Sign.verify?(result)
-              order_no = result['out_trade_no']
-              payment=::Payment.find_by!(trade_no: order_no)
-              payment.update!(paid: true, payment_at: Time.now)
-              order = ::Mall::Order.find_by!(number: order_no)
-              order.pay
+              payment=::Payment.find_by!(trade_no: result['out_trade_no'])
+              payment.update!(paid: true, payment_at: Time.now, out_trade_no: reslut['transaction_id'])
+              payment.item.pay
               {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
             else
               {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
