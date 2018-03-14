@@ -35,7 +35,7 @@ module V1
                 body: payment.trade_no,
                 out_trade_no:     Time.now.to_i,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
-                spbill_create_ip: '127.0.0.1',
+                spbill_create_ip: request.ip,
                 notify_url:       ENV['WX_OPEN_PAY_NOTIFY_URL'],
                 trade_type:       params[:trade_type],
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
