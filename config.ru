@@ -17,6 +17,7 @@ require 'kaminari'
 require 'colorize'
 require "redis"
 require "weixin_authorize"
+require "wx_pay"
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
   require 'pry-nav'

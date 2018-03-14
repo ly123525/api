@@ -33,13 +33,13 @@ module V1
               pay_params = {
                 # body:             '商品：我要卖机油'[0..63],
                 body: payment.trade_no,
-                out_trade_no:     payment.trade_no,
+                out_trade_no:     Time.now.to_i,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
                 spbill_create_ip: request.ip,
-                notify_url:       ENV['WX_PAY_NOTIFY_URL'],
+                notify_url:       ENV['WX_OPEN_PAY_NOTIFY_URL'],
                 trade_type:       params[:trade_type],
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
-                time_expire:      order.expired_at
+                time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
               ret = WxPay::Service.invoke_unifiedorder pay_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
@@ -57,7 +57,7 @@ module V1
               server_error(ex)
             end
           end
-          
+            
         end
       end
     end
