@@ -42,15 +42,16 @@ module V1
                 time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
               ret = WxPay::Service.invoke_unifiedorder pay_params
-              app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
-              app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
-              r = case params[:trade_type]
-              when 'APP' then WxPay::Service::generate_app_pay_req(app_params)
-              when 'JSAPI' then WxPay::Service::generate_js_pay_req(app_params)
-              end
-              package = r.delete(:package)
-              r[:package_value] = package
-              r
+              # app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
+              # app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
+              # r = case params[:trade_type]
+              # when 'APP' then WxPay::Service::generate_app_pay_req(app_params)
+              # when 'JSAPI' then WxPay::Service::generate_js_pay_req(app_params)
+              # end
+              # package = r.delete(:package)
+              # r[:package_value] = package
+              # r
+              ret
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
