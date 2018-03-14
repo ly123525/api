@@ -68,7 +68,7 @@ module V1
               payment=::Payment.find_by(trade_no: result['out_trade_no'])
               payment.update(paid: true, payment_at: Time.now, out_trade_no: result['transaction_id'] )
               # payment.item.pay
-              {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
+              {return_code: "SUCCESS", return_msg: 'OK'}.to_xml(root: 'xml', dasherize: false)
             else
               {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
             end
