@@ -68,6 +68,7 @@ module V1
               logger.info('==========================')
               payment=::Payment.find_by!(trade_no: result['out_trade_no'])
               logger.info(result.to_json)
+              logger.info(result['transaction_id'])
               logger.info('==========================')
               payment.update!(paid: true, payment_at: Time.now)
               payment.item.pay
