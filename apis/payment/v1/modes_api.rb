@@ -67,7 +67,7 @@ module V1
             if WxPay::Sign.verify?(result)
               logger.info('==========================')
               payment=::Payment.find_by!(trade_no: result['out_trade_no'])
-              logger.info(reslut['transaction_id'])
+              logger.info(reslut.to_json)
               logger.info('==========================')
               payment.update!(paid: true, payment_at: Time.now)
               payment.item.pay
