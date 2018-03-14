@@ -66,8 +66,8 @@ module V1
             result = Hash.from_xml(request.body.read)["xml"]
             if WxPay::Sign.verify?(result)
               payment=::Payment.find_by(trade_no: result['out_trade_no'])
-              payment.update!(paid: true, payment_at: Time.now, out_trade_no: result['transaction_id'] )
-              payment.item.pay
+              payment.update(paid: true, payment_at: Time.now, out_trade_no: result['transaction_id'] )
+              # payment.item.pay
               {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
             else
               {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
