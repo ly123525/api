@@ -51,7 +51,7 @@ module V1
               # package = r.delete(:package)
               # r[:package_value] = package
               # r
-              loggor.info(ret.to_s)
+              logger.info(ret.to_s)
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
