@@ -65,13 +65,13 @@ module V1
           post :wechat_pay_notify do
             result = Hash.from_xml(request.body.read)["xml"]
             if WxPay::Sign.verify?(result)
+              a = ::Payment.counter(0)
+              logger.info(a.call)
               payment=::Payment.find_by(trade_no: result['out_trade_no'])
               payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
               payment.item.pay!
               status 200
               # {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
-              a = ::Payment.counter(0)
-              logger.info(a.call)
               present "success"
             else
               # {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
