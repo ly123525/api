@@ -72,7 +72,7 @@ module V1
               payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
               payment.item.pay!
               status 200
-              {return_code: String.class_eval(%Q("\<![CDATA[SUCCESS]]\>")), return_msg: String.class_eval(%Q("<![CDATA[OK]]>"))}
+              "<xml><return_code>SUCCESS</return_code></xml>"
             else
               {return_code: "FAIL", return_msg: "签名失败"}
             end

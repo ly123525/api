@@ -12,10 +12,8 @@ module API
     
     module XMLFormatter
       def self.call object, env
-        xml=object.to_xml.gsub("<hash>\n", "<xml>").gsub("</hash>", "</xml>")
-        xml=xml.gsub("<return-code>", "<return_code>").gsub("</return-code>", "</return_code>")
-        xml=xml.gsub("<return-msg>", "<return_msg>").gsub("</return-msg>", "</return_msg>")
-        xml
+        return object if env["REQUEST_URI"]==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
+        object.to_xml
       end
     end
     
