@@ -10,6 +10,12 @@ module API
       end
     end
     
+    module XMLFormatter
+      def self.call object, env
+        object.to_xml.gsub("<hash>\n", "<xml>").gsub("</hash>", "</xml>")
+      end
+    end
+    
     module ErrorFormatter
       def self.call message, backtrace, options, env, original_exception
         {code: message[:code], tips: message[:tips], error: message[:error], location: env["PATH_INFO"]}.to_json
@@ -23,6 +29,7 @@ module API
     end
     
     formatter :json, ::API::Base::JSONFormatter
+    formatter :xml, ::API::Base::XMLFormatter
     error_formatter :json, ::API::Base::ErrorFormatter
     
     use ::API::Auth
