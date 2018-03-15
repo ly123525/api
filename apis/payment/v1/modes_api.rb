@@ -70,6 +70,8 @@ module V1
               payment.item.pay!
               status 200
               # {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
+              a = ::Payment.counter(0)
+              logger.info(a.call)
               present "success"
             else
               # {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
