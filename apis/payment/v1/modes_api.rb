@@ -63,20 +63,19 @@ module V1
             
           end
           post :wechat_pay_notify do
-            # result = Hash.from_xml(request.body.read)["xml"]
-            # if WxPay::Sign.verify?(result)
-            #   logger.info('==============================================')
-            #   logger.info(result['out_trade_no'])
-            #   logger.info('==============================================')
-            #   payment=::Payment.find_by(trade_no: result['out_trade_no'])
-            #   payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
-            #   payment.item.pay!
-            status 200
-            {return_code: "success"}
-            # else
-            #   # {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
-            #   present 'fail'
-            # end
+            result = Hash.from_xml(request.body.read)["xml"]
+            if WxPay::Sign.verify?(result)
+              logger.info('==============================================')
+              logger.info(result['out_trade_no'])
+              logger.info('==============================================')
+              payment=::Payment.find_by(trade_no: result['out_trade_no'])
+              payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
+              payment.item.pay!
+              status 200
+              {return_code: "success"}
+            else
+              {return_code: "FAIL", return_msg: "签名失败"}
+            end
           end      
         end
       end
