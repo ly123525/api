@@ -1,3 +1,4 @@
+require "logger"
 module API
   class Base < Grape::API
     
@@ -7,6 +8,18 @@ module API
         data = object[:data] || object['data'] || object rescue object
         data = nil if data.blank?
         {code: 200, data: data, tips: tips}.to_json
+      end
+    end
+    
+    module XMLFormatter
+      def self.call object, env
+        logger.info("==================================")
+        logger.info(env["REQUEST_URI"])
+        logger.info("==================================")
+        logger.info(env["WX_OPEN_PAY_NOTIFY_URL"])
+        logger.info("==================================")
+        return object if env["REQUEST_URI"]==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
+        object.to_xml
       end
     end
     
@@ -23,6 +36,7 @@ module API
     end
     
     formatter :json, ::API::Base::JSONFormatter
+    formatter :xml, ::API::Base::XMLFormatter
     error_formatter :json, ::API::Base::ErrorFormatter
     
     use ::API::Auth

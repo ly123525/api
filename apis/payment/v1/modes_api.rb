@@ -36,10 +36,10 @@ module V1
                 out_trade_no:     payment.trade_no,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
                 spbill_create_ip: request.ip,
-                notify_url:       ENV['WX_PAY_NOTIFY_URL'],
+                notify_url:       ENV['WX_OPEN_PAY_NOTIFY_URL'],
                 trade_type:       params[:trade_type],
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
-                time_expire:      order.expired_at
+                time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
               ret = WxPay::Service.invoke_unifiedorder pay_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
@@ -58,6 +58,25 @@ module V1
             end
           end
           
+          desc "支付异步回调通知"
+          params do 
+            
+          end
+          post :wechat_pay_notify do
+            result = Hash.from_xml(request.body.read)["xml"]
+            if WxPay::Sign.verify?(result)
+              logger.info('==============================================')
+              logger.info(result['out_trade_no'])
+              logger.info('==============================================')
+              payment=::Payment.find_by(trade_no: result['out_trade_no'])
+              payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
+              payment.item.pay!
+              status 200
+              "<xml><return_code>SUCCESS</return_code></xml>"
+            else
+              {return_code: "FAIL", return_msg: "签名失败"}
+            end
+          end      
         end
       end
     end
