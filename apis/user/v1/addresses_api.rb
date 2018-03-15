@@ -2,7 +2,7 @@ module V1
   module User
     class AddressesAPI < Grape::API
       namespace :user do
-        resources :addersses do
+        resources :addresses do
           
           desc "添加收货地址"
           params do
