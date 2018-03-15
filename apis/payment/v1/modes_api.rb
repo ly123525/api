@@ -72,7 +72,7 @@ module V1
               payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
               payment.item.pay!
               status 200
-              {return_code: "success"}
+              {return_code: "SUCCESS"}
             else
               {return_code: "FAIL", return_msg: "签名失败"}
             end
