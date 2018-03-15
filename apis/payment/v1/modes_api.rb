@@ -73,10 +73,10 @@ module V1
               payment.item.pay!
               status 200
               # {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
-              present "success"
+              "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
             else
               # {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
-              present 'fail'
+              "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[FAIL]]></return_msg></xml>"
             end
           end      
         end
