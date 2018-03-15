@@ -14,7 +14,7 @@ module API
         Grape::API.logger.info("==================================")
         Grape::API.logger.info(env["REQUEST_URI"])
         Grape::API.logger.info("==================================")
-        Grape::API.logger.info(env["WX_OPEN_PAY_NOTIFY_URL"])
+        Grape::API.logger.info(ENV["WX_OPEN_PAY_NOTIFY_URL"])
         Grape::API.logger.info("==================================")
         return object if env["REQUEST_URI"]==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
         object.to_xml
