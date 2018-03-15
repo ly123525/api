@@ -12,7 +12,10 @@ module API
     
     module XMLFormatter
       def self.call object, env
-        object.to_xml.gsub("<hash>\n", "<xml>").gsub("</hash>", "</xml>")
+        xml=object.to_xml.gsub("<hash>\n", "<xml>").gsub("</hash>", "</xml>")
+        xml=xml.gsub("<return-code>", "<return_code>").gsub("</return-code>", "</return_code>")
+        xml=xml.gsub("<return-msg>", "<return_msg>").gsub("</return-msg>", "</return_msg>")
+        xml
       end
     end
     
