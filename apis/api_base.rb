@@ -1,3 +1,4 @@
+require "logger"
 module API
   class Base < Grape::API
     
@@ -15,7 +16,7 @@ module API
         logger.info("==================================")
         logger.info(env["REQUEST_URI"])
         logger.info("==================================")
-        logger.info(ENV["WX_OPEN_PAY_NOTIFY_URL"])
+        logger.info(env["WX_OPEN_PAY_NOTIFY_URL"])
         logger.info("==================================")
         return object if env["REQUEST_URI"]==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
         object.to_xml
