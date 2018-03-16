@@ -1,7 +1,5 @@
-require "logger"
 module API
   class Base < Grape::API
-    
     module JSONFormatter
       def self.call object, env
         tips = object.delete(:tips) || object.delete('tips') rescue nil
@@ -13,12 +11,7 @@ module API
     
     module XMLFormatter
       def self.call object, env
-        logger.info("==================================")
-        logger.info(env["REQUEST_URI"])
-        logger.info("==================================")
-        logger.info(env["WX_OPEN_PAY_NOTIFY_URL"])
-        logger.info("==================================")
-        return object if env["REQUEST_URI"]==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
+        return object if ('http://39.107.86.17'+ env["REQUEST_URI"])==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
         object.to_xml
       end
     end
