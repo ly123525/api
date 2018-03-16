@@ -3,7 +3,7 @@ module V1
     module Mall
       class Channels < Grape::Entity
         expose :image do |m, o|
-          m.picture.image.url rescue nil
+          m.picture.image.style_url('180w') rescue nil
         end  
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/mall_indexs/channels?uuid=#{m.uuid}"
