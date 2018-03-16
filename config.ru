@@ -18,6 +18,7 @@ require 'colorize'
 require "redis"
 require "weixin_authorize"
 require "wx_pay"
+require "acts_as_list"
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
   require 'pry-nav'

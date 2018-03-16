@@ -52,6 +52,7 @@ gem 'faraday', '~> 0.14.0'
 # 友盟
 gem 'umeng', '~> 0.2.1'
 
+gem 'acts_as_list', '~> 0.9.10'
 group :development, :test do
   gem 'pry_debug', '0.0.1'
   gem 'pry-nav', '0.2.4'
