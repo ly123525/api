@@ -29,12 +29,13 @@ require_all 'apis', 'lib', 'middleware'
 if ENV['SERVER_ENV']=='development'
   # 静态文件
   use Rack::Static, :urls => ["/docs/"], :root => "public"
-  # 启用 CORS 来支持外部请求
-  use Rack::Cors do
-    allow do
-      origins '*'
-      resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
-    end
+end
+
+# 启用 CORS 来支持外部请求
+use Rack::Cors do
+  allow do
+    origins '*'
+    resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
   end
 end
 
