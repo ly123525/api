@@ -2,7 +2,6 @@ source 'http://gems.ruby-china.org'
 
 gem 'rake', '11.1.2'
 gem 'rack', '1.6.4'
-gem 'rack-cors', '0.3.1'
 
 gem 'activesupport', '4.2.0'
 gem 'activerecord', '4.2.0'
@@ -52,7 +51,7 @@ gem 'faraday', '~> 0.14.0'
 gem 'umeng', '~> 0.2.1'
 
 # 跨域请求
-gem 'rack-cors', '0.3.1'
+gem 'rack-cors', :require => 'rack/cors'
 
 group :development, :test do
   gem 'pry_debug', '0.0.1'
