@@ -113,18 +113,23 @@ module V1
               server_error(ex)
             end              
           end
-          # desc "支付宝回调"
-          # params do
-          #
-          # end
-          # post :alipay_notify do
-          #   notify_params = params.except(*request.path_parameters.keys)
-          #   if Alipay::Notify.verify?(notify_params, options = {})
-          #       "success"
-          #     else
-          #       "fail"
-          #   end
-          # end
+          desc "支付宝回调"
+          params do
+
+          end
+          post :alipay_notify do
+            # notify_params = params.except(*request.path_parameters.keys)
+            notify_params = require.request_parameters
+            if Alipay::Notify.verify?(notify_params)
+              payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
+              payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
+              payment.item.pay!
+              status 200
+                "success"
+              else
+                "error"
+            end
+          end
         end
       end
     end
