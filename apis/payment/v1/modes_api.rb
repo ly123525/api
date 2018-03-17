@@ -88,7 +88,7 @@ module V1
               payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
               @alipay_client = Alipay::Client.new(
                 url: Alipay::API_URL,
-                app_id: Alipay::APP_ID
+                app_id: Alipay::APP_ID,
                 app_private_key: Alipay::APP_PRIVATE_KEY,
                 alipay_public_key: Alipay::ALIPAY_PUBLIC_KEY
               )
