@@ -58,7 +58,7 @@ module V1
             end
           end
           
-          desc "支付异步回调通知"
+          desc "微信支付异步回调通知"
           params do 
             
           end
@@ -73,7 +73,54 @@ module V1
             else
               "<xml><return_code>FAIL</return_code><return_msg>签名失败</return_msg></xml>"
             end
-          end      
+          end
+          
+          desc "支付宝支付"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :order_uuid, type: String, desc: '订单 UUID'
+          end
+          post :alipay do
+            begin
+              authenticate_user
+              order = @session_user.orders.find_uuid(params[:order_uuid])
+              payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
+              @alipay_client = Alipay::Client.new(
+                url: Alipay::API_URL,
+                app_id: Alipay::APP_ID
+                app_private_key: Alipay::APP_PRIVATE_KEY,
+                alipay_public_key: Alipay::ALIPAY_PUBLIC_KEY
+              )
+              r=@alipay_client.page_execute_url(
+                method: 'alipay.trade.app.pay',
+                biz_content: {
+                  out_trade_no: payment.trade_no,
+                  product_code: 'FAST_INSTANT_TRADE_PAY',
+                  total_amount: payment.total_fee.to_s,
+                  subject: 'test'  #名称
+                }.to_json(ascii_only: true), 
+                timestamp: order.expired_at.localtime.strftime("%Y-%m-%d %H:%M:%S")
+              )
+              r
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end
+          # desc "支付宝回调"
+          # params do
+          #
+          # end
+          # post :alipay_notify do
+          #   notify_params = params.except(*request.path_parameters.keys)
+          #   if Alipay::Notify.verify?(notify_params, options = {})
+          #       "success"
+          #     else
+          #       "fail"
+          #   end
+          # end
         end
       end
     end
