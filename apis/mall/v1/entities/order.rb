@@ -40,6 +40,12 @@ module V1
         expose :pay_remaining_time do |m, o|
           m.expired_at.localtime-Time.now
         end
+        expose :fight_group_residual_quantity do |m, o|
+          m.try(:fight_group).try(:residual_quantity) || 0
+        end
+        expose :user_image do |m, o|
+          m.user_avatar
+        end
         expose :status_tips do |m, o|
           if m.closed?
             "交易关闭"
@@ -69,7 +75,21 @@ module V1
         expose :consignee
         expose :mobile
         expose :receiving_address
-        expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem
+        expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
+          m.order_items.first
+        end  
+        expose :number
+        expose :pay_way do |m, o|
+          case m.payment.method
+            when 'wechat_pay'
+              '微信支付'
+            when 'alipay'
+              '支付宝'
+          end     
+        end  
+        expose :order_time do |m, o|
+         m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')
+        end  
         # expose :im_scheme
       end
       

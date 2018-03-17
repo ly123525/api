@@ -70,13 +70,13 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            requires :uuid, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '订单 UUID'
           end
           get :show do
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:uuid])
-              
+              present order, with: ::V1::Entities::Mall::Order
             rescue Exception => ex
               server_error(ex)
             end
