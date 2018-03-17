@@ -90,17 +90,21 @@ module V1
                 url: Alipay::API_URL,
                 app_id: Alipay::APP_ID,
                 app_private_key: Alipay::APP_PRIVATE_KEY,
-                alipay_public_key: Alipay::ALIPAY_PUBLIC_KEY
+                alipay_public_key: Alipay::ALIPAY_PUBLIC_KEY,
+                format: 'json',
+                charset: 'UTF-8',
+                sign_type: 'RSA2'
               )
-              r=@alipay_client.page_execute_url(
+              r=@alipay_client.sdk_execute(
                 method: 'alipay.trade.app.pay',
                 biz_content: {
                   out_trade_no: payment.trade_no,
-                  product_code: 'FAST_INSTANT_TRADE_PAY',
+                  product_code: 'QUICK_MSECURITY_PAY',
                   total_amount: payment.total_fee.to_s,
                   subject: 'test'  #名称
                 }.to_json(ascii_only: true), 
-                timestamp: order.expired_at.localtime.strftime("%Y-%m-%d %H:%M:%S")
+                timestamp: order.expired_at.localtime.strftime("%Y-%m-%d %H:%M:%S"),
+                notify_url: Alipay::NOTIFY_URL
               )
               r
             rescue ActiveRecord::RecordNotFound
