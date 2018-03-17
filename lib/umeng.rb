@@ -33,8 +33,8 @@ module Umeng
       # token 友盟设备唯一标识, Android的device_token是44位字符串，iOS的device_token是64位 [多特么脑残]
       # opts{title, body, scheme}
       def push_unicast token, opts={}
-        $umeng_ios.push_unicast(token, android_opts(opts)) if token.to_s.size=44
-        $umeng_android.push_unicast(token, ios_opts(opts)) if token.to_s.size=64
+        $umeng_ios.push_unicast(token, android_opts(opts)) if token.to_s.size==44
+        $umeng_android.push_unicast(token, ios_opts(opts)) if token.to_s.size==64
       end
 
       # tokens 列表推送
