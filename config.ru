@@ -33,12 +33,12 @@ if ENV['SERVER_ENV']=='development'
 end
 
 # 启用 CORS 来支持外部请求
-use Rack::Cors do
-  allow do
-    origins '*'
-    resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
-  end
-end
+# use Rack::Cors do
+#   allow do
+#     origins '*'
+#     resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
+#   end
+# end
 
 # I18n
 I18n.load_path += Dir[File.expand_path(File.dirname(__FILE__)) + "/config/locales/*.{rb,yml}"]
