@@ -14,6 +14,9 @@ module V1
       end
       
       class MallIndex < Grape::Entity
+        expose :search_key do |m, o|
+          "搜索结果"
+        end  
         expose :banners, using: ::V1::Entities::Mall::Banners do |m, o|
           m.banners
         end
