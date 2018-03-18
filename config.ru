@@ -35,7 +35,7 @@ end
 # 启用 CORS 来支持外部请求
 use Rack::Cors do
   allow do
-    origins '*'
+    origins 'localhost:8686', '*'
     resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
   end
 end
