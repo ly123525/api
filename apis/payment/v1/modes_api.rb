@@ -86,16 +86,7 @@ module V1
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
               payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
-              @alipay_client = Alipay::Client.new(
-                url: Alipay::API_URL,
-                app_id: Alipay::APP_ID,
-                app_private_key: Alipay::APP_PRIVATE_KEY,
-                alipay_public_key: Alipay::ALIPAY_PUBLIC_KEY,
-                format: 'json',
-                charset: 'UTF-8',
-                sign_type: 'RSA2'
-              )
-              r=@alipay_client.sdk_execute(
+              r=Alipay::INIT_CLIENT.sdk_execute(
                 method: 'alipay.trade.app.pay',
                 biz_content: {
                   out_trade_no: payment.trade_no,
@@ -120,7 +111,7 @@ module V1
           post :alipay_notify do
             # notify_params = params.except(*request.path_parameters.keys)
             notify_params = require.request_parameters
-            if Alipay::Notify.verify?(notify_params)
+            if Alipay::INIT_CLIENT.verify?(notify_params)
               payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
               payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
               payment.item.pay!

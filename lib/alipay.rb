@@ -5,7 +5,7 @@ Alipay::APP_ID = ENV['ALIPAY_APP_ID']
 Alipay::NOTIFY_URL = ENV['ALIPAY_NOTIFY_URL']
 
 Alipay::APP_PRIVATE_KEY = <<-EOF
------BEGIN PRIVATE KEY-----
+-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAwTPEJxoDZvF3OTvLh8sC1DtckpT86E1yD4sm4i+Rf5qNZr7s
 LBUStbKhJ3ghrZzNFGdabHqAA1w2mBgyQcKeddLZUfWKt884mmWZXRoK7EXjZOHt
 XZ7hNsUImHAyAo+dVN5UiP3cmBtuV6YZtwmWLguzGf3SdBYnl37UCLATiZquZGWf
@@ -31,7 +31,7 @@ IEPvDfSABJHoDmDaNGS30i4MfRHvjod+OVKpmdz4tOZKZJsfdve/sXhn7IoZ+p9+
 ioAbAoGBAKecxiWx5Zsl97QjW/x09rAsGmlgCv3DHzTkbKiSbKCySFic78tIBGsz
 lXDgh/H4IJIAgcQeDhbWl7lDpLfNu6cQxjDedFZNM48rayeqzBP5+fnoRsBLJguf
 p0b0nFOF5drEbEsqjw74Xqb4WPDC9Ac7P5zDZcW7+cgTsDWSgaGn
------END PRIVATE KEY-----
+-----END RSA PRIVATE KEY-----
 EOF
 Alipay::ALIPAY_PUBLIC_KEY = <<-EOF
 -----BEGIN PUBLIC KEY-----
@@ -44,3 +44,13 @@ JWCNxtWuRldT/K2ouDE40VaYE1IzoLm/hWTK2S44x0FY6M962dyt0G0fz8Ct3Phc
 /wIDAQAB
 -----END PUBLIC KEY-----
 EOF
+
+Alipay::INIT_CLIENT = Alipay::Client.new(
+  url: Alipay::API_URL,
+  app_id: Alipay::APP_ID,
+  app_private_key: Alipay::APP_PRIVATE_KEY,
+  alipay_public_key: Alipay::ALIPAY_PUBLIC_KEY,
+  format: 'json',
+  charset: 'UTF-8',
+  sign_type: 'RSA2'
+)
