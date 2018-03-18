@@ -3,7 +3,7 @@ source 'http://gems.ruby-china.org'
 gem 'rake', '11.1.2'
 gem 'rack', '1.6.4'
 # 跨域请求
-# gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-cors', :require => 'rack/cors'
 
 gem 'activesupport', '4.2.0'
 gem 'activerecord', '4.2.0'
