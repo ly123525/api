@@ -3,7 +3,7 @@ source 'http://gems.ruby-china.org'
 gem 'rake', '11.1.2'
 gem 'rack', '1.6.4'
 # 跨域请求
-# gem 'rack-cors', :require => 'rack/cors'
+gem 'rack-cors', :require => 'rack/cors'
 
 gem 'activesupport', '4.2.0'
 gem 'activerecord', '4.2.0'
@@ -51,8 +51,6 @@ gem 'easemob', '0.3.4'
 gem 'faraday', '~> 0.14.0'
 # 友盟
 gem 'umeng', '~> 0.2.1'
-#支付宝
-gem 'alipay', '~> 0.15.0'
 
 gem 'acts_as_list', '~> 0.9.10'
 group :development, :test do
