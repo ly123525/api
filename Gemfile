@@ -51,7 +51,8 @@ gem 'easemob', '0.3.4'
 gem 'faraday', '~> 0.14.0'
 # 友盟
 gem 'umeng', '~> 0.2.1'
-
+#支付宝
+gem 'alipay', '~> 0.15.0'
 gem 'acts_as_list', '~> 0.9.10'
 group :development, :test do
   gem 'pry_debug', '0.0.1'
