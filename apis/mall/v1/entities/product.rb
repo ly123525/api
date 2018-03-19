@@ -24,7 +24,7 @@ module V1
             
       class SimpleProductByStyle < Grape::Entity
         expose :image do |m, o|
-          m.pictures.sorted.last.image.style_url('480w') rescue nil
+          m.adaption_pictures.sorted.last.image.style_url('480w') rescue nil
         end
         expose :title do |m, o|
           m.product.name
