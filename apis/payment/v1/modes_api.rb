@@ -116,16 +116,9 @@ module V1
           end
           post :alipay_notify do
             begin
-            # notify_params = params.except(*request.path_parameters.keys)
-              logger.info "进入回调接口"
               logger.info "================================="
-              logger.info(notify_params['out_trade_no'])
+              logger.info(params['out_trade_no'])
               logger.info "================================="
-              # notify_params = require.request_parameters
-              logger.info "================================="
-              logger.info(params)
-              logger.info "================================="
-              # notify_params = params.except(*request.path_parameters.keys)
               notify_params = params
               logger.info "================================="
               logger.info "notify_params=#{notify_params.to_s}"
