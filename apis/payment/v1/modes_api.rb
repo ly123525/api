@@ -104,7 +104,7 @@ module V1
                 notify_url: Alipay::NOTIFY_URL
               )
               logger.info "============================"
-              loggor.info(payment.trade_no)
+              logger.info(payment.trade_no)
               logger.info "============================"
               r
             rescue ActiveRecord::RecordNotFound
