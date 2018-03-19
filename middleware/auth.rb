@@ -2,7 +2,6 @@ module API
   class Auth < Grape::Middleware::Base
 
     def before
-      Grape::API.logger.info "================Request content-type: #{env["CONTENT_TYPE"]}" rescue nil
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       return if ENV['SERVER_ENV']=='development'
       params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h
