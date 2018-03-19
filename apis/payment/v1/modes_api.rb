@@ -100,7 +100,8 @@ module V1
                   total_amount: payment.total_fee.to_s,
                   subject: 'test'  #名称
                 }.to_json(ascii_only: true), 
-                timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S")
+                timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
+                notify_url: Alipay::NOTIFY_URL
               )
               r
             rescue ActiveRecord::RecordNotFound
