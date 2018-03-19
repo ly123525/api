@@ -2,10 +2,6 @@ module API
   class Base < Grape::API
     module JSONFormatter
       def self.call object, env
-        Grape::API.logger.info'============================='
-        Grape::API.logger.info(env["REQUEST_URI"])
-        Grape::API.logger.info(ENV["ALIPAY_NOTIFY_URL"])
-        Grape::API.logger.info'============================='
         return object if ('http://39.107.86.17'+ env["REQUEST_URI"])==(ENV["ALIPAY_NOTIFY_URL"])
         tips = object.delete(:tips) || object.delete('tips') rescue nil
         data = object[:data] || object['data'] || object rescue object

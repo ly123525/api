@@ -116,13 +116,7 @@ module V1
           end
           post :alipay_notify do
             begin
-              logger.info "================================="
-              logger.info(params['out_trade_no'])
-              logger.info "================================="
               notify_params = params
-              logger.info "================================="
-              logger.info "notify_params=#{notify_params.to_s}"
-              logger.info "================================="
               if Alipay::INIT_CLIENT.verify?(notify_params)
                 payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
                 payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
