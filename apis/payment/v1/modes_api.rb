@@ -120,10 +120,10 @@ module V1
               logger.info "进入回调接口"
               # notify_params = require.request_parameters
               logger.info "================================="
-              logger.info(params.class)
+              logger.info(params)
               logger.info "================================="              
               # notify_params = params.except(*request.path_parameters.keys)
-              notify_params = eval(params)
+              notify_params = params
               logger.info "================================="
               logger.info "notify_params=#{notify_params.to_s}"
               logger.info "================================="
