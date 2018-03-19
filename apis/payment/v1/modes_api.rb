@@ -118,7 +118,11 @@ module V1
             begin
             # notify_params = params.except(*request.path_parameters.keys)
               logger.info "进入回调接口"
-              notify_params = require.request_parameters
+              # notify_params = require.request_parameters
+              logger.info "================================="
+              logger.info(params)
+              logger.info "================================="              
+              notify_params = params.except(*request.path_parameters.keys)
               logger.info "================================="
               logger.info "notify_params=#{notify_params.to_s}"
               logger.info "================================="
