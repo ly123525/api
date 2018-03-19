@@ -63,15 +63,21 @@ module V1
             
           end
           post :wechat_pay_notify do
-            result = Hash.from_xml(request.body.read)["xml"]
-            if WxPay::Sign.verify?(result)
-              payment=::Payment.find_by(trade_no: result['out_trade_no'])
-              payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
-              payment.item.pay!
-              status 200
-              "<xml><return_code>SUCCESS</return_code></xml>"
-            else
-              "<xml><return_code>FAIL</return_code><return_msg>签名失败</return_msg></xml>"
+            begin
+              result = Hash.from_xml(request.body.read)["xml"]
+              if WxPay::Sign.verify?(result)
+                payment=::Payment.find_by(trade_no: result['out_trade_no'])
+                payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
+                payment.item.pay!
+                status 200
+                "<xml><return_code>SUCCESS</return_code></xml>"
+              else
+                "<xml><return_code>FAIL</return_code><return_msg>签名失败</return_msg></xml>"
+              end
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
             end
           end
           
@@ -109,16 +115,28 @@ module V1
 
           end
           post :alipay_notify do
+            begin
             # notify_params = params.except(*request.path_parameters.keys)
-            notify_params = require.request_parameters
-            if Alipay::INIT_CLIENT.verify?(notify_params)
-              payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
-              payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
-              payment.item.pay!
-              status 200
-                "success"
-              else
-                "error"
+              notify_params = require.request_parameters
+              logger.info "================================="
+              logger.info "notify_params=#{notify_params.to_s}"
+              logger.info "================================="
+              if Alipay::INIT_CLIENT.verify?(notify_params)
+                payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
+                payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
+                logger.info "================================="
+                logger.info(notify_params['out_trade_no'])
+                logger.info "================================="
+                payment.item.pay!
+                status 200
+                  "success"
+                else
+                  "error"
+              end
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
             end
           end
         end
