@@ -6,7 +6,7 @@ module API
         Grape::API.logger.info(env["REQUEST_URI"])
         Grape::API.logger.info(ENV["ALIPAY_NOTIFY_URL"])
         Grape::API.logger.info'============================='
-        return object if (env["REQUEST_URI"])==(ENV["ALIPAY_NOTIFY_URL"])
+        return object if ('http://39.107.86.17'+ env["REQUEST_URI"])==(ENV["ALIPAY_NOTIFY_URL"])
         tips = object.delete(:tips) || object.delete('tips') rescue nil
         data = object[:data] || object['data'] || object rescue object
         data = nil if data.blank?
