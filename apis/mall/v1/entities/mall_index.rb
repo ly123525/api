@@ -9,7 +9,8 @@ module V1
           }
         end
         expose :items, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
-          o[:styles]
+          # o[:styles]
+          m
         end
       end
       
@@ -31,9 +32,9 @@ module V1
         expose :sections, using: ::V1::Entities::Mall::Sections do |m, o|
           m.sections
         end  
-        expose :recommend, using: ::V1::Entities::Mall::Recommend do |m, o|
-          {title_bar: nil, styles: o[:styles]}
-        end   
+        # expose :recommend, using: ::V1::Entities::Mall::Recommend do |m, o|
+        #   {title_bar: nil, styles: o[:styles]}
+        # end   
       end
     end  
   end  
