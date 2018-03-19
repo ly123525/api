@@ -27,7 +27,7 @@ module V1
           get :page do
             begin
               styles = ::Mall::Style.recommended.sorted.page(params[:page]).per(10)
-              present styles, with: ::V1::Entities::Mall::Recommend
+              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

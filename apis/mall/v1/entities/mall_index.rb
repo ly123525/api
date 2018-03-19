@@ -2,19 +2,16 @@ module V1
   module Entities
     module Mall
       class Recommend < Grape::Entity
-        expose :items, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
-          o[:styles] || m
-        end
-      end
-      
-      class RecommendOfIndex < Recommend
         expose :title_bar do |m, o|
           {
             image: nil,
             scheme: nil
           }
         end
-      end  
+        expose :items, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
+          o[:styles]
+        end
+      end
       
       class MallIndex < Grape::Entity
         expose :search_key do |m, o|
@@ -34,7 +31,7 @@ module V1
         expose :sections, using: ::V1::Entities::Mall::Sections do |m, o|
           m.sections
         end  
-        expose :recommend, using: ::V1::Entities::Mall::RecommendOfIndex do |m, o|
+        expose :recommend, using: ::V1::Entities::Mall::Recommend do |m, o|
           {title_bar: nil, styles: o[:styles]}
         end  
       end
