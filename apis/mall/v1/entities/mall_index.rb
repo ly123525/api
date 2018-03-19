@@ -33,7 +33,7 @@ module V1
         end  
         expose :recommend, using: ::V1::Entities::Mall::Recommend do |m, o|
           {title_bar: nil, styles: o[:styles]}
-        end   
+        end  
       end
     end  
   end  
