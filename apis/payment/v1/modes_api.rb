@@ -103,6 +103,9 @@ module V1
                 timestamp: order.expired_at.localtime.strftime("%Y-%m-%d %H:%M:%S"),
                 notify_url: Alipay::NOTIFY_URL
               )
+              logger.info "============================"
+              loggor.info(payment.trade_no)
+              logger.info "============================"
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
