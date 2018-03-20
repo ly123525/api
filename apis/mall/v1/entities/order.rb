@@ -59,6 +59,7 @@ module V1
             "客官，给个评价吧~"
           end
         end
+        expose :express_number
         expose :express_company
         expose :express_info do |m, o|
           if m.delivered?
