@@ -25,7 +25,7 @@ module V1
           params do
             requires :style_uuid, type: String, desc: '商品款式 UUID'
           end
-          get do
+          get :details do
             begin
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               style.product.details
