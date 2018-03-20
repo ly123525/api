@@ -94,6 +94,7 @@ module V1
       end
       
       class Orders < Grape::Entity
+        expose :uuid
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :status do |m, o|
           if m.closed?
