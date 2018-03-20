@@ -38,7 +38,7 @@ module V1
           end
         end
         expose :pay_remaining_time do |m, o|
-          m.expired_at.localtime-Time.now
+          (m.expired_at-Time.now).to_i
         end
         expose :fight_group_residual_quantity do |m, o|
           m.try(:fight_group).try(:residual_quantity) || 0
