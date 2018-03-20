@@ -101,7 +101,7 @@ module V1
           m.uuid
         end
         expose :banners do |m, o|
-          m.pictures.map{|picture| picture.image.style_url('480w') } rescue nil
+          m.adaption_pictures.map{|picture| picture.image.style_url('480w') } rescue nil
         end
         expose :title do |m, o|
           m.product.name + " " + m.name
