@@ -67,6 +67,9 @@ module V1
             "感谢您在全民拼购物，欢迎您再次光临！"
           end
         end
+        expose :express_scheme do |m, o|
+          "http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}"
+        end  
         expose :express_at do |m, o|
           if m.delivered?
             Time.now.localtime.strftime('%Y-%m-%d')
@@ -75,6 +78,9 @@ module V1
         expose :consignee
         expose :mobile
         expose :receiving_address
+        expose :im_user_scheme do |m, o|
+          "lvsent://gogo.cn/im/chats?im_user_name=#{m.shop.im_user_name}"
+        end
         expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
           m.order_items
         end
