@@ -21,6 +21,21 @@ module V1
             end
           end
           
+          desc "商品描述"
+          params do
+            requires :style_uuid, type: String, desc: '商品款式 UUID'
+          end
+          get do
+            begin
+              style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
+              style.product.details
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
+          
           desc "选择款式"
           params do
             optional :user_uuid, type: String, desc: "用户 UUID"
