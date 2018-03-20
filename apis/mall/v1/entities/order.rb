@@ -76,8 +76,11 @@ module V1
         expose :mobile
         expose :receiving_address
         expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
-          m.order_items.first
-        end  
+          m.order_items
+        end
+        expose :total_fee do |m, o|
+          m.total_fee.to_s
+        end    
         expose :number
         expose :pay_way do |m, o|
           case m.payment.method
