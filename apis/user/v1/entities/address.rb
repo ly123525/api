@@ -17,7 +17,7 @@ module V1
         expose :mobile 
         expose :is_default
         expose :current_used do |m, o|
-          m.user_extra.pluck(:id).present?
+          m.user_extra.present?
         end
       end
     end
