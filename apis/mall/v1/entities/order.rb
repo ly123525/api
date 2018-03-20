@@ -38,7 +38,7 @@ module V1
           end
         end
         expose :pay_remaining_time do |m, o|
-          m.expired_at.localtime-Time.now
+          (m.expired_at-Time.now).to_i
         end
         expose :fight_group_residual_quantity do |m, o|
           m.try(:fight_group).try(:residual_quantity) || 0
@@ -76,8 +76,11 @@ module V1
         expose :mobile
         expose :receiving_address
         expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
-          m.order_items.first
-        end  
+          m.order_items
+        end
+        expose :total_fee do |m, o|
+          m.total_fee.to_s
+        end    
         expose :number
         expose :pay_way do |m, o|
           case m.payment.method
