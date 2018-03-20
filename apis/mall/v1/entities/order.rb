@@ -26,7 +26,7 @@ module V1
           elsif m.created?
             "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
-            "拼单中..."
+            "拼单中"
           elsif m.paid?
             "等待卖家发货"
           elsif m.delivered?
