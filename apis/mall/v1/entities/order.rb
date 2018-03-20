@@ -46,7 +46,6 @@ module V1
         expose :user_image do |m, o|
           m.user_avatar
         end
-        expose :status
         expose :status_tips do |m, o|
           if m.closed?
             "交易关闭"
