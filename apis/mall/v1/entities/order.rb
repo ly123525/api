@@ -37,15 +37,6 @@ module V1
             "已完成"
           end
         end
-        expose :pay_remaining_time do |m, o|
-          (m.expired_at-Time.now).to_i
-        end
-        expose :fight_group_residual_quantity do |m, o|
-          m.try(:fight_group).try(:residual_quantity) || 0
-        end
-        expose :user_image do |m, o|
-          m.user_avatar
-        end
         expose :status_tips do |m, o|
           if m.closed?
             "交易关闭"
@@ -58,6 +49,22 @@ module V1
           elsif m.received?
             "客官，给个评价吧~"
           end
+        end
+        expose :status_image do |m, o|
+          if m.fight_group.present? && m.fight_group.waiting?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_pindan_icon_white.png?x-oss-process=style/120w"
+          elsif m.paid?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_fahuo_icon_white.png?x-oss-process=style/120w"
+          elsif m.delivered?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_shouhuo_icon_white.png?x-oss-process=style/120w"
+          elsif m.received?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_pingjia_icon_white.png?x-oss-process=style/120w"
+          elsif m.refund?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"        
+          end  
+        end  
+        expose :fight_group, using: ::V1::Entities::Mall::FightGroupForOrder do |m, o|
+          m
         end
         expose :express_number
         expose :express_company
@@ -76,9 +83,13 @@ module V1
             Time.now.localtime.strftime('%Y-%m-%d')
           end
         end
-        expose :consignee
-        expose :mobile
-        expose :receiving_address
+        expose :address do |m, o|
+          {
+            consignee: m.consignee,
+            mobile: m.mobile,
+            receiving_address: m.receiving_address
+          }
+        end
         expose :im_user_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.shop.im_user_name}"
         end
@@ -87,27 +98,14 @@ module V1
         end
         expose :total_fee do |m, o|
           m.total_fee.to_s
-        end    
-        expose :number
-        expose :pay_way do |m, o|
-          case m.payment.method
-            when 'wechat_pay'
-              '微信支付'
-            when 'alipay'
-              '支付宝'
-          end     
-        end  
-        expose :order_time do |m, o|
-         m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')
         end
-        expose :share do |m, o|
-          {
-            title: '我在全民拼选购了商品，赶紧来拼单吧',
-            image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
-            url: 'http://www.baidu.com',
-            description: '快来拼单吧'
-          }
-        end    
+        expose :other_info do |m, o|
+          [
+            {title: "订单编号", content: m.number},
+            {title: "支付方式", content: m.payment.payment_method_name},
+            {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
+          ]
+        end  
         # expose :im_scheme
       end
       
