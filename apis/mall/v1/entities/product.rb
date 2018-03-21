@@ -143,7 +143,7 @@ module V1
           if m.product.details_url.present?
             m.product.details_url
           else
-            "http://39.107.86.17:8081/#/mall/products/details?style_uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/mall/products/details?style_uuid=#{m.uuid}"
           end
         end
         expose :need_to_choose_style do | m, o |
