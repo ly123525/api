@@ -6,7 +6,7 @@ module V1
           m.name
         end
         expose :receiving_address, as: :infos do |m, o|
-          m.try(:user_extra).try(:address).try(:infos)
+          m.infos
         end  
       end
       
