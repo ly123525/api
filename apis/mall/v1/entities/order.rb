@@ -18,7 +18,25 @@ module V1
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
         end
       end
-      
+      class Express < Grape::Entity
+        expose :express_number
+        expose :express_company
+        expose :express_info do |m, o|
+          if m.delivered?
+            "点击查看物流信息"
+          elsif m.received? or m.evaluated?
+            "感谢您在全民拼购物，欢迎您再次光临！"
+          end
+        end
+        expose :express_scheme do |m, o|
+          "http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}"
+        end  
+        expose :express_at do |m, o|
+          if m.delivered?
+            Time.now.localtime.strftime('%Y-%m-%d')
+          end
+        end
+      end  
       class Order < Grape::Entity
         expose :status do |m, o|
           if m.closed?
@@ -66,23 +84,9 @@ module V1
         expose :fight_group, using: ::V1::Entities::Mall::FightGroupForOrder do |m, o|
           m
         end
-        expose :express_number
-        expose :express_company
-        expose :express_info do |m, o|
-          if m.delivered?
-            "点击查看物流信息"
-          elsif m.received? or m.evaluated?
-            "感谢您在全民拼购物，欢迎您再次光临！"
-          end
-        end
-        expose :express_scheme do |m, o|
-          "http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}"
+        expose :express, using: ::V1::Entities::Mall::Express do |m, o|
+          m
         end  
-        expose :express_at do |m, o|
-          if m.delivered?
-            Time.now.localtime.strftime('%Y-%m-%d')
-          end
-        end
         expose :address do |m, o|
           {
             consignee: m.consignee,
