@@ -58,7 +58,7 @@ module V1
         expose :status_tips do |m, o|
           if m.closed?
             "交易关闭"
-          elsif m.fight_group.present? && m.fight_group.waiting?
+          elsif m.fight_group.present? && m.fight_group.waiting? && m.paid?
             "邀请好友拼单"
           elsif m.paid?
             "正在准备货品"
