@@ -102,7 +102,7 @@ module V1
         expose :other_info do |m, o|
           [
             {title: "订单编号", content: m.number},
-            {title: "支付方式", content: m.payment.payment_method_name},
+            {title: "支付方式", content: m.try(:payment).try(:payment_method_name)},
             {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
           ]
         end  
