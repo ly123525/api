@@ -29,7 +29,7 @@ module V1
       
       class FightGroupForOrder < Grape::Entity
         expose :pay_remaining_time do |m, o|
-          (m.expired_at-Time.now).to_i unless m.fight_group.present? && m.fight_group.completed?
+          ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) unless m.fight_group.present? && m.fight_group.completed?
         end
         expose :fight_group_info do |m, o|
           "等待分享，还差#{m.try(:fight_group).try(:residual_quantity)}人" if m.fight_group.present? && m.fight_group.waiting?             
