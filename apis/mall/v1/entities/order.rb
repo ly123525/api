@@ -103,7 +103,7 @@ module V1
         expose :total_fee do |m, o|
           m.total_fee.to_s
         end
-        expose :other_info do |m, o|
+        expose :other_infos do |m, o|
           [
             {title: "订单编号", content: m.number},
             {title: "支付方式", content: m.try(:payment).try(:payment_method_name)},
