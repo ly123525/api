@@ -80,7 +80,10 @@ module V1
           elsif m.refund?
             "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"        
           end  
-        end  
+        end
+        expose :pay_remaining_time do |m, o|
+          ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) if m.created?
+        end    
         expose :fight_group, using: ::V1::Entities::Mall::FightGroupForOrder do |m, o|
           m
         end
