@@ -5,7 +5,9 @@ module V1
         expose :consignee do |m, o|
           m.name
         end
-        expose :receiving_address, as: :infos
+        expose :receiving_address, as: :infos do |m, o|
+          m.infos
+        end  
       end
       
       class Addresses < Grape::Entity
