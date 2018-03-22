@@ -29,7 +29,7 @@ module V1
           end
         end
         expose :express_scheme do |m, o|
-          "http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}"
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}")
         end  
         expose :express_at do |m, o|
           if m.delivered?
