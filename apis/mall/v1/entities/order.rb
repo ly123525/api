@@ -146,6 +146,9 @@ module V1
             }
           end
         end
+        expose :removeable do |m, o|
+          m.removeable?
+        end
         # expose :im_scheme
       end
       
