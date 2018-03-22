@@ -85,7 +85,7 @@ module V1
           ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) if m.created?
         end    
         expose :fight_group, using: ::V1::Entities::Mall::FightGroupForOrder do |m, o|
-          m
+          m.try(:fight_group).try(:waiting?) ? m : nil
         end
         expose :express, using: ::V1::Entities::Mall::Express do |m, o|
           m
