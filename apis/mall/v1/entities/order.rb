@@ -88,7 +88,7 @@ module V1
           m.try(:fight_group).try(:waiting?) ? m : nil
         end
         expose :express, using: ::V1::Entities::Mall::Express do |m, o|
-          m
+          m unless (m.created? || m.paid? || m.closed? || m.refunded?) 
         end  
         expose :address do |m, o|
           {
