@@ -112,7 +112,40 @@ module V1
             {title: "支付方式", content: m.try(:payment).try(:payment_method_name)},
             {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
           ]
+        end
+        expose :buy_again_scheme do |m, o|
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?
         end  
+        expose :to_evaluate_scheme do |m, o|
+          'lvsent://gogo.cn/mall/orders/waiting_evaluation' if m.received? and !m.evaluated?
+        end
+        expose :pay_center_scheme do |m, o|
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{m.uuid}") if m.created?
+        end
+        expose :to_refund do |m, o|
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/after_sale?order_uuid=#{m.uuid}") if !m.created? || !m.closed? || !m.refunded?
+        end  
+        expose :can_be_hasten do |m, o|
+          if m.fight_group.present?
+            m.fight_group.completed? && m.paid?
+          else
+            m.paid?
+          end
+        end
+        expose :confirmable do |m, o|
+          m.delivered?
+        end
+        expose :inviting_friends_info do |m, o|
+          if m.fight_group.present? && m.fight_group.waiting?
+            image = m.order_items.first.picture.image.style_url('300w') rescue nil
+            {
+              url: "http://39.107.86.17:8080/#/mall/products?uuid=FEGWGEG",
+              image: image,
+              title: "来拼",
+              summary: "来拼"
+            }
+          end
+        end
         # expose :im_scheme
       end
       
