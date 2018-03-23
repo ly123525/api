@@ -181,12 +181,12 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            requires :order_item_id, type: String, desc: '子订单 uuid' 
+            requires :order_item_uuid, type: String, desc: '子订单 uuid' 
           end  
           get :comment do
             begin
               authenticate_user
-              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_id])
+              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
               {name: order_item.product_name, image: order_item.try(:picture).try(:image).try(:tyle_url,'160w')}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -199,14 +199,14 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            requires :order_item_id, type: String, desc: '子订单 uuid' 
+            requires :order_item_uuid, type: String, desc: '子订单 uuid' 
             requires :content, type: String, desc: '评论内容'
             requires :level, type: Integer, values: [1, 2, 3], desc: '1: good, 2: medium, 3: bad' 
           end
           post :comment do
             begin
               authenticate_user
-              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_id])
+              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
               ::Mall::Comment.create!(order_item: order_item, user: @session_user, order: order_item.order, product: order_item.product, content: params[:content], level: params[:level])
               true
             rescue ActiveRecord::RecordNotFound
