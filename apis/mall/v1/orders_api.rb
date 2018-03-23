@@ -201,14 +201,21 @@ module V1
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_item_uuid, type: String, desc: '子订单 uuid' 
             requires :content, type: String, desc: '评论内容'
-            requires :level, type: Integer, values: [1, 2, 3], desc: '1: good, 2: medium, 3: bad' 
+            requires :level, type: Integer, values: [1, 2, 3], default: 1 ,desc: '1: good, 2: medium, 3: bad' 
           end
           post :comment do
             begin
               authenticate_user
               order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
+              if !params[:content].present?
+                {msg: '评论不能为空'}
+              elsif params[:content].size < 6
+                {msg: '评论字数不能少于6个字符'}
+              elsif params[:content].size >250
+                {msg: '评论字数最多不能超过250个字符'}
+              else
               ::Mall::Comment.create!(order_item: order_item, user: @session_user, order: order_item.order, product: order_item.product, content: params[:content], level: params[:level])
-              true
+              end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
