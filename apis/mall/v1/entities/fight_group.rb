@@ -45,7 +45,7 @@ module V1
           {
             title: '我在全民拼选购了商品，赶紧来拼单吧',
             image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
-            url: 'http://www.baidu.com',
+            url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
             summary: '快来拼单吧'
           }
         end       
