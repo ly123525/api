@@ -187,7 +187,7 @@ module V1
             begin
               authenticate_user
               order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
-              {name: order_item.product_name, image: order_item.try(:picture).try(:image).try(:tyle_url,'160w')}
+              {product_name: order_item.product_name, image: order_item.try(:picture).try(:image).try(:tyle_url,'160w')}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
