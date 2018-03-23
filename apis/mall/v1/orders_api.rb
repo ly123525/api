@@ -215,6 +215,7 @@ module V1
                 {msg: '评论字数最多不能超过250个字符'}
               else
               ::Mall::Comment.create!(order_item: order_item, user: @session_user, order: order_item.order, product: order_item.product, content: params[:content], level: params[:level])
+              true
               end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
