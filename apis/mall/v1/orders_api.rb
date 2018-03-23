@@ -159,11 +159,14 @@ module V1
           end
           
           desc "支付成功后，分享页"
-          params do 
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌' 
             requires :uuid, type: String, desc: '订单 UUID'
           end
           get :pay_result do
             begin
+              authenticate_user
               order = ::Mall::Order.find_uuid(params[:uuid])
               fight_group = order.fight_group
               present :order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
@@ -172,7 +175,46 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end
+          end
+          
+          desc "创建评论页面"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :order_item_id, type: String, desc: '子订单 uuid' 
           end  
+          get :comment do
+            begin
+              authenticate_user
+              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_id])
+              {name: order_item.product_name, image: order_item.try(:picture).try(:image).try(:tyle_url,'160w')}
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end  
+          end
+          
+          desc "创建评论"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :order_item_id, type: String, desc: '子订单 uuid' 
+            requires :content, type: String, desc: '评论内容'
+            requires :level, type: Integer, values: [1, 2, 3], desc: '1: good, 2: medium, 3: bad' 
+          end
+          post :comment do
+            begin
+              authenticate_user
+              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_id])
+              ::Mall::Comment.create!(order_item: order_item, user: @session_user, order: order_item.order, product: order_item.product, content: params[:content], level: params[:level])
+              true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end          
         end
       end
     end
