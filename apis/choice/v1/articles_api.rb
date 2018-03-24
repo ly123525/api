@@ -92,7 +92,7 @@ module V1
           get 'detail'  do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              article = ::Choice::Article.find_uuid(params[:uuid]) rescue nil
+              article = ::Choice::Article.find_uuid(params[:uuid])
               good_article_ids = user.good_lauds.pluck(:article_id) rescue []
               bad_article_ids = user.bad_lauds.pluck(:article_id) rescue []
               user_ids = article.collections.pluck(:user_id) rescue []
