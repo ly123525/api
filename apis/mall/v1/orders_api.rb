@@ -60,7 +60,7 @@ module V1
           get do
             begin
               authenticate_user
-              present ({orders: @session_user.list_orders.sorted.page(params[:page]).per(20)}), with: ::V1::Entities::Mall::OrderList
+              present ({orders: ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(20)}), with: ::V1::Entities::Mall::OrderList
             rescue Exception => ex
               server_error(ex)
             end
