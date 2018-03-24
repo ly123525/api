@@ -72,9 +72,27 @@ module V1
               server_error(ex)
             end
           end
+          
+          desc "商品评论列表"
+          params do
+            optional :user_uuid, type: String, desc: '用户 UUID'
+            requires :style_uuid, type: String, desc: '商品款式 UUID'
+            requires :page, type: Integer, default: 1, desc: '页码'
+          end
+          get :comments do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              style= ::Mall::Style.find_uuid(params[:style_uuid])
+              comments = style.product.comments.page(params[:page]).per(20)
+              present comments, with: ::V1::Entities::Mall::Comments
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end    
         end
       end
-      
     end
   end
 end
