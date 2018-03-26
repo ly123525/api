@@ -139,7 +139,7 @@ module V1
           if m.fight_group.present?
             (m.delivered? || m.paid?) and m.fight_group.completed?
           else
-            m.delivered? || m.paid?            
+            false           
           end  
         end
         expose :inviting_friends_info do |m, o|
