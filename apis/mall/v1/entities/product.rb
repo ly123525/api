@@ -12,7 +12,7 @@ module V1
           m.style_name
         end
         expose :price do |m, o|
-          "¥ " + m.order_items.last.style.price.to_s
+          "¥ " + m.style.price.to_s
         end
         expose :quantity_str do |m, o|
           "x#{m.quantity}"
