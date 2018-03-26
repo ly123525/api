@@ -39,9 +39,6 @@ module V1
       end  
       class Order < Grape::Entity
         expose :status do |m, o|
-          ::Grape::API.logger.info "============================="
-          ::Grape::API.logger.info "#{m.status}"
-          ::Grape::API.logger.info "============================="
           if m.closed?
             "交易关闭"
           elsif m.created?
@@ -81,7 +78,9 @@ module V1
           elsif m.received?
             "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_pingjia_icon_white.png?x-oss-process=style/120w"
           elsif m.refunded?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"        
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"
+          elsif m.created?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"          
           end  
         end
         expose :pay_remaining_time do |m, o|
