@@ -173,8 +173,10 @@ module V1
             "待发货"
           elsif m.delivered?
             "已发货"
-          elsif m.received? or m.evaluated?
-            "已完成"
+          elsif m.received?
+            "待评价"
+          elsif m.evaluated?
+            "已完成"  
           end
         end
         expose :order_items, as: :products, using: ::V1::Entities::Mall::ProductByOrderItem
