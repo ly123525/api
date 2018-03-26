@@ -77,7 +77,7 @@ module V1
             "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_shouhuo_icon_white.png?x-oss-process=style/120w"
           elsif m.received?
             "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_pingjia_icon_white.png?x-oss-process=style/120w"
-          elsif m.refund?
+          elsif m.refunded?
             "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"        
           end  
         end
