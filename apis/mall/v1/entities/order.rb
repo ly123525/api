@@ -136,7 +136,11 @@ module V1
           end
         end
         expose :confirmable do |m, o|
-          m.delivered? || m.paid?
+          if m.fight_group.present?
+            (m.delivered? || m.paid?) && m.fight_group.completed?
+          else
+            m.delivered? || m.paid?            
+          end  
         end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
@@ -200,7 +204,11 @@ module V1
           end
         end
         expose :confirmable do |m, o|
-          m.delivered? || m.paid?
+          if m.fight_group.present?
+            (m.delivered? || m.paid?) && m.fight_group.completed?
+          else
+            m.delivered? || m.paid?            
+          end
         end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
