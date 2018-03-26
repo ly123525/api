@@ -39,9 +39,9 @@ module V1
       end  
       class Order < Grape::Entity
         expose :status do |m, o|
-          loger.ingo "============================="
+          logger.ingo "============================="
           logger.info "#{m.status}"
-          loger.ingo "============================="
+          logger.ingo "============================="
           if m.closed?
             "交易关闭"
           elsif m.created?
