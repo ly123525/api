@@ -137,7 +137,8 @@ module V1
         end
         expose :confirmable do |m, o|
           if m.fight_group.present?
-            (m.delivered? || m.paid?) and m.fight_group.completed?
+            # (m.delivered? || m.paid?) and m.fight_group.completed?
+            "m"
           else
             false           
           end  
