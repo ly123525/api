@@ -137,10 +137,9 @@ module V1
         end
         expose :confirmable do |m, o|
           if m.fight_group.present?
-            # (m.delivered? || m.paid?) and m.fight_group.completed?
-            "m"
+            ((m.delivered? || m.paid?) and m.fight_group.completed?)
           else
-            false           
+            m.delivered? || m.paid?            
           end  
         end
         expose :inviting_friends_info do |m, o|
