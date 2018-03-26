@@ -39,7 +39,7 @@ module V1
       end  
       class Order < Grape::Entity
         expose :status do |m, o|
-          if m.closed?
+          if m.closed? || (m.expired_at < Time.now)
             "交易关闭"
           elsif m.created?
             "待支付"
@@ -56,7 +56,7 @@ module V1
           end
         end
         expose :status_tips do |m, o|
-          if m.closed?
+          if m.closed? || (m.expired_at < Time.now)
             "交易关闭"
           elsif m.fight_group.present? && m.fight_group.waiting? && m.paid?
             "邀请好友拼单"
@@ -109,11 +109,18 @@ module V1
           m.total_fee.to_s
         end
         expose :other_infos do |m, o|
+          if m.created?
+            [
+              {title: "订单编号", content: m.number},
+              {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
+            ]            
+          else  
           [
             {title: "订单编号", content: m.number},
             {title: "支付方式", content: m.try(:payment).try(:payment_method_name)},
             {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
           ]
+          end
         end
         expose :buy_again_scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?
@@ -162,7 +169,7 @@ module V1
         expose :uuid
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :status do |m, o|
-          if m.closed?
+          if m.closed? || (m.expired_at < Time.now)
             "交易关闭"
           elsif m.created?
             "待支付" 
