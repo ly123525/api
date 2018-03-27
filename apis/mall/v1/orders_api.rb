@@ -61,9 +61,7 @@ module V1
             begin
               authenticate_user
               orders = ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(20)
-              orders.each do |order|
-                order.refrensh_status
-              end  
+              ::Mall::Order.refrensh_status(orders)
               present ({orders: orders}), with: ::V1::Entities::Mall::OrderList
             rescue Exception => ex
               server_error(ex)
