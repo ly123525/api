@@ -39,7 +39,7 @@ module V1
       end  
       class Order < Grape::Entity
         expose :status do |m, o|
-          if m.closed? || (m.expired_at < Time.now)
+          if m.closed?
             "交易关闭"
           elsif m.created?
             "待支付"
@@ -56,7 +56,7 @@ module V1
           end
         end
         expose :status_tips do |m, o|
-          if m.closed? || (m.expired_at < Time.now)
+          if m.closed?
             "交易关闭"
           elsif m.fight_group.present? && m.fight_group.waiting? && m.paid?
             "邀请好友拼单"
@@ -169,7 +169,7 @@ module V1
         expose :uuid
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :status do |m, o|
-          if m.closed? || (m.expired_at < Time.now)
+          if m.closed?
             "交易关闭"
           elsif m.created?
             "待支付" 
