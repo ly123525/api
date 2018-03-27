@@ -68,7 +68,9 @@ module V1
               if WxPay::Sign.verify?(result)
                 payment=::Payment.find_by(trade_no: result['out_trade_no'])
                 payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
-                payment.item.pay!
+                payment.item.with_lock do
+                  payment.item.pay!
+                end
                 status 200
                 "<xml><return_code>SUCCESS</return_code></xml>"
               else
@@ -117,10 +119,12 @@ module V1
           post :alipay_notify do
             begin
               notify_params = params
-              if Alipay::INIT_CLIENT.verify?(notify_params)
+              if Alipay::INIT_CLIENT.verify?(notify_params) && notify_params['trade_status'] == 'TRADE_SUCCESS'
                 payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
                 payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
-                payment.item.pay!
+                payment.item.with_lock do
+                  payment.item.pay!
+                end
                 status 200
                   "success"
                 else

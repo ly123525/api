@@ -24,7 +24,26 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end              
-          end  
+          end 
+          
+          desc "消息详情"
+          params do
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :token, type: String, desc: '用户访问令牌'            
+          end
+          get :destail do
+            begin
+              authenticate_user
+              {
+                title: "学会这个妆，拍照不用PS",
+                
+              }
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end                          
+          end     
         end  
       end  
     end  
