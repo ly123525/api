@@ -16,7 +16,8 @@ module V1
                   image: 'https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/touxiang.png?x-oss-process=style/160w', 
                   message_type: 'service', 
                   scheme: 'www.baidu.com', 
-                  status: true
+                  status: true,
+                  time: Time.now.localtime.localtime.strftime('%y/%m/%d')
                 }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
