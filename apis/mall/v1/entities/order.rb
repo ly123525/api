@@ -190,7 +190,7 @@ module V1
           "实付 ¥#{m.total_fee}"
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated? or m.closed?
         end
         expose :look_logistics_scheme do |m, o|
           
