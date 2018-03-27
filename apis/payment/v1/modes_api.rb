@@ -103,7 +103,8 @@ module V1
                   subject: 'test'  #名称
                 }.to_json(ascii_only: true), 
                 timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
-                notify_url: Alipay::NOTIFY_URL
+                notify_url: Alipay::NOTIFY_URL,
+                timeout_express: order.timeout_express_for_alipay
               )
               r
             rescue ActiveRecord::RecordNotFound

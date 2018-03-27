@@ -60,7 +60,11 @@ module V1
           get do
             begin
               authenticate_user
-              present ({orders: ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(20)}), with: ::V1::Entities::Mall::OrderList
+              orders = ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(20)
+              orders.each do |order|
+                order.refrensh_status
+              end  
+              present ({orders: orders}), with: ::V1::Entities::Mall::OrderList
             rescue Exception => ex
               server_error(ex)
             end
@@ -76,6 +80,7 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:uuid])
+              order.refrensh_status
               present order, with: ::V1::Entities::Mall::Order
             rescue Exception => ex
               server_error(ex)
