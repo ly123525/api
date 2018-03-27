@@ -109,7 +109,7 @@ module V1
           m.total_fee.to_s
         end
         expose :other_infos do |m, o|
-          if m.created?
+          if m.created? || m.closed?
             [
               {title: "订单编号", content: m.number},
               {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
