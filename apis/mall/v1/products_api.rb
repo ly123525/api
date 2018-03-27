@@ -40,13 +40,13 @@ module V1
           params do
             optional :user_uuid, type: String, desc: "用户 UUID"
             requires :uuid, type: String, desc: '商品 UUID'
-            optional :labels, type: Array[String], desc: "url 参数：labels[]=红色&labels[]=41码"
+            optional :labels, type: String, desc: "url 参数：labels=红色####41码"
           end
           get :style do
             begin
               product = ::Mall::Product.with_deleted.find_uuid(params[:uuid])
-              style = product.get_style_by_labels(params[:labels])
-              styles_for_choice = product.styles_for_choice(params[:labels])
+              style = product.get_style_by_labels(params[:labels].split("####"))
+              styles_for_choice = product.styles_for_choice(params[:labels].split("####"))
               present product, with: ::V1::Entities::Mall::ProductForChoice, style: style, styles_for_choice: styles_for_choice
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
