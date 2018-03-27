@@ -20,6 +20,7 @@ module API
     mount ::V1::User::UsersAPI
     mount ::V1::User::SessionsAPI
     mount ::V1::User::AddressesAPI
+    mount ::V1::User::MessagesAPI
     
     mount ::V1::IM::UsersAPI
     
