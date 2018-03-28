@@ -129,7 +129,7 @@ module V1
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
         end
         expose :pay_center_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{m.uuid}") if (m.created? && m.expired_at >= Time.now)
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/cashier?order_uuid=#{m.uuid}") if (m.created? && m.expired_at >= Time.now)
         end
         expose :to_refund_scheme do |m, o|
            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/after_sale?order_uuid=#{m.uuid}") unless (m.created? || m.closed? || m.refunded?)
@@ -199,7 +199,7 @@ module V1
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
         end
         expose :pay_center_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/payment/modes?order_uuid=#{m.uuid}") if m.created?
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/cashier?order_uuid=#{m.uuid}") if m.created?
         end
         expose :removeable do |m, o|
           m.removeable?
