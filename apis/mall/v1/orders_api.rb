@@ -212,16 +212,10 @@ module V1
             begin
               authenticate_user
               order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
-              if !params[:content].present?
-                {msg: '评论不能为空'}
-              elsif params[:content].size < 6
-                {msg: '评论字数不能少于6个字符'}
-              elsif params[:content].size >250
-                {msg: '评论字数最多不能超过250个字符'}
-              else
+              app_error("评论字数不能少于6个字符,最多不能超过250个字符", "Please choose the receiving address") if !params[:content].present?
+              app_error("评论字数不能少于6个字符,最多不能超过250个字符", "Please choose the receiving address") if params[:content].size < 6 || params[:content].size >250
               ::Mall::Comment.create!(order_item: order_item, user: @session_user, order: order_item.order, product: order_item.product, content: params[:content], level: params[:level])
               true
-              end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
