@@ -62,6 +62,7 @@ module V1
               authenticate_user
               orders = ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(20)
               ::Mall::Order.refrensh_status(orders)
+              ::Mall::Order.auto_fight_group(orders)
               present ({orders: orders}), with: ::V1::Entities::Mall::OrderList
             rescue Exception => ex
               server_error(ex)
@@ -79,6 +80,7 @@ module V1
               authenticate_user
               order = @session_user.orders.find_uuid(params[:uuid])
               order.refrensh_status
+              order.auto_fight_group
               present order, with: ::V1::Entities::Mall::Order
             rescue Exception => ex
               server_error(ex)
