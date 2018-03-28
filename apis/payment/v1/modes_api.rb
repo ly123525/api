@@ -11,11 +11,29 @@ module V1
           end
           get do
             authenticate_user
-            [
-              {mode: 'wechat_pay', scheme: 'lvsent://gogo.cn/payment?mode=wechat_pay&order_uuid=EGEBE'},
-              {mode: 'alipay', scheme: 'lvsent://gogo.cn/payment?mode=alipay&order_uuid=EGEBE'},
-              {mode: 'union_pay', scheme: 'lvsent://gogo.cn/payment?mode=union_pay&order_uuid=EGEBE'}
-            ]
+            begin
+              order = ::Mall::Order.find_uuid(params[:order_uuid])
+              item = order.order_items.first
+              {
+                settlement:{
+                  title: item.product_name,
+                  style_name: item.style_name,
+                  image: (item.picture.image.style_url('160w') rescue nil),
+                  price: "¥ " + item.style.price.to_s,
+                  quantity_str: "x#{item.quantity}",
+                  scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}"
+                            },
+                modes:[
+                  {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment?mode=wechat_pay&order_uuid=#{params[:order_uuid]}"},
+                  {mode: 'alipay', scheme: "lvsent://gogo.cn/payment?mode=alipay&order_uuid=#{params[:order_uuid]}"},
+                  {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment?mode=union_pay&order_uuid=#{params[:order_uuid]}"}
+                      ]
+              }      
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
           end
           
           desc "微信支付"
