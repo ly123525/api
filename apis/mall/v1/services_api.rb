@@ -40,6 +40,7 @@ module V1
             requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
+            optional :images, type: Array[File], desc: '上传凭证'  
           end
           post :item_order do
             begin
@@ -49,7 +50,8 @@ module V1
               service = ::Mall::Service.type_of_service!(  order_item, params[:type_of], 
                                                 params[:refund_cause], params[:mobile],
                                                 params[:description], refund_fee, 
-                                                @session_user)                                 
+                                                @session_user)
+              service.create_picture!(params[:images])                                                                   
               nil
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
