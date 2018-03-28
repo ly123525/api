@@ -190,7 +190,7 @@ module V1
           "实付 ¥#{m.total_fee}"
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated? or m.closed?
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated? or m.closed? or m.paid?
         end
         expose :look_logistics_scheme do |m, o|
           
@@ -213,9 +213,9 @@ module V1
         end
         expose :confirmable do |m, o|
           if m.fight_group.present?
-            (m.delivered? || m.paid?) and m.fight_group.completed?
+            m.delivered? and m.fight_group.completed?
           else
-            m.delivered? || m.paid?            
+            m.delivered?          
           end
         end
         expose :inviting_friends_info do |m, o|
