@@ -130,6 +130,7 @@ module V1
               return true if order.deleted?
               app_error("该订单暂时不可删除", "Please choose the receiving address") unless order.removeable?
               order.destroy!
+              true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
