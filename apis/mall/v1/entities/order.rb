@@ -97,7 +97,7 @@ module V1
             consignee: m.consignee,
             mobile: m.mobile,
             receiving_address: m.receiving_address
-            } if (m.created? || m.paid?)
+            } if (m.created? || m.paid? || m.closed?)
         end
         expose :im_user_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.shop.im_user_name}"
