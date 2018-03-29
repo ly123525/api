@@ -40,13 +40,13 @@ module V1
           m.user_avatars
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.orders.first.order_items.first.style.uuid}" if m.user == o[:user]
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}" if m.user == o[:user]
         end
         expose :inviting_friends_info do |m, o|
            if m.waiting? && m.user != o[:user]
              image = m.orders.first.order_items.first.picture.image.style_url('300w') rescue nil
              {
-               url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.orders.first.order_items.first.product.uuid}",
+               url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.product.uuid}",
                image: image,
                title: "来拼",
                summary: "来拼"
