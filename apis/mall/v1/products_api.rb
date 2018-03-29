@@ -66,7 +66,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               user.mall_searches.find_or_create_by(content: params[:keywords]) rescue nil
-              styles = ::Mall::Style.joins(:product).search(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
+              styles = ::Mall::Style.recommended.joins(:product).search(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle
             rescue Exception => ex
               server_error(ex)
