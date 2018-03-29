@@ -108,10 +108,9 @@ module V1
               authenticate_user
               order = @session_user.orders.find_uuid(params[:uuid])
               if order.paid?
-                {msg: '订单未发货，不能确认收货'}
+                app_error("订单未发货，不能确认收货", "The order is not delivered, and the goods cannot be confirmed")
               else
                 order.receive!
-                {msg: nil}
               end  
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
