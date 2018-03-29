@@ -130,10 +130,9 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.with_deleted.find_uuid(params[:uuid])
-              return if order.deleted?
+              return true if order.deleted?
               app_error("该订单暂时不可删除", "Please choose the receiving address") unless order.removeable?
               order.destroy!
-              nil
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
