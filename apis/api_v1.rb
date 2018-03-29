@@ -52,6 +52,10 @@ module API
         end
       end
     end
+    
+    get :wx_token_verfity do
+      "5m5YL8YZOfzZmPwLTcrmlb6hE2zkqFBicHQUZrbuDEF"
+    end
   end
 end
 
