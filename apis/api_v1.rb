@@ -54,6 +54,9 @@ module API
     end
     
     get :wx_token_verfity do
+      Grape::API.logger "==========="
+      Grape::API.logger "#{params}"
+      Grape::API.logger "==========="
       "5m5YL8YZOfzZmPwLTcrmlb6hE2zkqFBicHQUZrbuDEF"
     end
   end
