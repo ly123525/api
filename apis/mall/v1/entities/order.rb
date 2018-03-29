@@ -190,7 +190,7 @@ module V1
           "实付 ¥#{m.total_fee}"
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.try(:order_items).try(:first).try(:style).try(:uuid)}" if m.received? or m.evaluated? or m.closed?
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.try(:order_items).try(:first).try(:style).try(:uuid)}" if m.received? or m.evaluated? or m.closed? or (m.paid? && m.fight_group.completed?)
         end
         expose :look_logistics_scheme do |m, o|
           
