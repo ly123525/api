@@ -111,6 +111,7 @@ module V1
                 app_error("订单未发货，不能确认收货", "The order is not delivered, and the goods cannot be confirmed")
               else
                 order.receive!
+                app_error( nil, nil)
               end  
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
