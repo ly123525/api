@@ -19,12 +19,40 @@ module V1
         
       
       class FightGroup < Grape::Entity
-        expose :status
+        expose :status_image do |m, o|
+          if m.completed?
+            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/chenggong3.png?x-oss-process=style/160w"
+          end  
+        end  
+        expose :status do |m, o|
+          if m.waiting?
+            "还差#{m.residual_quantity}人，赶紧邀请好友拼单吧！"
+          elsif m.completed?
+            "拼单成功，商家正在努力发货，请耐心等待..."  
+          end  
+        end  
         with_options(format_with: :timestamp) {expose :updated_at}
         expose :product,  using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
           m.style
         end  
-        expose :participants, using: ::V1::Entities::User::SimpleUser   
+        # expose :participants, using: ::V1::Entities::User::SimpleUser
+        expose :user_images do |m, o| 
+          m.user_avatars
+        end
+        expose :buy_again_scheme do |m, o|
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.orders.first.order_items.first.style.uuid}" if m.user == o[:user]
+        end
+        expose :inviting_friends_info do |m, o|
+           if m.waiting? && m.user != o[:user]
+             image = m.orders.first.order_items.first.picture.image.style_url('300w') rescue nil
+             {
+               url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.orders.first.order_items.first.product.uuid}",
+               image: image,
+               title: "来拼",
+               summary: "来拼"
+             }
+           end
+         end   
       end
       
       class FightGroupForOrder < Grape::Entity
