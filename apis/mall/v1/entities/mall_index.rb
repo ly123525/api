@@ -4,7 +4,7 @@ module V1
       class Recommend < Grape::Entity
         expose :title_bar do |m, o|
           {
-            image: nil,
+            image: "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_recommend.jpg?x-oss-process=style/400w",
             scheme: nil
           }
         end
