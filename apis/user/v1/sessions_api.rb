@@ -46,12 +46,16 @@ module V1
           desc '微信 OAuth2'
           params do
             requires :code, type: String, desc: "access_token 票据"
+            optional :type, type: String, values: ['jsapi' ,'app'], default: 'app', desc: "接口类型"
           end
-          post :wechat_mp_oauth2 do
+          post :wechat_login do
             begin
-              access_info = $wx_mp_auth.get_oauth_access_token(params[:code])
+              access_info = $wx_open_auth.get_oauth_access_token(params[:code])
+              logger.info "=================================="
+              logger.info "#{access_info}"
+              logger.info "=================================="
               app_error("获取用户授权失败", 'WX oauth2 access denied') unless access_info.ok?
-              user_info = $wx_mp_auth.get_oauth_userinfo(access_info.result['openid'], access_info.result['access_token'])
+              user_info = $wx_open_auth.get_oauth_userinfo(access_info.result['openid'], access_info.result['access_token'])
               app_error("获取用户信息失败", 'WX user info access denied') unless user_info.ok?
               user_and_token = ::Account::User.wx_unionid_login!(user_info.result)
               client_info_record(request, user_and_token[1])
