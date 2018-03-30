@@ -48,7 +48,7 @@ module V1
             requires :code, type: String, desc: "access_token 票据"
             # optional :type, type: String, values: ['jsapi' ,'app'], default: 'app', desc: "接口类型"
           end
-          post :wechat_login do
+          post :wechat_mp_oauth2 do
             begin
               access_info = $wx_open_auth.get_oauth_access_token(params[:code])
               logger.info "=================================="
