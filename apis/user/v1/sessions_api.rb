@@ -46,7 +46,7 @@ module V1
           desc '微信 OAuth2'
           params do
             requires :code, type: String, desc: "access_token 票据"
-            optional :type, type: String, values: ['jsapi' ,'app'], default: 'app', desc: "接口类型"
+            # optional :type, type: String, values: ['jsapi' ,'app'], default: 'app', desc: "接口类型"
           end
           post :wechat_login do
             begin
