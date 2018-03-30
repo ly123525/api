@@ -170,6 +170,7 @@ module V1
             begin
               authenticate_user
               order = ::Mall::Order.find_uuid(params[:uuid])
+              order.refrensh_status
               fight_group = order.fight_group
               present :order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
             rescue ActiveRecord::RecordNotFound

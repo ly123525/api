@@ -236,6 +236,16 @@ module V1
       end
       
       class OrderPayResult < Grape::Entity
+        expose :status_image do |m, o|
+          "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/chenggong3.png?x-oss-process=style/160w" if m.paid? 
+        end
+        expose :status_tips do |m, o|
+          if m.paid?
+            "支付成功"
+          elsif m.created?
+            "支付失败"  
+          end    
+        end    
         expose :title do |m, o|
           if o[:fight_group]
             "还差#{o[:fight_group].residual_quantity}人，赶快邀请好友拼单吧～"
