@@ -164,6 +164,9 @@ module V1
         expose :comments, using: ::V1::Entities::Mall::Comments do |m, o|
           m.product.comments.sorted.limit(4)
         end
+        expose :comments_scheme do |m, o|
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/evaluate?style_uuid=#{m.uuid}")
+        end  
         expose :styles do |m, o|
           m.product.styles_for_choice(m.labels)
         end
