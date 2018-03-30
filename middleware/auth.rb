@@ -4,6 +4,9 @@ module API
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       # return if ENV['SERVER_ENV']=='development'
+      Grape::API.logger.info "===================#{env['QUERY_STRING']}"
+      Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
+      Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
       params = env['QUERY_STRING'].split("&").map{|param| [param.split("=")[0], param.split("=")[1].to_s]}.to_h
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
