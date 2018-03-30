@@ -3,11 +3,8 @@ module API
 
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
-      Grape::API.logger.info "======================="
-      Grape::API.logger.info "#{env['QUERY_STRING']}"
-      Grape::API.logger.info "======================="
       # return if ENV['SERVER_ENV']=='development'
-      params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h rescue {}
+      params = env['QUERY_STRING'].split("&").map{|param| [param.split("=")[0], param.split("=")[1].to_s]}.to_h
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
