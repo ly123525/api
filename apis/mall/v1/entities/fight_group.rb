@@ -13,7 +13,7 @@ module V1
           "还差#{m.residual_quantity}人"
         end
         expose :remaining_time do |m, o|
-          m.expired_at.localtime-Time.now
+          (m.expired_at.localtime-Time.now).to_i
         end
       end 
         
