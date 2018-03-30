@@ -7,7 +7,7 @@ module API
       Grape::API.logger.info "#{env['QUERY_STRING']}"
       Grape::API.logger.info "======================="
       # return if ENV['SERVER_ENV']=='development'
-      params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h
+      params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h rescue {}
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
