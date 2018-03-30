@@ -3,11 +3,11 @@ module API
 
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
-      return if ENV['SERVER_ENV']=='development'
-      params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h
-      params['signature'] = env['HTTP_SIGNATURE']
-      params['timestamp'] = env['HTTP_TIMESTAMP']
-      env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
+      # return if ENV['SERVER_ENV']=='development'
+      # params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h
+      # params['signature'] = env['HTTP_SIGNATURE']
+      # params['timestamp'] = env['HTTP_TIMESTAMP']
+      # env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
     end
 
     # 签名算法
