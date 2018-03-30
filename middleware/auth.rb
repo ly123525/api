@@ -3,9 +3,9 @@ module API
 
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
-      Grape::API.info "======================="
-      Grape::API.info "#{env['QUERY_STRING']}"
-      Grape::API.info "======================="
+      Grape::API.logger.info "======================="
+      Grape::API.logger.info "#{env['QUERY_STRING']}"
+      Grape::API.logger.info "======================="
       # return if ENV['SERVER_ENV']=='development'
       params = env['QUERY_STRING'].split("&").map{|param| param.split("=")}.to_h
       params['signature'] = env['HTTP_SIGNATURE']
