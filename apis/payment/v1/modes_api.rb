@@ -3,15 +3,6 @@ module V1
     class ModesAPI < Grape::API
       namespace :payment do
         resources :modes do
-          get :a do
-            WxPay.appid = 1
-            puts "=========#{WxPay.appid}" 
-          end
-          
-          get :b do
-            puts "=========#{WxPay.appid}"  
-          end
-          
           desc '可用支付方式'
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
