@@ -4,10 +4,11 @@ module API
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       # return if ENV['SERVER_ENV']=='development'
-      Grape::API.logger.info "===================#{env['QUERY_STRING']}"
+      request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
+      params = request.params
+      Grape::API.logger.info "===================#{params.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
-      params = env['QUERY_STRING'].split("&").map{|param| [param.split("=")[0], param.split("=")[1].to_s]}.to_h
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
@@ -22,7 +23,7 @@ module API
     # 所有参数按字母顺序排序
     def generate(params)
       query = params.sort.map do |k, v|
-        "#{k}=#{v}"
+        "#{k}=#{v}" if v.to_s != ''
       end.compact.join('&')
       Digest::MD5.hexdigest(ENV['API_SECRET'] + query).upcase
     end
