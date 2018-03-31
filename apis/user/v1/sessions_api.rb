@@ -52,7 +52,7 @@ module V1
             begin
               wx_auth = params[:type] == 'app' ? $wx_open_auth : $wx_mp_auth
               access_info = wx_auth.get_oauth_access_token(params[:code])
-              logger.info "=====================access_info: #{access_info.to_json}"
+              logger.info "=====================access_info: #{access_info.result.to_s}"
               app_error("获取用户授权失败", 'WX oauth2 access denied') unless access_info.ok?
               user_info = wx_auth.get_oauth_userinfo(access_info.result['openid'], access_info.result['access_token'])
               app_error("获取用户信息失败", 'WX user info access denied') unless user_info.ok?
