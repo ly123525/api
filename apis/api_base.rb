@@ -2,7 +2,7 @@ module API
   class Base < Grape::API
     module JSONFormatter
       def self.call object, env
-        return object if ('http://39.107.86.17'+ env["REQUEST_URI"])==(ENV["ALIPAY_NOTIFY_URL"])
+        return object if ENV["ALIPAY_NOTIFY_URL"].include? env["REQUEST_URI"]
         tips = object.delete(:tips) || object.delete('tips') rescue nil
         data = object[:data] || object['data'] || object rescue object
         data = nil if data.blank?
@@ -12,7 +12,7 @@ module API
     
     module XMLFormatter
       def self.call object, env
-        return object if ('http://39.107.86.17'+ env["REQUEST_URI"])==(ENV["WX_OPEN_PAY_NOTIFY_URL"])
+        return object if ENV["WX_OPEN_PAY_NOTIFY_URL"].include? env["REQUEST_URI"]
         object.to_xml
       end
     end
