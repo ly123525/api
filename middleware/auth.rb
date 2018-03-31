@@ -3,7 +3,7 @@ module API
 
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
-      # return if ENV['SERVER_ENV']=='development'
+      return if ENV['SERVER_ENV']=='development'
       Grape::API.logger.info "===================#{env['QUERY_STRING']}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
