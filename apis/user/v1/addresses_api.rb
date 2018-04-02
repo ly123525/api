@@ -19,12 +19,13 @@ module V1
             begin
               authenticate_user
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
-              @session_user.addresses.create!(name: params[:name], 
-              province: params[:province], 
-              city: params[:city], 
-              address: params[:address], 
-              mobile: params[:phone],
-              is_default: params[:is_default])
+              address=@session_user.addresses.create!(name: params[:name], 
+                province: params[:province], 
+                city: params[:city], 
+                address: params[:address], 
+                mobile: params[:phone],
+                is_default: params[:is_default])
+              @session_user.set_default_address(address, params[:is_default])  
               nil
             rescue Exception => ex
               server_error(ex)
@@ -48,6 +49,8 @@ module V1
               authenticate_user
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               address = @session_user.addresses.find_uuid(params[:uuid])
+              binding.pry
+              @session_user.set_default_address(address, params[:is_default]) 
               address.update!(name: params[:name], 
               province: params[:province], 
               city: params[:city], 
@@ -111,7 +114,25 @@ module V1
             end
           end
           
-        
+          desc "设为默认"
+          params do 
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '收货地址 UUID'
+            requires :is_default, type: Boolean, desc: '是否默认'
+          end
+          put :default do
+            begin
+              authenticate_user
+              address = @session_user.addresses.find_uuid(params[:uuid])
+              @session_user.set_default_address(address, params[:is_default])
+              nil 
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end                          
+          end    
         end
         
       end
