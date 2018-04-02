@@ -21,7 +21,7 @@ module V1
                   image: (item.picture.image.style_url('160w') rescue nil),
                   price: "¥ " + item.style.price.to_s,
                   quantity_str: "x#{item.quantity}",
-                  total_fee: "￥ " + item.style.price * item.quantity
+                  total_fee: "￥ " + item.style.price * item.quantity,
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}"
                             },
                 modes:[
