@@ -25,9 +25,9 @@ module V1
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}"
                 },
                 modes:[
-                  {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment?mode=wechat_pay&order_uuid=#{params[:order_uuid]}"},
-                  {mode: 'alipay', scheme: "lvsent://gogo.cn/payment?mode=alipay&order_uuid=#{params[:order_uuid]}"},
-                  {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment?mode=union_pay&order_uuid=#{params[:order_uuid]}"}
+                  {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment/modes/wechat?order_uuid=#{params[:order_uuid]}"},
+                  {mode: 'alipay', scheme: "lvsent://gogo.cn/payment/modes/alipay?order_uuid=#{params[:order_uuid]}"},
+                  {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment/modes/union?order_uuid=#{params[:order_uuid]}"}
                 ]
               }      
             rescue ActiveRecord::RecordNotFound
