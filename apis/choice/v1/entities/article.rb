@@ -76,7 +76,7 @@ module V1
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :share do |m, o|
           {
-            url: "http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}",
+            url: "http://39.107.86.17:8080/#/choiceness?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_bg_square.png?x-oss-process=style/300w',
             title: m.title,
