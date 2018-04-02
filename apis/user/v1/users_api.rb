@@ -108,9 +108,24 @@ module V1
               server_error(ex)
             end
           end
+          
+          desc "用户协议"
+          params do 
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :token, type: String, desc: '用户访问令牌'            
+          end
+          get :agreement do
+            begin
+              authenticate_user
+              {scheme:  "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/agreement")}
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end    
         end
       end
-      
     end
   end
 end
