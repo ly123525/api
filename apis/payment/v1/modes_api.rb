@@ -21,14 +21,14 @@ module V1
                   image: (item.picture.image.style_url('160w') rescue nil),
                   price: "¥ " + item.style.price.to_s,
                   quantity_str: "x#{item.quantity}",
-                  total_fee: "￥ " + item.style.price * item.quantity,
+                  total_fee: "￥ " + item.style.price * item.quantity
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}"
-                            },
+                },
                 modes:[
                   {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment?mode=wechat_pay&order_uuid=#{params[:order_uuid]}"},
                   {mode: 'alipay', scheme: "lvsent://gogo.cn/payment?mode=alipay&order_uuid=#{params[:order_uuid]}"},
                   {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment?mode=union_pay&order_uuid=#{params[:order_uuid]}"}
-                      ]
+                ]
               }      
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -62,8 +62,8 @@ module V1
               }
               pay_params[:openid] = @session_user.openid if params[:trade_type] == 'JSAPI'
               trade_type_params = case params[:trade_type]
-                when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
-                when "JSAPI" then {}  
+              when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
+              when "JSAPI" then {}  
               end  
               ret = WxPay::Service.invoke_unifiedorder pay_params, trade_type_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
@@ -120,16 +120,16 @@ module V1
               order = @session_user.orders.find_uuid(params[:order_uuid])
               payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
               res=Alipay::INIT_CLIENT.sdk_execute(
-                method: 'alipay.trade.app.pay',
-                biz_content: {
-                  out_trade_no: payment.trade_no,
-                  product_code: 'QUICK_MSECURITY_PAY',
-                  total_amount: payment.total_fee.to_s,
-                  subject: 'test'  #名称
-                }.to_json(ascii_only: true), 
-                timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
-                notify_url: Alipay::NOTIFY_URL,
-                timeout_express: order.timeout_express_for_alipay
+              method: 'alipay.trade.app.pay',
+              biz_content: {
+                out_trade_no: payment.trade_no,
+                product_code: 'QUICK_MSECURITY_PAY',
+                total_amount: payment.total_fee.to_s,
+                subject: 'test'  #名称
+              }.to_json(ascii_only: true), 
+              timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
+              notify_url: Alipay::NOTIFY_URL,
+              timeout_express: order.timeout_express_for_alipay
               )
               r={res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[order_uuid]}")}
               r
@@ -153,9 +153,9 @@ module V1
                   payment.item.pay!
                 end
                 status 200
-                  "success"
-                else
-                  "error"
+                "success"
+              else
+                "error"
               end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
