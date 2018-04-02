@@ -87,7 +87,7 @@ module V1
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/choiceness?uuid=#{m.uuid}")
         end
         expose :comments_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/evaluate?article_uuid=#{m.uuid}")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/comment?article_uuid=#{m.uuid}")
         end
       end
     end
