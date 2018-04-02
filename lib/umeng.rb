@@ -18,7 +18,7 @@ module Umeng
       def ios_opts opts={}
         {
           key_value: {"content": opts},
-          production_mode: false,
+          production_mode: true,
           description: opts[:title]
         }
       end
