@@ -60,6 +60,7 @@ module V1
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
                 time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
+              logger.info "============================#{@session_user.openid}"
               pay_params[:openid] = @session_user.openid if params[:trade_type] == 'JSAPI'
               trade_type_params = case params[:trade_type]
               when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
