@@ -15,7 +15,7 @@ module V1
                 {title: '学会这个妆，拍照不用PS', 
                   image: 'https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/touxiang.png?x-oss-process=style/160w', 
                   message_type: '系统', 
-                  scheme: 'www.baidu.com', 
+                  scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/messages/destail"),
                   status: true,
                   time: Time.now.localtime.localtime.strftime('%y/%m/%d')
                 }
