@@ -93,10 +93,7 @@ module V1
               result = Hash.from_xml(request.body.read)["xml"]
               if WxPay::Sign.verify?(result)
                 payment=::Payment.find_by(trade_no: result['out_trade_no'])
-                payment.update(paid: true, payment_at: result['time_end'].to_time, out_trade_no: result['transaction_id'] )
-                payment.item.with_lock do
-                  payment.item.pay!
-                end
+                payment.item.refrensh_status
                 status 200
                 "<xml><return_code>SUCCESS</return_code></xml>"
               else
