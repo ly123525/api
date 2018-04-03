@@ -48,7 +48,8 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
-              payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_WECHAT)
+              pay_method = params[:trade_type] == 'APP' ? ::Payment::PAY_METHOD_WECHAT : ::Payment::PAY_METHOD_WECHAT_MP
+              payment = ::Payment.find_or_create_by_order(order, pay_method)
               pay_params = {
                 # body:             '商品：我要卖机油'[0..63],
                 body: payment.trade_no,
@@ -64,8 +65,7 @@ module V1
               trade_type_params = case params[:trade_type]
               when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
               when "JSAPI" then {appid: ENV['WX_MP_APP_ID'], mch_id: ENV['WX_MP_MCH_ID'], key: ENV['WX_MP_API_KEY']}  
-              end
-              binding.pry  
+              end  
               ret = WxPay::Service.invoke_unifiedorder pay_params, trade_type_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
@@ -75,7 +75,7 @@ module V1
               end
               package = r.delete(:package)
               r[:package_value] = package
-              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[order_uuid]}")
+              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/pay_result?uuid=#{params[:order_uuid]}")
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -147,7 +147,6 @@ module V1
               notify_params = params
               if Alipay::INIT_CLIENT.verify?(notify_params) && notify_params['trade_status'] == 'TRADE_SUCCESS'
                 payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
-                payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
                 payment.item.refrensh_status
                 status 200
                 "success"
