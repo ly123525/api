@@ -48,7 +48,7 @@ module V1
         end
         expose :section do |m, o|
           [{name: "优惠券", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/coupon_icon.png', dot_display: true },
-          {name: "地址管理", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64('http://39.107.86.17:8080/#/account/addresses'), icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/address_icon.png', dot_display: false },
+          {name: "地址管理", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("http://39.107.86.17:8080/#/account/addresses?type='personal'"), icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/address_icon.png', dot_display: false },
           {name: "足迹", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/history_icon.png', dot_display: false },
           {name: "官方客服", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/official_service_icon.png', dot_display: false },
           {name: "收藏", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/collect_icon.png', dot_display: true },
