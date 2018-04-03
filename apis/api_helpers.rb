@@ -26,10 +26,10 @@ module APIHelpers
   end
   
   def client_info_record request, token
-    # logger.info "================#{request.headers['User-Agent']}"
-    # logger.info "================#{request.headers['System']}"
-    # logger.info "================#{request.headers['Device']}"
-    # logger.info "================#{request.headers['DeviceID']}"
+    logger.info "================#{request.headers['User-Agent']}"
+    logger.info "================#{request.headers['System']}"
+    logger.info "================#{request.headers['Device']}"
+    logger.info "================#{request.headers['DeviceID']}"
     os = request.headers['System'].split(' ')[0] rescue nil
     os_version = request.headers['System'].split(' ')[1] rescue nil
     device = request.headers['Device']
