@@ -132,7 +132,7 @@ module V1
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: order.timeout_express_for_alipay
               )
-              r={res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[:order_uuid]}")}
+              r={res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[:order_uuid]}")}.as_json
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
