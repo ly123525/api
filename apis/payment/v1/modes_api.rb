@@ -60,12 +60,12 @@ module V1
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
                 time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
-              logger.info "============================#{@session_user.wx_open_id}"
               pay_params[:openid] = @session_user.wx_open_id if params[:trade_type] == 'JSAPI'
               trade_type_params = case params[:trade_type]
               when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
-              when "JSAPI" then {appid: Env['WX_MP_APP_ID'], mch_id: ENV['WX_MP_MCH_ID'], key: ENV['WX_MPAPI_KEY']}  
-              end  
+              when "JSAPI" then {appid: ENV['WX_MP_APP_ID'], mch_id: ENV['WX_MP_MCH_ID'], key: ENV['WX_MP_API_KEY']}  
+              end
+              binding.pry  
               ret = WxPay::Service.invoke_unifiedorder pay_params, trade_type_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
@@ -132,7 +132,7 @@ module V1
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: order.timeout_express_for_alipay
               )
-              r={res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[order_uuid]}")}
+              r={res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[:order_uuid]}")}
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
