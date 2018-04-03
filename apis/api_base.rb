@@ -2,7 +2,7 @@ module API
   class Base < Grape::API
     module JSONFormatter
       def self.call object, env
-        return object if ENV["ALIPAY_NOTIFY_URL"].include? env["REQUEST_URI"]
+        return object if ENV["ALIPAY_NOTIFY_URL"] == env["REQUEST_URI"]
         tips = object.delete(:tips) || object.delete('tips') rescue nil
         data = object[:data] || object['data'] || object rescue object
         data = nil if data.blank?
