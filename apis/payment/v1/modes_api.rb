@@ -63,7 +63,7 @@ module V1
               pay_params[:openid] = @session_user.openid if params[:trade_type] == 'JSAPI'
               trade_type_params = case params[:trade_type]
               when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
-              when "JSAPI" then {}  
+              when "JSAPI" then {appid: Env['WX_MP_APP_ID'], mch_id: ENV['WX_MP_MCH_ID'], key: ENV['WX_MPAPI_KEY']}  
               end  
               ret = WxPay::Service.invoke_unifiedorder pay_params, trade_type_params
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
