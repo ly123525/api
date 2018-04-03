@@ -131,7 +131,7 @@ module V1
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: order.timeout_express_for_alipay)
-              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/orders/pay_result?uuid=#{params[:order_uuid]}")}
+              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/pay_result?uuid=#{params[:order_uuid]}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -148,9 +148,7 @@ module V1
               if Alipay::INIT_CLIENT.verify?(notify_params) && notify_params['trade_status'] == 'TRADE_SUCCESS'
                 payment=::Payment.find_by(trade_no: notify_params['out_trade_no'])
                 payment.update(paid: true, payment_at: notify_params['gmt_payment'].to_time, out_trade_no: notify_params['trade_no'] )
-                payment.item.with_lock do
-                  payment.item.pay!
-                end
+                payment.item.refrensh_status
                 status 200
                 "success"
               else
