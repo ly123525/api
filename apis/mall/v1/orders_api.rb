@@ -172,7 +172,7 @@ module V1
               order = ::Mall::Order.find_uuid(params[:uuid])
               order.refrensh_status
               fight_group = order.fight_group
-              present :order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
+              present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
