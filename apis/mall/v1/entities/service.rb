@@ -36,7 +36,38 @@ module V1
         expose :product_details do |m, o|
           m.product_details
         end  
-      end    
+      end
+      
+      class Services < Grape::Entity
+        expose :status do |m, o|
+          case m.status
+            when "service_processing"
+              "#{m.service_name} 申请中..."
+            when "applied" 
+              "#{m.service_name} 卖家已确认"
+            when "closed"
+              "已取消"
+          end       
+        end  
+        expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
+          m.service_target.try(:shop) || m.service_target.try(:order).try(:shop)
+        end
+        expose :product, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
+          m.service_target_type == 'Mall::Order' ? m.service_target.order_items.first : m.service_target
+        end
+        expose :total_fee do |m, o|
+          "￥ "+m.refund_fee.to_s
+        end
+        expose :cancel_apply_scheme do |m, o|
+          m.service_processing? || m.applied?
+        end
+        expose :express_scheme do |m, o|
+          m.service_processing?
+        end
+        expose :check_details_scheme do |m, o|
+          m.service_processing? || m.applied?
+        end            
+      end      
     end  
   end  
 end  
