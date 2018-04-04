@@ -5,20 +5,20 @@ module Umeng
     $umeng_android = Umeng::Client.new(ENV['UMENG_ANDROID_APP_KEY'], ENV['UMENG_ANDROID_SECRET'], 'Android')
 
     class << self
-      # opts{title, body, scheme}
+      # opts{title, body, scheme, production_mode}
       def android_opts opts={}
         {
           key_value: opts,
-          production_mode: true,
+          pproduction_mode: opts[:production_mode] || true,
           description: opts[:title]
         }
       end
       
-      # opts{title, body, scheme}
+      # opts{title, body, scheme, production_mode}
       def ios_opts opts={}
         {
           key_value: {"content": opts},
-          production_mode: true,
+          production_mode: opts[:production_mode] || true,
           description: opts[:title]
         }
       end
@@ -31,7 +31,7 @@ module Umeng
 
       # 单推
       # token 友盟设备唯一标识, Android的device_token是44位字符串，iOS的device_token是64位 [多特么脑残]
-      # opts{title, body, scheme}
+      # opts{title, body, scheme, production_mode}
       def push_unicast token, opts={}
         $umeng_ios.push_unicast(token, android_opts(opts)) if token.to_s.size==44
         $umeng_android.push_unicast(token, ios_opts(opts)) if token.to_s.size==64
