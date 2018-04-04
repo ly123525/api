@@ -66,7 +66,10 @@ module V1
         end
         expose :check_details_scheme do |m, o|
           m.service_processing? || m.applied?
-        end            
+        end
+        expose :scheme do |m, o|
+          "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+        end              
       end      
     end  
   end  
