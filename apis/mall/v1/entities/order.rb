@@ -268,7 +268,7 @@ module V1
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (o[:fight_group].style.prcture.image.style_url('300w') rescue nil),
-              url: 'http://www.baidu.com',
+              url: 'http://39.107.86.17:8080/#/commdoity',
               description: '快来拼单吧'
             }
           else
