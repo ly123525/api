@@ -9,7 +9,7 @@ module Umeng
       def android_opts opts={}
         {
           key_value: opts,
-          pproduction_mode: opts[:production_mode] || true,
+          production_mode: opts[:production_mode] || true,
           description: opts[:title]
         }
       end
@@ -33,16 +33,16 @@ module Umeng
       # token 友盟设备唯一标识, Android的device_token是44位字符串，iOS的device_token是64位 [多特么脑残]
       # opts{title, body, scheme, production_mode}
       def push_unicast token, opts={}
-        $umeng_ios.push_unicast(token, android_opts(opts)) if token.to_s.size==44
-        $umeng_android.push_unicast(token, ios_opts(opts)) if token.to_s.size==64
+        $umeng_android.push_unicast(token, android_opts(opts)) if token.to_s.size==44
+        $umeng_ios.push_unicast(token, ios_opts(opts)) if token.to_s.size==64
       end
 
       # tokens 列表推送
       def push_listcast tokens, opts={}
         android_tokens = tokens.find_all{|token| token.to_s.size==44}
         ios_tokens = tokens.find_all{|token| token.to_s.size==64}
-        $umeng_ios.push_listcast(android_tokens, android_opts(opts))
-        $umeng_android.push_listcast(ios_tokens, ios_opts(opts))
+        $umeng_android.push_listcast(android_tokens, android_opts(opts))
+        $umeng_ios.push_listcast(ios_tokens, ios_opts(opts))
       end
     end
   end

@@ -49,7 +49,6 @@ module V1
               authenticate_user
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               address = @session_user.addresses.find_uuid(params[:uuid])
-              binding.pry
               @session_user.set_default_address(address, params[:is_default]) 
               address.update!(name: params[:name], 
               province: params[:province], 
