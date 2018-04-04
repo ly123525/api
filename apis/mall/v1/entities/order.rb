@@ -247,17 +247,21 @@ module V1
           end    
         end    
         expose :title do |m, o|
-          if o[:fight_group]
+          if o[:fight_group] && o[:fight_group].waiting? 
             "还差#{o[:fight_group].residual_quantity}人，赶快邀请好友拼单吧～"
           end
         end
         expose :desc do |m, o|
-          if o[:fight_group]
+          if o[:fight_group] && o[:fight_group].waiting?
             "拼单人满后立即发货"
           end
         end
         expose :remaining_time do |m, o|
-          o[:fight_group].expired_at.localtime-Time.now
+          if o[:fight_group] && o[:fight_group].waiting?
+            (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? (o[:fight_group].expired_at.localtime-Time.now).to_i : 0
+          else
+            0  
+          end 
         end
         expose :share do |m, o|
           if o[:fight_group]
