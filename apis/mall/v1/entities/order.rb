@@ -268,7 +268,7 @@ module V1
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (o[:fight_group].style.prcture.image.style_url('300w') rescue nil),
-              url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}&fight_group_uuid=#{m.fight_group_uuid}",
+              url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}&fight_group_uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
           else
