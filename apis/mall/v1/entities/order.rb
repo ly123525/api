@@ -152,7 +152,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
-              url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
+              url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}&fight_group_uuid=#{m.try(:fight_group).try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -222,7 +222,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
-              url: "http://39.107.86.17:8080/#/mall/products?uuid=FEGWGEG",
+              url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}&fight_group_uuid=#{m.try(:fight_group).try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
