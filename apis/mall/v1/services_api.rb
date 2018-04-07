@@ -2,14 +2,31 @@ module V1
   module Mall
     class ServicesAPI < Grape::API
       namespace :mall do
-        resources :services do 
+        resources :services do
+          desc "进入服务单页面"
+          params do
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :order_uuid, type: String, desc: '订单 UUID'            
+          end
+          get :new do
+            begin
+              authenticate_user
+              order = @session_user.orders.find_uuid(params[:order_uuid])
+              present order, with: ::V1::Entities::Service::ServiceOfOrder
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end                           
+          end     
           desc "订单服务单生成"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_uuid, type: String, desc: '订单UUID'
             requires :type_of, type: String, values: ['RefundService','ReturnAllService']
-            requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
+            requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
             optional :images, type: Array[File], desc: '上传凭证'  
@@ -37,7 +54,7 @@ module V1
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_item_uuid, type: String, desc: '子订单UUID'
             requires :type_of, type: String, values: ['RefundService','ReturnAllService']
-            requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
+            requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
             optional :images, type: Array[File], desc: '上传凭证'  
