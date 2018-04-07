@@ -35,6 +35,7 @@ module API
     mount ::V1::Mall::ShopsAPI
     mount ::V1::Mall::IndexsAPI
     mount ::V1::Mall::IndexsAPI
+    mount ::V1::Mall::BrowseRecordAPI
     
     mount ::V1::Choice::ArticlesAPI
     mount ::V1::Choice::CollectionsAPI
