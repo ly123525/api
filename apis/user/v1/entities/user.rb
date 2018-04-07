@@ -32,19 +32,19 @@ module V1
           nil
         end
         expose :to_be_paid_count do |m, o|
-          
+          m.orders.created.count
         end
         expose :waiting_delivery_count do |m, o|
-          1
+          m.waiting_fight_group_count
         end
         expose :waiting_receive_count do |m, o|
-          
+          m.waiting_receive_count
         end
         expose :waiting_evaluate_count do |m, o|
-          
+          m.orders.received.count
         end
         expose :customer_service_count do |m, o|
-          
+          m.orders.refunded.count
         end
         expose :section do |m, o|
           [{name: "优惠券", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/coupon_icon.png', dot_display: false },
