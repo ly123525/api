@@ -11,6 +11,7 @@ module V1
           end      
           get do
             begin
+              logger.info "====================================#{params.to_json}"
               authenticate_user
               fight_group = ::Mall::FightGroup.find_uuid(params[:uuid])
               present fight_group, with: ::V1::Entities::Mall::FightGroup, user: @session_user
