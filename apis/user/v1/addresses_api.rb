@@ -17,10 +17,8 @@ module V1
           end
           post do
             begin
-              logger.info "===================================#{params[:user_uuid]}"
               authenticate_user
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
-              logger.info "===================================#{@session_user.id}"
               address=@session_user.addresses.create!(name: params[:name], 
                 province: params[:province], 
                 city: params[:city], 
@@ -28,7 +26,6 @@ module V1
                 mobile: params[:phone],
                 is_default: params[:is_default])
               @session_user.set_default_address(address, params[:is_default])
-              logger.info "===================================#{address.id}"  
               nil
             rescue Exception => ex
               server_error(ex)
