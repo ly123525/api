@@ -32,22 +32,22 @@ module V1
           nil
         end
         expose :to_be_paid_count do |m, o|
-          m.orders.created.count > 0 ? m.orders.created.count : nil
+          
         end
         expose :waiting_delivery_count do |m, o|
-          m.waiting_fight_group_count > 0 ? m.waiting_fight_group_count : nil
+          
         end
         expose :waiting_receive_count do |m, o|
-          m.waiting_receive_count > 0 ? m.waiting_receive_count : nil
+          
         end
         expose :waiting_evaluate_count do |m, o|
-          m.orders.received.count > 0 ? m.orders.received.count : nil
+          
         end
         expose :customer_service_count do |m, o|
-          m.orders.refunded.count > 0 ? m.orders.refunded.count : nil
+          
         end
         expose :section do |m, o|
-          [{name: "优惠券", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/coupon_icon.png', dot_display: false },
+          [
           {name: "地址管理", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("http://39.107.86.17:8080/#/account/addresses?type='personal'"), icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/address_icon.png', dot_display: false },
           {name: "足迹", scheme: nil, icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/history_icon.png', dot_display: false },
           {name: "官方客服", scheme: "lvsent://gogo.cn/im/chats?im_user_name=#{::Mall::Shop.first.im_user_name}", icon: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/official_service_icon.png', dot_display: false },
