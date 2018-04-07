@@ -17,6 +17,7 @@ module V1
           end
           post do
             begin
+              logger.info "===================================#{params[:user_uuid]}"
               authenticate_user
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               logger.info "===================================#{@session_user.id}"
