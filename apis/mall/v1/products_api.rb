@@ -13,6 +13,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
+              ::Mall::BrowseRecord.generate_browse_record user, style.product
               present style, with: ::V1::Entities::Mall::ProductByStyle, user: user
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
