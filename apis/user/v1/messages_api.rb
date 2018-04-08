@@ -4,7 +4,7 @@ module V1
       namespace :user do
         resources :messages do
           
-          desc "消息通知列表"
+          desc "消息首页"
           params do
             requires :user_uuid, type: String, desc: '用户UUID'
             requires :token, type: String, desc: '用户访问令牌'
@@ -12,13 +12,8 @@ module V1
           get do
             begin
               authenticate_user
-                {title: '学会这个妆，拍照不用PS', 
-                  image: 'https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/touxiang.png?x-oss-process=style/160w', 
-                  message_type: '系统', 
-                  scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/messages/destail"),
-                  status: true,
-                  time: Time.now.localtime.localtime.strftime('%y/%m/%d')
-                }
+              message = ::Message.last
+              present message, with: ::V1::Entities::User::Message, user: @session_user
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -26,33 +21,60 @@ module V1
             end              
           end 
           
-          desc "消息详情"
+          desc "消息已读/未读"
+          params do
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :token, type: String, desc: '用户访问令牌'            
+          end
+          post do
+            begin
+              authenticate_user
+              message = ::Message.last
+              ::MessageReadRecord.find_or_create_by_message_and_user message, @session_user
+              true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end                           
+          end    
+          desc "消息详情列表"
           params do
             requires :user_uuid, type: String, desc: '用户UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            optional :type, type: String, values: ['service', 'personal'], default: 'service', desc: 'service: 系统消息, personal: 个人消息'            
+            optional :page, type: Integer, default: 1, desc: '分页页码'           
           end
           get :destail do
             begin
               authenticate_user
-              [
-                {
-                  title: "学会这个妆，拍照不用PS",
-                  image: 'https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/recommend_product.png?x-oss-process=style/160w',
-                  body: '学会这个妆，拍照不用PS学会这个妆，拍照不用PS学会这个妆，拍照不用PS学会这个妆，拍照不用PS学会这个妆，拍照不用PS'
-                },
-                {
-                  title: nil,
-                  image: nil,
-                  body: '学会这个妆，拍照不用PS学会这个妆，拍照不用PS学会这个妆，拍照不用PS学会这个妆，拍照不用PS学会这个妆，拍照不用PS'
-                }                
-              ]
+              messages = @session_user.list_messages.page(params[:page]).per(10)
+              present messages, with: ::V1::Entities::User::Messages
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
               server_error(ex)
             end                          
-          end     
+          end
+          
+          desc "消息删除"
+          params do
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '消息 UUID'
+          end  
+          delete do
+            begin
+              authenticate_user
+              message = ::Message.find_uuid(params[:uuid])
+              record=::MessageReadRecord.find_or_create_by_message_and_user message, @session_user
+              record.update!(deleted: true)
+              true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end       
         end  
       end  
     end  
