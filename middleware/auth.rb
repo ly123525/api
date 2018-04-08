@@ -30,7 +30,7 @@ module API
     end
 
     def verify?(params)
-      return false unless (Time.now-5.minute..Time.now).include?( Time.at(params['timestamp'].to_i) )
+      return false unless (Time.now-5.minute..Time.now+10.second).include?( Time.at(params['timestamp'].to_i) )
       sign = params.delete('signature')
       generate(params) == sign
     end
