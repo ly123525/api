@@ -32,7 +32,7 @@ module V1
         end
         expose :share do |m, o|
           {
-            url: "http://h5.ggoo.net.cn/#/choice/articles?uuid=#{m.uuid}",
+            url: "http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_bg_square.png?x-oss-process=style/300w',
             title: m.title,
@@ -73,7 +73,7 @@ module V1
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :share do |m, o|
           {
-            url: "http://h5.ggoo.net.cn/#/choiceness?uuid=#{m.uuid}",
+            url: "http://39.107.86.17:8080/#/choiceness?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_bg_square.png?x-oss-process=style/300w',
             title: m.title,
@@ -81,10 +81,10 @@ module V1
           }
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://h5.ggoo.net.cn/#/choiceness?uuid=#{m.uuid}")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/choiceness?uuid=#{m.uuid}")
         end
         expose :comments_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://h5.ggoo.net.cn/#/comment?article_uuid=#{m.uuid}")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/comment?article_uuid=#{m.uuid}")
         end
       end
     end
