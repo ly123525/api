@@ -41,7 +41,7 @@ module V1
         end
         expose :fight_group_scheme do |m, o|
           if m.waiting? && !m.orders.paid.pluck(&:user_id).include?(o[:user].id)
-            {button_name: '立即拼单', button_url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.product.uuid}&fight_group_uuid=#{m.uuid}"}    
+            {button_name: '立即拼单', button_url: "http://h5.ggoo.net.cn/#/mall/products?uuid=#{m.product.uuid}&fight_group_uuid=#{m.uuid}"}    
           end
         end      
       end
@@ -64,7 +64,7 @@ module V1
           {
             title: '我在全民拼选购了商品，赶紧来拼单吧',
             image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
-            url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
+            url: "http://h5.ggoo.net.cn/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
             summary: '快来拼单吧'
           }
         end       

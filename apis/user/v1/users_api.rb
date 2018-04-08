@@ -117,7 +117,7 @@ module V1
           get :agreement do
             begin
               authenticate_user
-              {scheme:  "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/agreement")}
+              {scheme:  "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://h5.ggoo.net.cn/#/agreement")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

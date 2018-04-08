@@ -143,7 +143,7 @@ module V1
           if m.product.details_url.present?
             m.product.details_url
           else
-            "http://39.107.86.17:8080/#/mall/products/details?style_uuid=#{m.uuid}"
+            "http://h5.ggoo.net.cn/#/mall/products/details?style_uuid=#{m.uuid}"
           end
         end
         expose :need_to_choose_style do | m, o |
@@ -165,7 +165,7 @@ module V1
           m.product.comments.sorted.limit(4)
         end
         expose :comments_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/evaluate?style_uuid=#{m.uuid}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://h5.ggoo.net.cn/#/evaluate?style_uuid=#{m.uuid}")
         end  
         expose :styles do |m, o|
           m.product.styles_for_choice(m.labels)

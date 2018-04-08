@@ -68,7 +68,7 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :scheme do |m, o|
-          "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+          "http://h5.ggoo.net.cn/#/mall/services?uuid=#{m.uuid}"
         end              
       end
       class ServiceOfOrder < Grape::Entity
