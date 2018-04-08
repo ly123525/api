@@ -10,6 +10,7 @@ module API
       Grape::API.logger.info "===================#{params.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
+      Grape::API.logger.info "===================#{Time.now}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       env['api.endpoint'].error!({error: "internal error!"},402) unless verify?(params)
