@@ -12,7 +12,7 @@ module API
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
-      env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
+      env['api.endpoint'].error!({error: "internal error!"},402) unless verify?(params)
     end
 
     # 签名算法
