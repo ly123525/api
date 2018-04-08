@@ -3,22 +3,22 @@ module V1
     module Mall
       class BrowseRecords < Grape::Entity
         expose :day do |m, o|
-          m.browse_time
-        end  
+          m.created_at.strftime('%m月%d日')
+        end   
         expose :title do |m, o|
-          m.product.name
+          m.style.product.name + " " + m.style.name
         end
         expose :image do |m, o|
-          m.styles.first.pictures.sorted.last.image.style_url('180w') rescue nil
+          m.style.adaption_pictures.sorted.last.image.style_url('180w') rescue nil
         end
         expose :scheme do |m, o|
-          "http://39.107.86.17/v1/mall/products?uuid=#{m.product.uuid}"
+          "http://39.107.86.17/v1/mall/products?style_uuid=#{m.style.uuid}"
         end
         expose :original_price do |m, o|
-          m.product.styles.first.original_price.to_s
+          m.style.original_price.to_s
         end
         expose :price do |m, o|
-          m.product.styles.first.price.to_s
+          m.style.price.to_s
         end          
       end  
     end  
