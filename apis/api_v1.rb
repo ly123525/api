@@ -55,7 +55,6 @@ module API
     end
     
     get :wx_token_verfity do
-      logger.info "============#{params.to_json}"
       params[:echostr]
     end
   end
