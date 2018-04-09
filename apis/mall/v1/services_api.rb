@@ -41,7 +41,7 @@ module V1
                                                 params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:images])
-              nil  
+              nil 
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -85,6 +85,7 @@ module V1
           get :express do
             begin
               authenticate_user
+              service = ::Mall::Service.find_uuid(params[:uuid])
               present service, with: ::V1::Entities::Service::DetailServiceOfExpress
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -105,7 +106,6 @@ module V1
               authenticate_user
               service = ::Mall::Service.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
-              service.appling!
               true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
