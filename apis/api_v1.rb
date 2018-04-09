@@ -41,6 +41,8 @@ module API
     mount ::V1::Choice::CollectionsAPI
     mount ::V1::Choice::CommentsAPI
     
+    mount ::V1::Topic::TopicsAPI
+    
     if ENV['SERVER_ENV']=='development'
       namespace :doc do
         formatter :json, ::API::Base::DOCFormatter
