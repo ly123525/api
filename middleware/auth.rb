@@ -16,7 +16,6 @@ module API
       params['nonce_str'] = env['HTTP_NONCE_STR']
       sign = params['signature']
       env['api.endpoint'].error!({error: "internal error!"},402) unless verify?(params)
-      binding.pry
       base_auth_record=$redis.write(sign, params['nonce_str'], Time.now + 12.hour)
     end
 
