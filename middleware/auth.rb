@@ -4,7 +4,7 @@ module API
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
-      # return if ENV['SERVER_ENV']=='development'
+      return if ENV['SERVER_ENV']=='development'
       request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
       params = request.params
       Grape::API.logger.info "===================#{params.to_s}"
@@ -31,7 +31,7 @@ module API
     end
 
     def verify?(params)
-      return false unless (Time.now-5.minute..Time.now+2.second).include?( Time.at(params['timestamp'].to_i) )
+      return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
       sign = params.delete('signature')
       generate(params) == sign
     end
