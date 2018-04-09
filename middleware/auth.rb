@@ -11,7 +11,6 @@ module API
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
       Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
-      Grape::API.logger.info "===================#{env}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       params['nonce'] = env['HTTP_NONCE']
