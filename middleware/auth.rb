@@ -10,14 +10,14 @@ module API
       Grape::API.logger.info "===================#{params.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
-      Grape::API.logger.info "===================#{env['HTTP_NONCE_STR']}"
+      Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
       Grape::API.logger.info "===================#{env}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
-      params['nonce_str'] = env['HTTP_NONCE_STR']
+      params['nonce'] = env['HTTP_NONCE']
       sign = params['signature']
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
-      base_auth_record=$redis.write(sign, params['nonce_str'], Time.now + 12.hour)
+      base_auth_record=$redis.write(sign, params['nonce'], Time.now + 12.hour)
     end
 
     # 签名算法
@@ -36,7 +36,7 @@ module API
 
     def verify?(params)
       return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
-      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce_str']      
+      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']      
       sign = params.delete('signature')
       generate(params) == sign
     end
