@@ -1,7 +1,7 @@
 module V1
   module Entities
     module Topic
-      class Topic < Grape::Entity
+      class TopicOfStyles < Grape::Entity
         expose :image do |m, o|
           m.target.adaption_pictures.sorted.last.image.style_url('480w') rescue nil
         end
@@ -20,7 +20,17 @@ module V1
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.target.uuid}"
         end 
-      end  
+      end
+      
+      class Topic < Grape::Entity
+        expose :title do |m, o|
+          m.title
+        end
+        
+        expose :products, using: ::V1::Entities::Topic::TopicOfStyles do |m, o|
+          o[:items]
+        end    
+      end    
     end  
   end  
 end  

@@ -14,7 +14,7 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               topic = ::Topic::Topic.find_uuid(params[:uuid])
               items = topic.topic_items.page(params[:page]).per(10)
-              present items, with: ::V1::Entities::Topic::Topic
+              present topic, with: ::V1::Entities::Topic::Topic, items: items
             rescue Exception => ex
               server_error(ex)
             end                          
