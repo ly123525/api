@@ -4,15 +4,19 @@ module API
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
-      return if ENV['SERVER_ENV']=='development'
+      # return if ENV['SERVER_ENV']=='development'
       request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
       params = request.params
       Grape::API.logger.info "===================#{params.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
+      Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
+      params['nonce'] = env['HTTP_NONCE']
+      sign = params['signature']
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
+      base_auth_record=$redis.write(sign, params['nonce'], Time.now + 12.hour)
     end
 
     # 签名算法
@@ -30,7 +34,8 @@ module API
     end
 
     def verify?(params)
-      return false unless (Time.now-5.minute..Time.now).include?( Time.at(params['timestamp'].to_i) )
+      return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
+      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']      
       sign = params.delete('signature')
       generate(params) == sign
     end

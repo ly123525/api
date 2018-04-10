@@ -39,20 +39,11 @@ module V1
         expose :user_images do |m, o| 
           m.user_avatars
         end
-        expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}" if m.user == o[:user]
-        end
-        expose :inviting_friends_info do |m, o|
-           if m.waiting? && m.user != o[:user]
-             image = m.orders.first.order_items.first.picture.image.style_url('300w') rescue nil
-             {
-               url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.product.uuid}",
-               image: image,
-               title: "来拼",
-               summary: "来拼"
-             }
-           end
-         end   
+        expose :fight_group_scheme do |m, o|
+          if m.waiting? && !m.orders.paid.pluck(&:user_id).include?(o[:user].id)
+            {button_name: '立即拼单', button_url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.product.uuid}&fight_group_uuid=#{m.uuid}"}    
+          end
+        end      
       end
       
       class FightGroupForOrder < Grape::Entity

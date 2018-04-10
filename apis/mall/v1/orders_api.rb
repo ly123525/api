@@ -60,7 +60,7 @@ module V1
           get do
             begin
               authenticate_user
-              orders = ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(20)
+              orders = ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(10)
               ::Mall::Order.refrensh_status(orders)
               ::Mall::Order.auto_fight_group_list(orders)
               present ({orders: orders}), with: ::V1::Entities::Mall::OrderList
@@ -172,7 +172,7 @@ module V1
               order = ::Mall::Order.find_uuid(params[:uuid])
               order.refrensh_status
               fight_group = order.fight_group
-              present :order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
+              present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

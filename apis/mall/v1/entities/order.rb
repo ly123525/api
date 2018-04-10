@@ -152,7 +152,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
-              url: "http://39.107.86.17:8080/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
+              url: "http://39.107.86.17:8080/#/share?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -222,7 +222,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
-              url: "http://39.107.86.17:8080/#/mall/products?uuid=FEGWGEG",
+              url: "http://39.107.86.17:8080/#/share?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -247,31 +247,35 @@ module V1
           end    
         end    
         expose :title do |m, o|
-          if o[:fight_group]
+          if o[:fight_group] && o[:fight_group].waiting? 
             "还差#{o[:fight_group].residual_quantity}人，赶快邀请好友拼单吧～"
           end
         end
         expose :desc do |m, o|
-          if o[:fight_group]
+          if o[:fight_group] && o[:fight_group].waiting?
             "拼单人满后立即发货"
           end
         end
         expose :remaining_time do |m, o|
-          o[:fight_group].expired_at.localtime-Time.now
+          if o[:fight_group] && o[:fight_group].waiting?
+            (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? (o[:fight_group].expired_at.localtime-Time.now).to_i : 0
+          else
+            0  
+          end 
         end
         expose :share do |m, o|
           if o[:fight_group]
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (o[:fight_group].style.prcture.image.style_url('300w') rescue nil),
-              url: 'http://www.baidu.com',
+              url: "http://39.107.86.17:8080/#/share?fight_group_uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
           else
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
-              url: 'http://39.107.86.17:8080/#/commdoity',
+              url: "http://39.107.86.17:8080/#/share?uuid=#{m.order_items.first.product.uuid}",
               description: '快来拼单吧'
             }
           end

@@ -25,7 +25,7 @@ module V1
                 address: params[:address], 
                 mobile: params[:phone],
                 is_default: params[:is_default])
-              @session_user.set_default_address(address, params[:is_default])  
+              @session_user.set_default_address(address, params[:is_default])
               nil
             rescue Exception => ex
               server_error(ex)

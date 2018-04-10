@@ -30,10 +30,7 @@ module V1
         expose :collection_or_not do |m, o|
           o[:user_ids].include?(o[:user_id])
         end
-        expose :collections_count do |m, o|
-            m.collections.count
-        end
-         expose :share do |m, o|
+        expose :share do |m, o|
           {
             url: "http://39.107.86.17:8080/#/choice/articles?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),

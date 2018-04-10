@@ -35,10 +35,13 @@ module API
     mount ::V1::Mall::ShopsAPI
     mount ::V1::Mall::IndexsAPI
     mount ::V1::Mall::IndexsAPI
+    mount ::V1::Mall::BrowseRecordAPI
     
     mount ::V1::Choice::ArticlesAPI
     mount ::V1::Choice::CollectionsAPI
     mount ::V1::Choice::CommentsAPI
+    
+    mount ::V1::Topic::TopicsAPI
     
     if ENV['SERVER_ENV']=='development'
       namespace :doc do
@@ -54,7 +57,6 @@ module API
     end
     
     get :wx_token_verfity do
-      logger.info "============#{params.to_json}"
       params[:echostr]
     end
   end
