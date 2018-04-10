@@ -174,7 +174,7 @@ module V1
           m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
-          {category_bar: {image: "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_recommend.jpg?x-oss-process=style/400w", scheme: 'www.baidu.com'}, products_by_styles: ::Mall::Style.recommended.sorted.limit(4)}
+          {category_bar: {image: "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_recommend.png?x-oss-process=style/400w", scheme: 'www.baidu.com'}, products_by_styles: ::Mall::Style.recommended.sorted.limit(4)}
         end
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
