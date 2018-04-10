@@ -9,7 +9,7 @@ module Umeng
       def android_opts opts={}
         {
           key_value: opts,
-          production_mode: opts[:production_mode] || true,
+          production_mode: opts[:production_mode] || false,
           description: opts[:title]
         }
       end
@@ -17,8 +17,8 @@ module Umeng
       # opts{title, body, scheme, production_mode}
       def ios_opts opts={}
         {
-          key_value: {"content": opts},
-          production_mode: opts[:production_mode] || true,
+          key_value: {"content"=> opts},
+          production_mode: opts[:production_mode] || false,
           description: opts[:title]
         }
       end
