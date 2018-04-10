@@ -5,9 +5,7 @@ module V1
         expose :image do |m, o|
           m.picture.image.style_url('640w') rescue nil
         end  
-        expose :scheme do |m, o|
-          "lvsent://gogo.cn/mall/mall_index/banners?uuid=#{m.uuid}"
-        end
+        expose :scheme
       end  
     end  
   end  
