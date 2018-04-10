@@ -35,7 +35,9 @@ module API
 
     def verify?(params)
       return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
-      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']      
+      Grape::API.logger.info "===================时间"
+      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']
+      Grape::API.logger.info "===================redis"      
       sign = params.delete('signature')
       generate(params) == sign
     end
