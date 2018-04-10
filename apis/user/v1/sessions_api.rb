@@ -16,7 +16,7 @@ module V1
               app_error("验证码已超出今日上限", "Captcha out of gauge") if ::Account::Captcha.over_limited?
               app_error("获取验证码过于频繁，请稍后再试", "Please try again later") if ::Account::Captcha.frequent?(params[:phone])
               captcha = ::Account::Captchas::LoginCaptcha.generate!(user.phone)
-              user.send_sms('SMS_131030131', code: captcha.code)
+              user.send_sms('SMS_123755005', code: captcha.code)
               { tips: "验证码已发送，有效期为10分钟，请注意查收" }
             rescue Exception => ex
               server_error(ex)
