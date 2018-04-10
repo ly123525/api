@@ -11,7 +11,7 @@ module V1
             when "Messages::SystemMessage"
               "系统"
             when "Messages::UserMessage"
-              "个人"
+              "通知"
           end     
         end
         expose :scheme do |m, o|
