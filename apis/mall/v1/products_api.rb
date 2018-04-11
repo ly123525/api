@@ -91,7 +91,26 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end              
-          end    
+          end
+          
+          desc "单个商品的拼单列表"
+          params do
+            optional :user_uuid, type: String, desc: '用户 UUID'
+            requires :product_uuid, type: String, desc: '商品 UUID'
+            requires :page, type: Integer, default: 1, desc: '页码'            
+          end
+          get :all_fight_groups do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil 
+              product= ::Mall::Product.find_uuid(params[:product_uuid])
+              fight_groups =  product.fight_groups.waiting.not_expired.sorted
+              present fight_groups, with: ::V1::Entities::Mall::FightGroups            
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end      
         end
       end
     end
