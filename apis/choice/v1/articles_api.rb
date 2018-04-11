@@ -87,6 +87,7 @@ module V1
           desc "详情页"
           params do
             requires :uuid, type: String, desc: '文章 UUID'
+            optional :user_uuid, type: String, desc: '用户 UUID'
           end
 
           get 'detail'  do
