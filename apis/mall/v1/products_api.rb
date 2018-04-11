@@ -103,7 +103,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil 
               product= ::Mall::Product.find_uuid(params[:product_uuid])
-              fight_groups =  product.fight_groups.waiting.not_expired.sorted
+              fight_groups =  product.fight_groups.waiting.not_expired.sorted.page(params[:page]).per(10)
               present fight_groups, with: ::V1::Entities::Mall::FightGroups            
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
