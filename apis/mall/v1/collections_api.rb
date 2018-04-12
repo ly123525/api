@@ -48,6 +48,7 @@ module V1
               authenticate_user
               style = ::Mall::Style.find_uuid(params[:style_uuid])
               @session_user.collections.where(item: style).destroy_all
+              nil
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
