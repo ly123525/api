@@ -18,7 +18,7 @@ module V1
           "¥ " + m.target.price.to_s
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.target.uuid}"
+          "http://39.107.86.17/v1/mall/products?style_uuid=#{m.target.uuid}"
         end 
       end
       
