@@ -31,7 +31,6 @@ module V1
           get do
             begin
               authenticate_user
-              @session_user = ::Account::User.find_uuid(params[:user_uuid])
               present @session_user.choice_articles, with: ::V1::Entities::Choice::ChoiceArticles
             rescue Exception => ex
               server_error(ex)
