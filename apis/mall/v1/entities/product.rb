@@ -156,7 +156,7 @@ module V1
           m.product.fight_groups.where.not(user: o[:user]).waiting.not_expired.sorted
         end
         expose :all_groups_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/messages/bill?product_uuid=#{m.product.uuid}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0  
         end  
         expose :comments_count do |m, o|
           m.product.comments.count
