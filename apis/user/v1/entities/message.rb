@@ -21,7 +21,7 @@ module V1
           ::MessageReadRecord.read? m, o[:user]
         end
         expose :time do |m, o|
-          m.created_at.localtime.strftime('%y/%m/%d')
+          m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
         end          
       end
       
@@ -34,7 +34,7 @@ module V1
           m.content
         end
         expose :time do |m, o|
-          m.created_at.localtime.strftime('%y/%m/%d') 
+          m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S') 
         end      
       end    
     end  
