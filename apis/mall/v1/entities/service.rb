@@ -128,6 +128,7 @@ module V1
         expose :refund_casue_tips do |m, o|
           ['买错了', '不想买了', '其他']
         end
+        expose :refund_fee
         expose :mobile    
       end        
     end  
