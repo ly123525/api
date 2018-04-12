@@ -110,14 +110,14 @@ module V1
       end
       class ServiceOfOrder < Grape::Entity
         expose :refund_type do |m, o|
-          if m.paid? && m.fight_group.waiting?
+          if m.paid?
               {tips: "仅退款", tip_type: 'RefundService'}
           elsif  m.delivered? || m.received? 
               {tips: "退货退款", tip_type: 'ReturnAllService' } 
           end                  
         end
         expose :express_status_tips do |m, o|
-          if m.paid? && m.fight_group.waiting?
+          if m.paid?
               "待发货"
           elsif  m.delivered?
               "已发货"
