@@ -13,7 +13,7 @@ module V1
                 "#{m.service_name} 卖家已确认" 
               end
             when "closed"
-              "已取消"
+              "申请已取消"
           end 
         end
         expose :status_image do |m, o|
