@@ -153,7 +153,7 @@ module V1
           m.product.fighting_orders.size.to_s
         end
         expose :groups, using: ::V1::Entities::Mall::FightGroups do |m, o|
-          m.product.fight_groups.waiting.not_expired.sorted
+          m.product.fight_groups.where.not(user: o[:user]).waiting.not_expired.sorted
         end
         expose :all_groups_scheme do |m, o|
            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/messages/bill?product_uuid=#{m.product.uuid}")
