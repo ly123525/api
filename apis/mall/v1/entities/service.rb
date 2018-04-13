@@ -7,9 +7,9 @@ module V1
             when "service_processing"
               "#{m.service_name}等待商家确认"
             when "applied" 
-              if m.class.to_s == 'Mall::Services::ReturnAllService'
+              if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.service_message.present?
                 "#{m.service_name} 卖家已确认,请填写快递信息" 
-              elsif m.class.to_s == 'Mall::Services::RefundService'
+              else
                 "#{m.service_name} 卖家已确认" 
               end
             when "refunded"
@@ -103,7 +103,7 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :detail_scheme do |m, o|
-          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
+          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
             "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
           else  
             "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
