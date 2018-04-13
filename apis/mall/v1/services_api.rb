@@ -155,17 +155,18 @@ module V1
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'            
           end
-          get :edit
-          begin
-            authenticate_user
-            service = @session_user.mall_services.find_uuid(params[:uuid])
-            present service, with: ::V1::Entities::Service::EditService
-          rescue ActiveRecord::RecordNotFound
-            app_uuid_error
-          rescue Exception => ex
-            server_error(ex)
-          end                        
+          get :edit do
+            begin
+              authenticate_user
+              service = @session_user.mall_services.find_uuid(params[:uuid])
+              present service, with: ::V1::Entities::Service::EditService
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end                        
           end  
+          
           desc "修改申诉"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
