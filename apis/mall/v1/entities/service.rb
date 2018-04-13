@@ -12,8 +12,10 @@ module V1
               elsif m.class.to_s == 'Mall::Services::RefundService'
                 "#{m.service_name} 卖家已确认" 
               end
+            when "refunded"
+              "已退款"
             when "closed"
-              "已取消"
+              "申请已取消"
           end 
         end
         expose :status_image do |m, o|
@@ -110,14 +112,14 @@ module V1
       end
       class ServiceOfOrder < Grape::Entity
         expose :refund_type do |m, o|
-          if m.paid? && m.fight_group.waiting?
+          if m.paid?
               {tips: "仅退款", tip_type: 'RefundService'}
           elsif  m.delivered? || m.received? 
               {tips: "退货退款", tip_type: 'ReturnAllService' } 
           end                  
         end
         expose :express_status_tips do |m, o|
-          if m.paid? && m.fight_group.waiting?
+          if m.paid?
               "待发货"
           elsif  m.delivered?
               "已发货"
@@ -128,8 +130,22 @@ module V1
         expose :refund_casue_tips do |m, o|
           ['买错了', '不想买了', '其他']
         end
+        expose :refund_fee do |m, o|
+          "￥ #{m.total_fee}"
+        end  
         expose :mobile    
-      end        
+      end
+      
+      class CreateServiceResult < Grape::Entity
+        expose :detail_scheme do |m, o|
+          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
+            "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
+          else  
+            "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+          end
+        end         
+      end
+              
     end  
   end  
 end  

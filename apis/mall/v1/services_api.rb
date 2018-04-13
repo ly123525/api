@@ -41,7 +41,7 @@ module V1
                                                 params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:images])
-              nil 
+              present service, with: ::V1::Entities::Service::CreateServiceResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -106,7 +106,7 @@ module V1
               authenticate_user
               service = ::Mall::Service.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
-              true
+              {scheme: "http://39.107.86.17:8080/#/mall/services?uuid=#{service.uuid}"}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
