@@ -41,7 +41,7 @@ module V1
                                                 params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:images])
-              nil 
+              present service, with: ::V1::Entities::Service::CreateServiceResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

@@ -12,6 +12,8 @@ module V1
               elsif m.class.to_s == 'Mall::Services::RefundService'
                 "#{m.service_name} 卖家已确认" 
               end
+            when "refunded"
+              "已退款"
             when "closed"
               "申请已取消"
           end 
@@ -132,7 +134,18 @@ module V1
           "￥ #{m.total_fee}"
         end  
         expose :mobile    
-      end        
+      end
+      
+      class CreateServiceResult < Grape::Entity
+        expose :detail_scheme do |m, o|
+          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
+            "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
+          else  
+            "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+          end
+        end         
+      end
+              
     end  
   end  
 end  
