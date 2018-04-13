@@ -159,7 +159,7 @@ module V1
           begin
             authenticate_user
             service = @session_user.mall_services.find_uuid(params[:uuid])
-            present service, with: ::V1::Entities::Mall::EditService
+            present service, with: ::V1::Entities::Service::EditService
           rescue ActiveRecord::RecordNotFound
             app_uuid_error
           rescue Exception => ex
