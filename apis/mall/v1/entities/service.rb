@@ -38,6 +38,10 @@ module V1
         expose :refund_cause   
       end
       
+      class EditService < DetailService
+        expose :description
+      end  
+      
       class DetailServiceOfExpress < DetailService
         expose :product_name do |m, o|
           m.product_name
