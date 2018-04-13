@@ -153,7 +153,6 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
-            requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
             optional :images, type: Array[File], desc: '上传凭证'
@@ -161,8 +160,8 @@ module V1
           put do
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
-              service.update!(refund_cause: params[:refund_cause], description: params[:description], mobile: params[:mobile])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
+              service.update!(description: params[:description], mobile: params[:mobile])
               service.update_picture!(params[:images])
               true
             rescue ActiveRecord::RecordNotFound
