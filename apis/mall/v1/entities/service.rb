@@ -108,9 +108,9 @@ module V1
         end
         expose :detail_scheme do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
-            "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details_two?uuid=#{m.uuid}"
           else  
-            "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details?uuid=#{m.uuid}"
           end
         end              
       end
@@ -143,9 +143,9 @@ module V1
       class CreateServiceResult < Grape::Entity
         expose :detail_scheme do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
-            "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details_two?uuid=#{m.uuid}"
           else  
-            "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details?uuid=#{m.uuid}"
           end
         end         
       end

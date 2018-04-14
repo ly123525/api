@@ -106,7 +106,7 @@ module V1
               authenticate_user
               service = ::Mall::Service.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
-              {scheme: "http://39.107.86.17:8080/#/mall/services?uuid=#{service.uuid}"}
+              {scheme: "http://39.107.86.17:8080/#/after_details?uuid=#{service.uuid}"}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
