@@ -7,9 +7,9 @@ module V1
             when "service_processing"
               "#{m.service_name}等待商家确认"
             when "applied" 
-              if m.class.to_s == 'Mall::Services::ReturnAllService'
+              if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.service_message.present?
                 "#{m.service_name} 卖家已确认,请填写快递信息" 
-              elsif m.class.to_s == 'Mall::Services::RefundService'
+              else
                 "#{m.service_name} 卖家已确认" 
               end
             when "refunded"
@@ -37,6 +37,26 @@ module V1
         end  
         expose :refund_cause   
       end
+      
+      class EditService < Grape::Entity
+        expose :type_of do |m, o| 
+          case m.class.to_s
+            when 'Mall::Services::RefundService'
+              "退款"
+            when 'Mall::Services::ReturnAllService' 
+              "退货退款" 
+          end      
+        end  
+        expose :refund_cause
+        expose :refund_cause_tips do |m, o|
+          ['买错了', '不想买了', '其他']
+        end         
+        expose :description
+        expose :mobile
+        expose :images do |m, o|
+          m.pictures.map{|picture| picture.image.url}
+        end  
+      end  
       
       class DetailServiceOfExpress < DetailService
         expose :product_name do |m, o|
@@ -103,10 +123,10 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :detail_scheme do |m, o|
-          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
-            "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
+          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
+            "http://39.107.86.17:8080/#/after_details_two?uuid=#{m.uuid}"
           else  
-            "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details?uuid=#{m.uuid}"
           end
         end              
       end
@@ -139,9 +159,9 @@ module V1
       class CreateServiceResult < Grape::Entity
         expose :detail_scheme do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
-            "http://39.107.86.17:8080/#/mall/services/express?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details_two?uuid=#{m.uuid}"
           else  
-            "http://39.107.86.17:8080/#/mall/services?uuid=#{m.uuid}"
+            "http://39.107.86.17:8080/#/after_details?uuid=#{m.uuid}"
           end
         end         
       end

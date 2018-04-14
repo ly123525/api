@@ -12,7 +12,7 @@ module V1
           get do
             authenticate_user
             begin
-              order = ::Mall::Order.find_uuid(params[:order_uuid])
+              order = @session_user.orders.find_uuid(params[:order_uuid])
               item = order.order_items.first
               {
                 settlement:{
