@@ -143,7 +143,7 @@ module V1
           if m.product.details_url.present?
             m.product.details_url
           else
-            "http://39.107.86.17:8080/#/mall/products/details?style_uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/mall/products/details?style_uuid=#{m.uuid}"
           end
         end
         expose :need_to_choose_style do | m, o |
@@ -156,7 +156,7 @@ module V1
           m.product.fight_groups.where.not(user: o[:user]).waiting.not_expired.sorted
         end
         expose :all_groups_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0  
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0  
         end  
         expose :comments_count do |m, o|
           m.product.comments.count
@@ -168,7 +168,7 @@ module V1
           m.product.comments.sorted.limit(4)
         end
         expose :comments_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/evaluate?style_uuid=#{m.uuid}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/evaluate?style_uuid=#{m.uuid}")
         end  
         expose :styles do |m, o|
           m.product.styles_for_choice(m.labels)
