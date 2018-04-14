@@ -46,8 +46,8 @@ module V1
         expose :customer_service_count do |m, o|
           
         end
-        expose :refund_service_scheme do|m, o|
-          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/after_sales"
+        expose :refund_service_scheme do |m, o|
+          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/after_sales")
         end  
         expose :section do |m, o|
           [

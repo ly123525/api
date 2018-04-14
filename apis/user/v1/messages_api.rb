@@ -47,6 +47,8 @@ module V1
           get :destail do
             begin
               authenticate_user
+              message = ::Message.last
+              ::MessageReadRecord.find_or_create_by_message_and_user message, @session_user
               messages = @session_user.list_messages.page(params[:page]).per(10)
               present messages, with: ::V1::Entities::User::Messages
             rescue ActiveRecord::RecordNotFound
