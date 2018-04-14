@@ -6,7 +6,7 @@ module V1
           m.user_extra.try(:address)
         end
         expose :address_scheme do |m, o|
-          'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/account/addresses?type='order'")
+          'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/account/addresses?type='order'")
         end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
           o[:style].product.shop
@@ -129,10 +129,10 @@ module V1
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
         end
         expose :pay_center_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/cashier?order_uuid=#{m.uuid}") if (m.created? && m.expired_at >= Time.now)
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{m.uuid}") if (m.created? && m.expired_at >= Time.now)
         end
         expose :to_refund_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/after_sale?order_uuid=#{m.uuid}") unless (m.created? || m.closed? || m.refunded? || m.fight_group.try(:waiting?) || m.evaluated?)
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/after_sale?order_uuid=#{m.uuid}") unless (m.created? || m.closed? || m.refunded? || m.fight_group.try(:waiting?) || m.evaluated?)
         end  
         expose :can_be_hasten do |m, o|
           if m.fight_group.present?
@@ -152,7 +152,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
-              url: "http://39.107.86.17:8080/#/share?fight_group_uuid=#{m.fight_group.try(:uuid)}",
+              url: "#{ENV['H5_HOST']}/#/share?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -199,7 +199,7 @@ module V1
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
         end
         expose :pay_center_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://39.107.86.17:8080/#/cashier?order_uuid=#{m.uuid}") if m.created?
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{m.uuid}") if m.created?
         end
         expose :removeable do |m, o|
           m.removeable?
@@ -222,7 +222,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
-              url: "http://39.107.86.17:8080/#/share?fight_group_uuid=#{m.fight_group.try(:uuid)}",
+              url: "#{ENV['H5_HOST']}/#/share?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -268,14 +268,14 @@ module V1
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (o[:fight_group].style.prcture.image.style_url('300w') rescue nil),
-              url: "http://39.107.86.17:8080/#/share?fight_group_uuid=#{o[:fight_group].uuid}",
+              url: "#{ENV['H5_HOST']}/#/share?fight_group_uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
           else
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
-              url: "http://39.107.86.17:8080/#/share?uuid=#{m.order_items.first.product.uuid}",
+              url: "#{ENV['H5_HOST']}/#/share?uuid=#{m.order_items.first.product.uuid}",
               description: '快来拼单吧'
             }
           end
