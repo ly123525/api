@@ -106,7 +106,7 @@ module V1
               authenticate_user
               service = ::Mall::Service.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
-              {scheme: "http://39.107.86.17:8080/#/mall/services?uuid=#{service.uuid}"}
+              {scheme: "http://39.107.86.17:8080/#/after_details?uuid=#{service.uuid}"}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -139,7 +139,7 @@ module V1
           delete do
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
               service.close!
               true
             rescue ActiveRecord::RecordNotFound
@@ -148,12 +148,30 @@ module V1
               server_error(ex)
             end 
           end
+          
+          desc "进入修改申诉页面"
+          params do 
+            requires :user_uuid, type: String, desc: '用户 UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '服务单UUID'            
+          end
+          get :edit do
+            begin
+              authenticate_user
+              service = @session_user.mall_services.find_uuid(params[:uuid])
+              present service, with: ::V1::Entities::Service::EditService
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end                        
+          end  
+          
           desc "修改申诉"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
-            requires :refund_cause, type: String, values: ['BUY_WRONG','DONT_WANT_BUY','OTHER'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
             optional :images, type: Array[File], desc: '上传凭证'
@@ -161,8 +179,8 @@ module V1
           put do
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
-              service.update!(refund_cause: params[:refund_cause], description: params[:description], mobile: params[:mobile])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
+              service.update!(description: params[:description], mobile: params[:mobile])
               service.update_picture!(params[:images])
               true
             rescue ActiveRecord::RecordNotFound

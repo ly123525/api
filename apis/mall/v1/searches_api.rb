@@ -11,7 +11,7 @@ module V1
           get :history do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              histories = user.mall_searches.order(created_at: :desc).pluck(:content) rescue []
+              histories = user.mall_searches.order(created_at: :desc).limit(20).pluck(:content) rescue []
               { histories: histories, recommends: ::SearchRecommend.all.pluck(:content) }
             rescue Exception => ex
               server_error(ex)
