@@ -40,6 +40,9 @@ module V1
       
       class EditService < DetailService
         expose :description
+        expose :images do |m, o|
+          m.pictures
+        end  
       end  
       
       class DetailServiceOfExpress < DetailService
