@@ -12,7 +12,7 @@ module V1
           m.style.adaption_pictures.sorted.last.image.style_url('180w') rescue nil
         end
         expose :scheme do |m, o|
-          "http://39.107.86.17/v1/mall/products?style_uuid=#{m.style.uuid}"
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
         end
         expose :original_price do |m, o|
           m.style.original_price.to_s
