@@ -12,7 +12,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               histories = user.mall_searches.order(created_at: :desc).pluck(:content) rescue []
-              { histories: histories, recommends: ::SearchRecommend.all.pluck(:content) }
+              { histories: histories, recommends: ::SearchRecommend.order(id: :desc).limit(20).pluck(:content) }
             rescue Exception => ex
               server_error(ex)
             end
