@@ -38,10 +38,23 @@ module V1
         expose :refund_cause   
       end
       
-      class EditService < DetailService
+      class EditService < Grape::Entity
+        expose :type_of do |m, o| 
+          case m.class.to_s
+            when 'Mall::Services::RefundService'
+              "退款"
+            when 'Mall::Services::ReturnAllService' 
+              "退货退款" 
+          end      
+        end  
+        expose :refund_cause
+        expose :refund_cause_tips do |m, o|
+          ['买错了', '不想买了', '其他']
+        end         
         expose :description
+        expose :mobile
         expose :images do |m, o|
-          m.pictures.map{|picture| picture.image.url} if m.pictures.present?
+          m.pictures.map{|picture| picture.image.url}
         end  
       end  
       
