@@ -139,7 +139,7 @@ module V1
           delete do
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
               service.close!
               true
             rescue ActiveRecord::RecordNotFound
