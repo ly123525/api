@@ -11,6 +11,7 @@ module V1
             requires :name, type: String, desc: '收货人姓名'
             requires :province, type: String, desc: '省份'
             requires :city, type: String, desc: '城市'
+            requires :region, type: String, desc: '地区'
             requires :address, type: String, desc: '详细地址'
             requires :phone, type: String, desc: '手机号码'
             optional :is_default, type: Boolean, default: false, desc: '是否默认'
@@ -21,7 +22,8 @@ module V1
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               address=@session_user.addresses.create!(name: params[:name], 
                 province: params[:province], 
-                city: params[:city], 
+                city: params[:city],
+                region: params[:region], 
                 address: params[:address], 
                 mobile: params[:phone],
                 is_default: params[:is_default])
