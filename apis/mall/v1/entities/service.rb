@@ -41,7 +41,7 @@ module V1
       class EditService < DetailService
         expose :description
         expose :images do |m, o|
-          m.pictures
+          m.pictures.map{|picture| picture.image.url} if m.pictures.present?
         end  
       end  
       
