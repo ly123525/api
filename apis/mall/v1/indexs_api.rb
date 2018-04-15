@@ -12,7 +12,7 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               app_version_code=app_version_code(request).to_i
               mall_index = ::Mall::Indices::Index.where("version_code > ? ", app_version_code).last || ::Mall::Indices::Index.where("version_code <= ? ", app_version_code).first
-              styles = ::Mall::Style.recommended.sorted.limit(10)
+              styles = ::Mall::Style.recommended.joins(:product).where('mall_products.on_sale is true').sorted.limit(10)
               present mall_index, with: ::V1::Entities::Mall::MallIndex, styles: styles
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
