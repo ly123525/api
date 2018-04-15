@@ -76,7 +76,7 @@ module V1
         expose :laud_good do |m, o|
           o[:article_ids].include?(m.id)
         end
-        expose :shop, using: ::V1::Entities::Mall::SimpleShop
+        expose :shop, using: ::V1::Entities::Mall::SimpleShopForH5
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/choiceness?uuid=#{m.uuid}",
