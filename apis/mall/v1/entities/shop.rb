@@ -25,6 +25,12 @@ module V1
         expose :im_chat_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
         end
+        expose :sales_volume do |m, o|
+          "已拼单：#{m.winning_orders.count}件"
+        end
+        expose :product_count do |m, o|
+          "商品数量：#{m.products.count}件"
+        end
       end  
                     
       class Shop < SimpleShop

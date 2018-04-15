@@ -32,7 +32,7 @@ module V1
         expose :images do |m, o|
           m.pictures.map{|picture| picture.image.style_url('480w') } rescue nil
         end
-        expose :shop, using: ::V1::Entities::Mall::Shop
+        expose :shop, using: ::V1::Entities::Mall::SimpleShopForH5
         expose :collection_or_not do |m, o|
           o[:user_ids].include?(o[:user_id])
         end
@@ -76,7 +76,7 @@ module V1
         expose :laud_good do |m, o|
           o[:article_ids].include?(m.id)
         end
-        expose :shop, using: ::V1::Entities::Mall::SimpleShopForH5
+        expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/choiceness?uuid=#{m.uuid}",
