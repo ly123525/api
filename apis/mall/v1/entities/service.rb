@@ -102,6 +102,8 @@ module V1
               "#{m.service_name} 卖家已确认"
             when "closed"
               "已取消"
+            when "refunded"
+              "#{m.service_name} 退款成功"  
           end       
         end  
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
