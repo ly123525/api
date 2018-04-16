@@ -4,13 +4,14 @@ module API
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
-      # return if ENV['SERVER_ENV']=='development'
+      return if ENV['SERVER_ENV']=='development'
       request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
       params = request.params
       Grape::API.logger.info "===================#{params.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
       Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
+      Grape::API.logger.info "===================#{params['image'].try(:class)}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       params['nonce'] = env['HTTP_NONCE']
@@ -27,7 +28,6 @@ module API
     # sign:     md5(secret+params)
     # 所有参数按字母顺序排序
     def generate(params)
-      params.delete('image')
       query = params.sort.map do |k, v|
         "#{k}=#{v}" if v.to_s != ''
       end.compact.join('&')
