@@ -36,9 +36,7 @@ module V1
               authenticate_user
               logger.info"================================user=#{user.name}"
               picture = ::Picture.find_or_create_by(imageable: @session_user)
-              logger.info"================================picture_id=#{picture.id}"
               picture.update!(image: params[:image])
-              logger.info"================================picture_id=#{picture.id}"
               nil
             rescue Exception => ex
               server_error(ex)
