@@ -28,17 +28,14 @@ module API
     # 所有参数按字母顺序排序
     def generate(params)
       query = params.sort.map do |k, v|
-        "#{k}=#{v}" if v.to_s != ''
+        "#{k}=#{v}" if (v.to_s != '' && k.to_s != 'image')
       end.compact.join('&')
       Digest::MD5.hexdigest(ENV['API_SECRET'] + query).upcase
     end
 
     def verify?(params)
       return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
-      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']
-      Grape::API.logger.info "===================image=#{params['image']}"     
-      params.delete('image')
-      Grape::API.logger.info "===================去掉image后的#{params.to_s}"      
+      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']     
       sign = params.delete('signature')
       generate(params) == sign
     end
