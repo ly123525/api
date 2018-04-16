@@ -32,7 +32,9 @@ module V1
           end
           patch :head_image do
             begin
+              logger.info"================================params=#{params}.to_s"
               authenticate_user
+              logger.info"================================user=#{user.name}"
               picture = ::Picture.find_or_create_by(imageable: @session_user)
               logger.info"================================picture_id=#{picture.id}"
               picture.update!(image: params[:image])
