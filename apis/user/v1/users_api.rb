@@ -32,13 +32,9 @@ module V1
           end
           patch :head_image do
             begin
-              logger.info "=======================进入user_uuid=#{params[:user_uuid]}"
               authenticate_user
-              logger.info "=======================登录成功user_uuid=#{params[:user_uuid]}"
               picture = ::Picture.find_or_create_by(imageable: @session_user)
-              logger.info "=======================创建或找到picture=#{picture.id}"
               picture.update!(image: params[:image])
-              logger.info "=======================头像修改成功picture=#{picture.id}"
               nil
             rescue Exception => ex
               server_error(ex)
