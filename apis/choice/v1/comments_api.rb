@@ -29,7 +29,6 @@ module V1
           post do
             begin
               authenticate_user
-              # @session_user = ::Account::User.find_uuid(params[:user_uuid])
               article = ::Choice::Article.find_uuid(params[:article_uuid])
               comment=article.comments.new(user_id: @session_user.id, content: params[:content])
               comment.save!
