@@ -49,6 +49,7 @@ module V1
           end
           patch :nickname do
             begin
+              logger.info "=======================#{params[:user_uuid]}"
               authenticate_user
               app_error("昵称长度有误！应为2至12个字符，中文、英文各占一个字符", "Nickname length out of range") unless valid_nickname?
               @session_user.update!(nickname: params[:nickname])
