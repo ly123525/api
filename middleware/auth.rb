@@ -11,7 +11,6 @@ module API
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
       Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
-      Grape::API.logger.info "===================#{params['image']}"
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       params['nonce'] = env['HTTP_NONCE']
@@ -37,7 +36,9 @@ module API
     def verify?(params)
       return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
       return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']
-      params.delete('image')      
+      Grape::API.logger.info "===================image=#{params['image']}"     
+      params.delete('image')
+      Grape::API.logger.info "===================去掉image后的#{params.to_s}"      
       sign = params.delete('signature')
       generate(params) == sign
     end
