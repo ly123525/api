@@ -34,7 +34,7 @@ module V1
           post :order do
             begin
               authenticate_user
-              order = ::Mall::Order.find_uuid(params[:order_uuid])
+              order = @session_user.orders.find_uuid(params[:order_uuid])
               refund_fee = order.total_fee
               service = ::Mall::Service.type_of_service!(  order, params[:type_of], 
                                                 params[:refund_cause], params[:mobile],
@@ -85,7 +85,7 @@ module V1
           get :express do
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
               present service, with: ::V1::Entities::Service::DetailServiceOfExpress
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -104,7 +104,7 @@ module V1
           post :express do    
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
               {scheme: "#{ENV['H5_HOST']}/#/after_details?uuid=#{service.uuid}"}
             rescue ActiveRecord::RecordNotFound
@@ -122,7 +122,7 @@ module V1
           get do
             begin
               authenticate_user
-              service = ::Mall::Service.find_uuid(params[:uuid])
+              service = @session_user.mall_services.find_uuid(params[:uuid])
               present service, with: ::V1::Entities::Service::DetailServiceOfProduct
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
