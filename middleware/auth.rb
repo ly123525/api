@@ -27,7 +27,7 @@ module API
     # sign:     md5(secret+params)
     # 所有参数按字母顺序排序
     def generate(params)
-      params.delete(params['image'])
+      params.delete('image')
       query = params.sort.map do |k, v|
         "#{k}=#{v}" if v.to_s != ''
       end.compact.join('&')
