@@ -102,7 +102,7 @@ module V1
             when "applied" 
               "#{m.service_name} 卖家已确认"
             when "closed"
-              "已取消"
+              "申请已取消"
             when "refunded"
               "#{m.service_name} 退款成功"  
           end       
