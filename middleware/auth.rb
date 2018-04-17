@@ -28,7 +28,7 @@ module API
     # 所有参数按字母顺序排序
     def generate(params)
       query = params.sort.map do |k, v|
-        "#{k}=#{v}" if (v.to_s != '' && k.to_s != 'image')
+        "#{k}=#{v}" if (v.to_s != '' || k.to_s != 'image')
       end.compact.join('&')
       Digest::MD5.hexdigest(ENV['API_SECRET'] + query).upcase
     end
