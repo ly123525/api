@@ -120,10 +120,7 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :express_scheme do |m, o|
-          m.service_processing?
-        end
-        expose :check_details_scheme do |m, o|
-          m.service_processing? || m.applied?
+         "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
         end
         expose :detail_scheme do |m, o|
           if m.refunded? && m.closed?
