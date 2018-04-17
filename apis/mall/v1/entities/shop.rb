@@ -13,9 +13,16 @@ module V1
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
         end
       end
+      class SimpleShopForChoice < SimpleShop
+        expose :name do |m, o|
+          "全民拼平台"
+        end  
+      end  
       
       class SimpleShopForH5 < Grape::Entity
-        expose :name
+        expose :name do |m, o|
+          "全民拼平台"
+        end  
         expose :logo do |m, o|
           m.picture.image.style_url('120w') rescue nil
         end
