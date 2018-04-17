@@ -55,7 +55,8 @@ module V1
         expose :mobile
         expose :images do |m, o|
           m.pictures.map{|picture| picture.image.url}
-        end  
+        end
+        expose :refund_fee  
       end  
       
       class DetailServiceOfExpress < DetailService
