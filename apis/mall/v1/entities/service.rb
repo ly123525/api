@@ -126,12 +126,21 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :detail_scheme do |m, o|
+          if m.refunded? && m.closed?
+            if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
+              "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
+            else  
+              "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
+            end
+          end  
+        end
+        expose :detail_url do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
             "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
           else  
             "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
           end
-        end              
+        end               
       end
       class ServiceOfOrder < Grape::Entity
         expose :refund_type do |m, o|
