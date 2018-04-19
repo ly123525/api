@@ -178,7 +178,6 @@ module V1
           end
           put do
             begin
-              logger.info "======================params=#{params.to_json}"
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.update!(description: params[:description], mobile: params[:mobile])
