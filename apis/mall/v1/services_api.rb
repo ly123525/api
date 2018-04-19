@@ -106,7 +106,7 @@ module V1
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
-              {scheme: "#{ENV['H5_HOST']}/#/after_details?uuid=#{service.uuid}"}
+              true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

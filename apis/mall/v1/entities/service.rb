@@ -19,7 +19,7 @@ module V1
           end 
         end
         expose :status_image do |m, o|
-          "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.service_processing? || m.applied?
+          "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.service_processing? || m.applied?
         end
         expose :created_at do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
@@ -55,7 +55,8 @@ module V1
         expose :mobile
         expose :images do |m, o|
           m.pictures.map{|picture| picture.image.url}
-        end  
+        end
+        expose :refund_fee  
       end  
       
       class DetailServiceOfExpress < DetailService
@@ -101,7 +102,7 @@ module V1
             when "applied" 
               "#{m.service_name} 卖家已确认"
             when "closed"
-              "已取消"
+              "申请已取消"
             when "refunded"
               "#{m.service_name} 退款成功"  
           end       
@@ -119,18 +120,24 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :express_scheme do |m, o|
-          m.service_processing?
-        end
-        expose :check_details_scheme do |m, o|
-          m.service_processing? || m.applied?
+         "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
         end
         expose :detail_scheme do |m, o|
+          if m.refunded? && m.closed?
+            if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
+              "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
+            else  
+              "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
+            end
+          end  
+        end
+        expose :detail_url do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
             "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
           else  
             "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
           end
-        end              
+        end               
       end
       class ServiceOfOrder < Grape::Entity
         expose :refund_type do |m, o|

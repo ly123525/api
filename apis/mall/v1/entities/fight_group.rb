@@ -21,7 +21,7 @@ module V1
       class FightGroup < Grape::Entity
         expose :status_image do |m, o|
           if m.completed?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/chenggong3.png?x-oss-process=style/160w"
+            "#{ENV['IMAGE_DOMAIN']}/app/chenggong3.png?x-oss-process=style/160w"
           end  
         end  
         expose :status do |m, o|

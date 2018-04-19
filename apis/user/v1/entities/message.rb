@@ -4,7 +4,7 @@ module V1
       class Message < Grape::Entity
         expose :title
         expose :image do |m, o|
-          'https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/touxiang.png?x-oss-process=style/160w'
+          "#{ENV['IMAGE_DOMAIN']}/app/touxiang.png?x-oss-process=style/160w"
         end
         expose :message_type do |m, o|
           case m.type
