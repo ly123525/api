@@ -19,7 +19,7 @@ module V1
           end 
         end
         expose :status_image do |m, o|
-          "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.service_processing? || m.applied?
+          "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.service_processing? || m.applied?
         end
         expose :created_at do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')

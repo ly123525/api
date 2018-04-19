@@ -70,17 +70,17 @@ module V1
         end
         expose :status_image do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_pindan_icon_white.png?x-oss-process=style/120w"
+            "#{ENV['IMAGE_DOMAIN']}/app/my_pindan_icon_white.png?x-oss-process=style/120w"
           elsif m.paid?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_fahuo_icon_white.png?x-oss-process=style/120w"
+            "#{ENV['IMAGE_DOMAIN']}/app/my_fahuo_icon_white.png?x-oss-process=style/120w"
           elsif m.delivered?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_shouhuo_icon_white.png?x-oss-process=style/120w"
+            "#{ENV['IMAGE_DOMAIN']}/app/my_shouhuo_icon_white.png?x-oss-process=style/120w"
           elsif m.received?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_pingjia_icon_white.png?x-oss-process=style/120w"
+            "#{ENV['IMAGE_DOMAIN']}/app/my_pingjia_icon_white.png?x-oss-process=style/120w"
           elsif m.refunded?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"
+            "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"
           elsif m.created?
-            "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"          
+            "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"          
           end  
         end
         expose :pay_remaining_time do |m, o|
@@ -237,7 +237,7 @@ module V1
       
       class OrderPayResult < Grape::Entity
         expose :status_image do |m, o|
-          "https://gogo-bj.oss-cn-beijing.aliyuncs.com/app/chenggong3.png?x-oss-process=style/160w" if m.paid? 
+          "#{ENV['IMAGE_DOMAIN']}/app/chenggong3.png?x-oss-process=style/160w" if m.paid? 
         end
         expose :status_tips do |m, o|
           if m.paid?
