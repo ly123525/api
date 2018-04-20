@@ -7,15 +7,15 @@ module V1
             when "service_processing"
               "#{m.service_name}等待商家确认"
             when "applied" 
-              if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.service_message.present?
+              if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
                 "#{m.service_name} 卖家已确认,请填写快递信息" 
               else
-                "#{m.service_name} 卖家已确认" 
+                "#{m.service_name} 等待卖家退款" 
               end
             when "refunded"
-              "已退款"
+              "#{m.service_name} 已退款"
             when "closed"
-              "申请已取消"
+              "#{m.service_name} 申请已取消"
           end 
         end
         expose :status_image do |m, o|
@@ -95,17 +95,20 @@ module V1
       end
       
       class Services < Grape::Entity
-        expose :status do |m, o|
-          case m.status
-            when "service_processing"
-              "#{m.service_name} 申请中..."
-            when "applied" 
-              "#{m.service_name} 卖家已确认"
-            when "closed"
-              "申请已取消"
-            when "refunded"
-              "#{m.service_name} 退款成功"  
-          end       
+        case m.status
+          when "service_processing"
+            "#{m.service_name}等待商家确认"
+          when "applied" 
+            if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
+              "#{m.service_name} 卖家已确认,请填写快递信息" 
+            else
+              "#{m.service_name} 等待卖家退款" 
+            end
+          when "refunded"
+            "#{m.service_name} 已退款"
+          when "closed"
+            "#{m.service_name} 申请已取消"
+        end       
         end  
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
           m.service_target.try(:shop) || m.service_target.try(:order).try(:shop)
