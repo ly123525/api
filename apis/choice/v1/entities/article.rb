@@ -40,7 +40,7 @@ module V1
           {
             url: "#{ENV['H5_HOST']}/#/choice/articles?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
-            image: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_bg_square.png?x-oss-process=style/300w',
+            image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
             summary: m.summary
           }
@@ -81,7 +81,7 @@ module V1
           {
             url: "#{ENV['H5_HOST']}/#/choiceness?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
-            image: 'http://gogo-bj.oss-cn-beijing.aliyuncs.com/app/product_bg_square.png?x-oss-process=style/300w',
+            image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
             summary: m.summary
           }
