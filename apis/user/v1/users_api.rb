@@ -123,7 +123,22 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end              
-          end    
+          end
+          desc "用户信息"
+          params do
+            requires :user_uuid, type: String, desc: '用户UUID'
+            requires :token, type: String, desc: '用户访问令牌'
+          end
+          get :user_info do
+            begin
+              authenticate_user
+              present @session_user, with: ::V1::Entities::User::UserInfo
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
+          end
         end
       end
     end

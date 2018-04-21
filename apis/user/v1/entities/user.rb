@@ -58,6 +58,12 @@ module V1
         ]
         end
       end
+      class UserInfo < Grape::Entity
+        expose :im_user_name
+        expose :umeng_token
+        expose :wx_unionid
+        expose :wx_open_id
+      end
     end
   end
 end
