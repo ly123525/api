@@ -11,7 +11,7 @@ module V1
           end
           get do
             begin
-              Grape::API.logger.info "===================#{env['HTTP_AGENT']}"
+              Grape::API.logger.info "===================#{env['HTTP_USERAGENT']}"
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               ::Mall::BrowseRecord.generate_browse_record user, style
