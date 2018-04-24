@@ -59,10 +59,14 @@ module V1
         end
       end
       class UserInfo < Grape::Entity
-        expose :im_user_name
-        expose :umeng_token
-        expose :wx_unionid
-        expose :wx_open_id
+        expose :uuid, if: lambda {|m,o| m.is_developer?}
+        expose :phone_token, if: lambda {|m,o| m.is_developer? && m.wx_open_id.blank?} do |m,o|
+          m.phone_tokens.last.token
+        end
+        expose :wechat_token, if: lambda {|m,o| m.is_developer? && m.wx_open_id.present?} do |m,o|
+          m.wechat_tokens.last.token
+        end
+        expose :im_user_name,:umeng_token,:wx_open_id,:wx_unionid, if: lambda {|m,o| m.is_developer?}
       end
     end
   end

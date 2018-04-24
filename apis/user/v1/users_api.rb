@@ -132,7 +132,11 @@ module V1
           get :user_info do
             begin
               authenticate_user
-              present @session_user, with: ::V1::Entities::User::UserInfo
+
+              user=@session_user
+              present user, with: ::V1::Entities::User::UserInfo
+
+
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
