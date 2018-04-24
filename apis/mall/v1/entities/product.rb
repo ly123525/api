@@ -184,16 +184,16 @@ module V1
         end
         expose :share do 
           expose :url do |m, o|
-            
+            "#{H5_HOST}/#/mall/products?style_uuid=#{m.uuid}"
           end
           expose :image do |m, o| 
-            
+            m.adaption_pictures.first.image.style_url('120w')
           end
           expose :title do |m, o|
-            
+            m.product.name + " " + m.name
           end
           expose :summary do |m, o|
-            
+            "快来拼单吧"
           end
         end
       end
