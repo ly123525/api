@@ -6,7 +6,7 @@ module V1
           m.user_extra.try(:address)
         end
         expose :address_scheme do |m, o|
-          'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/account/addresses?type=order")
+          'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/account/addressess?type=order")
         end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
           o[:style].product.shop

@@ -75,7 +75,7 @@ module V1
               end
               package = r.delete(:package)
               r[:package_value] = package
-              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/pay_result?uuid=#{params[:order_uuid]}")
+              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/orders/payment_result?uuid=#{params[:order_uuid]}")
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -128,7 +128,7 @@ module V1
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: order.timeout_express_for_alipay)
-              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/pay_result?uuid=#{params[:order_uuid]}")}
+              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/orders/payment_result?uuid=#{params[:order_uuid]}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
