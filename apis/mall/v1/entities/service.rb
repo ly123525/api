@@ -124,22 +124,22 @@ module V1
           m.service_processing? || m.applied?
         end
         expose :express_scheme do |m, o|
-         "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
+         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
         end
         expose :detail_scheme do |m, o|
           if m.refunded? && m.closed?
             if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
-              "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
+              "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
             else  
-              "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
+              "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
             end
           end  
         end
         expose :detail_url do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
-            "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
           else  
-            "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
           end
         end               
       end
@@ -172,9 +172,9 @@ module V1
       class CreateServiceResult < Grape::Entity
         expose :detail_scheme do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
-            "#{ENV['H5_HOST']}/#/after_details_two?uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
           else  
-            "#{ENV['H5_HOST']}/#/after_details?uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
           end
         end         
       end
