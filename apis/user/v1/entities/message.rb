@@ -15,7 +15,7 @@ module V1
           end     
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages/destail")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages")
         end
         expose :status do |m, o|
           ::MessageReadRecord.read? m, o[:user]
