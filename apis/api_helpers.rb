@@ -33,7 +33,9 @@ module APIHelpers
     logger.info "================os:#{ os(request)}"
     logger.info "================app_version:#{app_version(request)}"
     logger.info "================app_version_code:#{app_version_code(request)}"
-    token.update(os: os(request), os_version: os_version(request), app_version: app_version(request), app_version_code: app_version_code(request), device: device(request), device_id: device_id(request))
+    logger.info "================device:#{device(request)}"
+    logger.info "================device_id:#{device_id(request)}"
+    token.update(os: os(request), os_version: os_version(request), app_version: app_version(request), app_version_code: app_version_code(request), device: device(request), device_id: device_id(request)) rescue nil
   end
   def inner_app? request
     request.headers['User-Agent'].include?("gogo.cn")
