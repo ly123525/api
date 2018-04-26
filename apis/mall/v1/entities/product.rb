@@ -165,7 +165,7 @@ module V1
           m.product.comments.sorted.limit(4)
         end
         expose :comments_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/evaluate?style_uuid=#{m.uuid}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/commodity/evaluate?style_uuid=#{m.uuid}")
         end  
         expose :styles do |m, o|
           m.product.styles_for_choice(m.labels)
