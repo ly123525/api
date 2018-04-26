@@ -7,7 +7,7 @@ module V1
           m.picture.image.style_url('120w') rescue nil
         end
         expose :scheme do |m, o| 
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/shops?uuid=#{m.uuid}")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/shop/index?uuid=#{m.uuid}")
         end
         expose :im_chat_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
@@ -27,7 +27,7 @@ module V1
           m.picture.image.style_url('120w') rescue nil
         end
         expose :scheme do |m, o| 
-          "#{ENV['H5_HOST']}/#/shops?uuid=#{m.uuid}"
+          "#{ENV['H5_HOST']}/#/mall/shop/index?uuid=#{m.uuid}"
         end
         expose :im_chat_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
