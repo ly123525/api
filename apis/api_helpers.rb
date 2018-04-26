@@ -33,7 +33,7 @@ module APIHelpers
     token.update(os: os(request), os_version: os_version(request), app_version: app_version(request), app_version_code: app_version_code(request), device: device(request), device_id: device_id(request)) rescue nil
   end
   def inner_app? request
-    request.headers['User-Agent'].include?("man")
+    request.headers['User-Agent'].include?("gogo.cn")
   end
   def os request
     return unless inner_app?(request)
