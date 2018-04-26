@@ -31,13 +31,11 @@ module V1
           end
           post :captcha_login do
             begin
-              logger.info "===========================1234"
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               app_error("验证码格式错误，应为4位数字", "Invalid captcha") unless valid_captcha?
               user = ::Account::User.find_or_create_by!(phone: params[:phone])
               app_error("验证码错误", "Invalid captcha") unless user.valid_login_captcha?(params[:captcha])
-              token = user.phone_login!.token
-              logger.info "===========================token: #{token}"
+              token = user.phone_login!
               client_info_record(request, token)
               present user, with: ::V1::Entities::User::UserForLogin, token: token
             rescue Exception => ex
