@@ -28,7 +28,6 @@ module APIHelpers
     logger.info "================#{request.headers['System']}"
     logger.info "================#{request.headers['Device']}"
     logger.info "================#{request.headers['DeviceID']}"
-    binding.pry
     return unless inner_app?(request)
     token.update(os: os(request), os_version: os_version(request), app_version: app_version(request), app_version_code: app_version_code(request), device: device(request), device_id: device_id(request)) rescue nil
   end
