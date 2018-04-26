@@ -115,11 +115,8 @@ module V1
         expose :price do |m, o|
           "¥ " + m.price.to_s
         end
-        expose :service_note do |m, o|
-          [
-            {label: '包邮', desc: '由商家发货，免邮费', icon: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1516322006&di=65ee9624697c83b5dcb3292b347d2462&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c2ac57beb18d0000012e7eaa6d19.jpg'},
-            {label: '七天无理由退货', desc: '支持7天无理由退货', icon: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1516322006&di=65ee9624697c83b5dcb3292b347d2462&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01c2ac57beb18d0000012e7eaa6d19.jpg'}
-          ]
+        expose :service_note do |m,o|
+          m.product.service_note
         end
         expose :sold_count do |m, o|
           "已拼#{m.product.sold_count+m.product.fake_sold_count}件 #{m.product.mini_purchase_quantity}件起拼"
