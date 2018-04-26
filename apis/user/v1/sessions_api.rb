@@ -36,6 +36,7 @@ module V1
               user = ::Account::User.find_or_create_by!(phone: params[:phone])
               app_error("验证码错误", "Invalid captcha") unless user.valid_login_captcha?(params[:captcha])
               token = user.phone_login!.token
+              logger.info "===========================token: #{token}"
               client_info_record(request, token)
               present user, with: ::V1::Entities::User::UserForLogin, token: token
             rescue Exception => ex
