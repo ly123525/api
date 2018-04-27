@@ -30,9 +30,9 @@ module V1
             requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
-            optional :image1, type: File, desc: '上传凭证'
-            optional :image2, type: File, desc: '上传凭证'
-            optional :image3, type: File, desc: '上传凭证'
+            optional :image1, type: File, desc: '上传凭证1'
+            optional :image2, type: File, desc: '上传凭证2'
+            optional :image3, type: File, desc: '上传凭证3'
           end
           post :order do
             begin
@@ -44,7 +44,7 @@ module V1
                                                 params[:refund_cause], params[:mobile],
                                                 params[:description], refund_fee, 
                                                 @session_user)
-              service.create_picture!(params[:images])
+              service.create_picture!(params[:image1], params[:image2], params[:image3])
               present service, with: ::V1::Entities::Service::CreateServiceResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -178,7 +178,9 @@ module V1
             requires :uuid, type: String, desc: '服务单UUID'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
-            optional :images, type: Array[File], desc: '上传凭证'
+            optional :image1, type: File, desc: '上传凭证1'
+            optional :image2, type: File, desc: '上传凭证2'
+            optional :image3, type: File, desc: '上传凭证3'
           end
           put do
             begin
@@ -187,7 +189,7 @@ module V1
               service.with_lock do
                 app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.service_processing?
                 service.update!(description: params[:description], mobile: params[:mobile])
-                service.update_picture!(params[:images])
+                service.update_picture!(params[:image1], params[:image2], params[:image3])
                 true
               end
             rescue ActiveRecord::RecordNotFound
