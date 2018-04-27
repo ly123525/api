@@ -180,9 +180,12 @@ module V1
             begin
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
-              service.update!(description: params[:description], mobile: params[:mobile])
-              service.update_picture!(params[:images])
-              true
+              service.with_lock do
+                app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.service_processing?
+                service.update!(description: params[:description], mobile: params[:mobile])
+                service.update_picture!(params[:images])
+                true
+              end
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

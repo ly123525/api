@@ -21,27 +21,42 @@ module APIHelpers
     app_error(nil, "Failed to find the user", 401) if params[:user_uuid].blank? or params[:token].blank?
     user_and_token = ::Account::User.authenticate(params[:user_uuid], params[:token])
     app_error("授权失效，请重新登录!", "Failed to find the user", 401) if user_and_token.blank?
-    client_info_record request, user_and_token[1]
     @session_user = user_and_token[0]
   end
-  
   def client_info_record request, token
     logger.info "================#{request.headers['User-Agent']}"
     logger.info "================#{request.headers['System']}"
     logger.info "================#{request.headers['Device']}"
     logger.info "================#{request.headers['DeviceID']}"
-    os = request.headers['System'].split(' ')[0] rescue nil
-    os_version = request.headers['System'].split(' ')[1] rescue nil
-    device = request.headers['Device']
-    device_id = request.headers['DeviceID']
-    token.update(os: os, os_version: os_version, app_version: app_version(request), app_version_code: app_version_code(request), device: device, device_id: device_id) rescue nil
+    return unless inner_app?(request)
+    token.update(os: os(request), os_version: os_version(request), app_version: app_version(request), app_version_code: app_version_code(request), device: device(request), device_id: device_id(request)) rescue nil
   end
-  
+  def inner_app? request
+    request.headers['User-Agent'].include?("gogo.cn")
+  end
+  def os request
+    return unless inner_app?(request)
+    request.headers['System'].split(' ')[0] rescue nil
+  end
+  def os_version request
+    return unless inner_app?(request)
+    request.headers['System'].split(' ')[1] rescue nil
+  end
+  def device request
+    return unless inner_app?(request)
+    request.headers['Device']
+  end
+  def device_id request
+    return unless inner_app?(request)
+    request.headers['DeviceID']
+  end
   def app_version request
+    return unless inner_app?(request)
     request.headers['User-Agent'].split('/')[1] rescue nil
   end  
   
   def app_version_code request
+    return unless inner_app?(request)
     request.headers['User-Agent'].split('/')[2].to_i rescue nil
   end  
   
