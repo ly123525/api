@@ -152,7 +152,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil
             {
-              url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
+              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -222,7 +222,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting? && m.paid?
             image = m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil
             {
-              url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
+              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "来拼",
               summary: "来拼"
@@ -268,7 +268,7 @@ module V1
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
               image: (o[:fight_group].style.adaption_pictures.first.image.style_url('300w') rescue nil),
-              url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{o[:fight_group].uuid}",
+              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
           else
