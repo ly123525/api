@@ -63,7 +63,7 @@ module V1
         expose :share do |m, o|
           {
             title: '我在全民拼选购了商品，赶紧来拼单吧',
-            image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
+            image: (m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil),
             url: "#{ENV['H5_HOST']}/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
             summary: '快来拼单吧'
           }
