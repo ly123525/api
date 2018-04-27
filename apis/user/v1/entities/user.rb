@@ -47,7 +47,7 @@ module V1
           
         end
         expose :refund_service_scheme do |m, o|
-          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/reshipped")
+          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services")
         end  
         expose :section do |m, o|
           [
