@@ -219,7 +219,7 @@ module V1
           end
         end
         expose :inviting_friends_info do |m, o|
-          if m.fight_group.present? && m.fight_group.waiting?
+          if m.fight_group.present? && m.fight_group.waiting? && m.paid?
             image = m.order_items.first.picture.image.style_url('300w') rescue nil
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
