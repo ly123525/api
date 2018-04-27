@@ -98,9 +98,7 @@ module V1
               bad_article_ids = user.bad_lauds.pluck(:article_id) rescue []
               user_ids = article.collections.pluck(:user_id) rescue []
               user_id = user.id rescue nil
-              inner_app = inner_app? request
-              logger.info "=============================#{inner_app}" 
-              present article, with: ::V1::Entities::Choice::Article, good_article_ids: good_article_ids, bad_article_ids: bad_article_ids, user_ids: user_ids, user_id: user_id, inner_app: inner_app
+              present article, with: ::V1::Entities::Choice::Article, good_article_ids: good_article_ids, bad_article_ids: bad_article_ids, user_ids: user_ids, user_id: user_id
               rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
