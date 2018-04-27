@@ -182,7 +182,7 @@ module V1
             optional :image2, type: File, desc: '上传凭证2'
             optional :image3, type: File, desc: '上传凭证3'
           end
-          put do
+          post :update do
             begin
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
