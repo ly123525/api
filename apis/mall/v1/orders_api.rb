@@ -94,7 +94,7 @@ module V1
             requires :uuid, type: String, desc: '订单 UUID'
           end
           post :hasten do
-            
+            {tips: '已经催过了，卖家会尽快发货'}
           end
           
           desc "确认收货"

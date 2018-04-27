@@ -150,7 +150,7 @@ module V1
         end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
-            image = m.order_items.first.picture.image.style_url('300w') rescue nil
+            image = m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
@@ -219,8 +219,8 @@ module V1
           end
         end
         expose :inviting_friends_info do |m, o|
-          if m.fight_group.present? && m.fight_group.waiting?
-            image = m.order_items.first.picture.image.style_url('300w') rescue nil
+          if m.fight_group.present? && m.fight_group.waiting? && m.paid?
+            image = m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
@@ -267,14 +267,14 @@ module V1
           if o[:fight_group]
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
-              image: (o[:fight_group].style.prcture.image.style_url('300w') rescue nil),
+              image: (o[:fight_group].style.adaption_pictures.first.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
           else
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
-              image: (m.order_items.first.product.prcture.image.style_url('300w') rescue nil),
+              image: (m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.product.uuid}",
               description: '快来拼单吧'
             }
