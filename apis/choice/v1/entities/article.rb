@@ -38,7 +38,7 @@ module V1
         end
         expose :share do |m, o|
           {
-            url: "#{ENV['H5_HOST']}/#/choice/articles?uuid=#{m.uuid}",
+            url: "#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
@@ -79,7 +79,7 @@ module V1
         expose :shop, using: ::V1::Entities::Mall::SimpleShopForChoice
         expose :share do |m, o|
           {
-            url: "#{ENV['H5_HOST']}/#/choice/articles?uuid=#{m.uuid}",
+            url: "#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
@@ -87,7 +87,7 @@ module V1
           }
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/choice/articles?uuid=#{m.uuid}")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}")
         end
         expose :comments_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/choice/articles/comment?article_uuid=#{m.uuid}")
