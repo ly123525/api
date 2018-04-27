@@ -13,6 +13,7 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
+              app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
               present order, with: ::V1::Entities::Service::ServiceOfOrder
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -29,12 +30,15 @@ module V1
             requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
-            optional :images, type: Array[File], desc: '上传凭证'  
-          end  
+            optional :image1, type: File, desc: '上传凭证'
+            optional :image2, type: File, desc: '上传凭证'
+            optional :image3, type: File, desc: '上传凭证'
+          end
           post :order do
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
+              app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
               refund_fee = order.total_fee
               service = ::Mall::Service.type_of_service!(  order, params[:type_of], 
                                                 params[:refund_cause], params[:mobile],
