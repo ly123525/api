@@ -64,7 +64,7 @@ module V1
           {
             title: '我在全民拼选购了商品，赶紧来拼单吧',
             image: (m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil),
-            url: "#{ENV['H5_HOST']}/#/mall/products?uuid=#{m.order_items.first.product.uuid}",
+            url: "#{ENV['H5_HOST']}/#/mall/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
             summary: '快来拼单吧'
           }
         end       
