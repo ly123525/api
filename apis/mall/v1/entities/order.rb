@@ -267,14 +267,14 @@ module V1
           if o[:fight_group]
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
-              image: (o[:fight_group].style.prcture.adaption_pictures.first.style_url('300w') rescue nil),
+              image: (o[:fight_group].style.adaption_pictures.first.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
           else
             {
               title: '我在全民拼选购了商品，赶紧来拼单吧',
-              image: (m.order_items.first.product.adaption_pictures.first.image.style_url('300w') rescue nil),
+              image: (m.order_items.first.style.adaption_pictures.first.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.product.uuid}",
               description: '快来拼单吧'
             }
