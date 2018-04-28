@@ -72,7 +72,7 @@ module V1
           m.comments.count
         end
         expose :laud_good_count do |m, o|
-          m.good_lauds.count
+          200
         end
         expose :laud_good do |m, o|
           o[:article_ids].include?(m.id)
