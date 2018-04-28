@@ -51,8 +51,6 @@ module V1
             "已发货"
           elsif m.received?
             "待评价"
-          elsif m.refunded?
-            "退款"  
           else
             "已完成"
           end
