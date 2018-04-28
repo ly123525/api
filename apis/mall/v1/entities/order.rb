@@ -45,12 +45,16 @@ module V1
             "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
+          elsif m.servicing?
+            "售后处理中"            
           elsif m.paid?
             "等待卖家发货"
           elsif m.delivered?
             "已发货"
           elsif m.received?
             "待评价"
+          elsif m.refunded?
+            "已退款"    
           else
             "已完成"
           end
@@ -60,6 +64,8 @@ module V1
             "交易关闭"
           elsif m.fight_group.present? && m.fight_group.waiting? && m.paid?
             "邀请好友拼单"
+          elsif m.servicing?
+            "请前往我的退/换货中查看"  
           elsif m.paid?
             "正在准备货品"
           elsif m.delivered?
@@ -71,6 +77,8 @@ module V1
         expose :status_image do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
             "#{ENV['IMAGE_DOMAIN']}/app/my_pindan_icon_white.png?x-oss-process=style/120w"
+          elsif m.servicing?
+            ""    
           elsif m.paid?
             "#{ENV['IMAGE_DOMAIN']}/app/my_fahuo_icon_white.png?x-oss-process=style/120w"
           elsif m.delivered?
@@ -132,20 +140,20 @@ module V1
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{m.uuid}") if (m.created? && m.expired_at >= Time.now)
         end
         expose :to_refund_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/apply?order_uuid=#{m.uuid}") unless (m.created? || m.closed? || m.refunded? || m.fight_group.try(:waiting?) || m.evaluated?)
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/apply?order_uuid=#{m.uuid}") unless (m.created? || m.closed? || m.servicing? ||m.refunded? || m.fight_group.try(:waiting?) || m.evaluated?)
         end  
         expose :can_be_hasten do |m, o|
           if m.fight_group.present?
-            m.fight_group.completed? && m.paid?
+            m.fight_group.completed? && m.paid? && !m.servicing?
           else
-            m.paid?
+            m.paid? && !m.servicing?
           end
         end
         expose :confirmable do |m, o|
           if m.fight_group.present?
-            ((m.delivered? || m.paid?) and m.fight_group.completed?)
+            ((m.delivered? || m.paid?) && m.fight_group.completed? && !m.servicing? ) 
           else
-            m.delivered? || m.paid?            
+            (m.delivered? || m.paid?) && !m.servicing?            
           end  
         end
         expose :inviting_friends_info do |m, o|
@@ -175,12 +183,16 @@ module V1
             "待支付" 
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
+          elsif m.servicing?
+            "售后处理中"            
           elsif m.paid?
             "待发货"
           elsif m.delivered?
             "已发货"
           elsif m.received?
             "待评价"
+          elsif m.refunded?
+            "已退款"   
           elsif m.evaluated?
             "已完成"  
           end
@@ -206,9 +218,9 @@ module V1
         end
         expose :can_be_hasten do |m, o|
           if m.fight_group.present?
-            m.fight_group.completed? && m.paid?
+            m.fight_group.completed? && m.paid? && !m.servicing?
           else
-            m.paid?
+            m.paid? && !m.servicing?
           end
         end
         expose :confirmable do |m, o|
