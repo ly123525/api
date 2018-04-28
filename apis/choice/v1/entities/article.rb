@@ -12,7 +12,7 @@ module V1
           m.comments.count
         end
         expose :laud_good_count do |m, o|
-          100
+          m.good_lauds.count
         end
         expose :laud_good_tip do |m, o|
           "靠谱"
