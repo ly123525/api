@@ -1,6 +1,12 @@
 module Umeng
   class Push
-
+    
+    case ENV['SERVER_ENV']
+      when 'production'
+        PRODUCTION_MODE = true
+      when 'staging'
+        PRODUCTION_MODE = false
+    end
     $umeng_ios = Umeng::Client.new(ENV['UMENG_iOS_APP_KEY'], ENV['UMENG_iOS_SECRET'], 'iOS')
     $umeng_android = Umeng::Client.new(ENV['UMENG_ANDROID_APP_KEY'], ENV['UMENG_ANDROID_SECRET'], 'Android')
 
@@ -9,7 +15,7 @@ module Umeng
       def android_opts opts={}
         {
           key_value: opts,
-          production_mode: opts[:production_mode] || false,
+          production_mode: PRODUCTION_MODE,
           description: opts[:title]
         }
       end
@@ -18,7 +24,7 @@ module Umeng
       def ios_opts opts={}
         {
           key_value: {"content"=> opts},
-          production_mode: opts[:production_mode] || false,
+          production_mode: PRODUCTION_MODE,
           description: opts[:title]
         }
       end
