@@ -1,12 +1,6 @@
 module Umeng
   class Push
-    
-    case ENV['SERVER_ENV']
-      when 'production'
-        PRODUCTION_MODE = true
-      when 'staging'
-        PRODUCTION_MODE = false
-    end
+
     $umeng_ios = Umeng::Client.new(ENV['UMENG_iOS_APP_KEY'], ENV['UMENG_iOS_SECRET'], 'iOS')
     $umeng_android = Umeng::Client.new(ENV['UMENG_ANDROID_APP_KEY'], ENV['UMENG_ANDROID_SECRET'], 'Android')
 
