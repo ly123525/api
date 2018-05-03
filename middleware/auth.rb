@@ -4,7 +4,7 @@ module API
     def before
       return if env['PATH_INFO'].include?('/doc/swagger_doc')
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
-      return if ENV['SERVER_ENV']=='development'
+      return if ENV['SERVER_ENV']=='development' || ENV['SERVER_ENV']=='staging'
       request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
       params = request.params
       Grape::API.logger.info "===================#{params.to_s}"
