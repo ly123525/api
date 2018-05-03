@@ -54,7 +54,7 @@ gem 'umeng', '~> 0.2.1'
 #支付宝
 gem 'alipay', '~> 0.15.0'
 gem 'acts_as_list', '~> 0.9.10'
-group :development, :test do
+group :development, :test, :staging do
   gem 'pry_debug', '0.0.1'
   gem 'pry-nav', '0.2.4'
 end
