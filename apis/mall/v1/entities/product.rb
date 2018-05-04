@@ -147,7 +147,7 @@ module V1
           m.product.styles.size!=1
         end
         expose :group_user_size do |m, o|
-          m.product.fighting_orders.size.to_s
+          m.product.fight_groups.count
         end
         expose :groups, using: ::V1::Entities::Mall::FightGroups do |m, o|
           m.product.fight_groups.where.not(user: o[:user]).waiting.not_expired.sorted
