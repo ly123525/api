@@ -43,7 +43,7 @@ module API
     
     mount ::V1::Topic::TopicsAPI
     
-    if ENV['SERVER_ENV']=='development'
+    if ENV['SERVER_ENV']=='staging'
       namespace :doc do
         formatter :json, ::API::Base::DOCFormatter
         add_swagger_documentation doc_version: 'v1',
