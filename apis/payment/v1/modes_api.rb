@@ -123,7 +123,7 @@ module V1
                 out_trade_no: payment.trade_no,
                 product_code: 'QUICK_MSECURITY_PAY',
                 total_amount: payment.total_fee.to_s,
-                subject: 'test'  
+                subject: '全民拼'
               }.to_json(ascii_only: true), 
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
