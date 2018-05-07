@@ -60,7 +60,7 @@ module V1
           params do
             optional :user_uuid, type: String, desc: '用户 UUID'
             requires :keywords, type: String, desc: '关键词'
-            requires :sort_rule, type: String, default: 'all', values: ['all', 'new', 'sales_volumn', 'lowest_price', 'highest_price'], desc: '排序规则'
+            requires :sort_rule, type: String, default: 'all', values: ['all', 'newest', 'sales_volumn', 'lowest_price', 'highest_price'], desc: '排序规则'
             requires :page, type: Integer, default: 1, desc: '页码'
           end
           get :search do
