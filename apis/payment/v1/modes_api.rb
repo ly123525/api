@@ -49,7 +49,7 @@ module V1
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
               pay_method = params[:trade_type] == 'APP' ? ::Payment::PAY_METHOD_WECHAT : ::Payment::PAY_METHOD_WECHAT_MP
-              payment = ::Payment.find_or_create_by_order(order, pay_method)
+              payment = ::Payment.create_by_order(order, pay_method)
               pay_params = {
                 # body:             '商品：我要卖机油'[0..63],
                 body: payment.trade_no,
@@ -116,14 +116,14 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
-              payment = ::Payment.find_or_create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
+              payment = ::Payment.create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
               res = Alipay::INIT_CLIENT.sdk_execute(
               method: 'alipay.trade.app.pay',
               biz_content: {
                 out_trade_no: payment.trade_no,
                 product_code: 'QUICK_MSECURITY_PAY',
                 total_amount: payment.total_fee.to_s,
-                subject: '全民拼'  #名称
+                subject: '全民拼'
               }.to_json(ascii_only: true), 
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,

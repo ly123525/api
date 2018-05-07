@@ -44,7 +44,6 @@ misN1BctVyeoUYkUg8HkU6ilaLI22/uzf8JrdRzwfVBi1ySwu40A7ZsMnDRRT0TC
 swIDAQAB
 -----END PUBLIC KEY-----
 EOF
-
 Alipay::INIT_CLIENT = Alipay::Client.new(
   url: Alipay::API_URL,
   app_id: Alipay::APP_ID,
