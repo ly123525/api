@@ -18,6 +18,9 @@ module V1
         expose :nickname
         expose :im_user_name
         expose :im_password
+        expose :user_info_scheme do |m, o|
+          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/backdoor")
+        end  
       end
       
       class PersonalCenter < Grape::Entity
