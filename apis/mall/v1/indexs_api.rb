@@ -40,7 +40,7 @@ module V1
           end
           get :progress_bar do
             begin
-              {current_foucs_on_count: 888000, target_focus_count: 1000000, scheme: "#{ENV['H5_HOST']}/#/expedite_openaward"}
+              {current_foucs_on_count: 888000, target_focus_on_count: 1000000, scheme: "#{ENV['H5_HOST']}/#/expedite_openaward"}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
