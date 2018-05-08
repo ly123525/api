@@ -71,8 +71,6 @@ module V1
           o[:style].uuid rescue nil
         end
         expose :image do |m, o|
-          binding.pry
-
           o[:style].style_cover.image.style_url('180w') rescue nil
         end
         expose :max_quantity do |m, o|
