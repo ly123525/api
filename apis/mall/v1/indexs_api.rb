@@ -46,7 +46,19 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end            
-          end        
+          end
+          desc "首页弹出框"
+          params do 
+          end  
+          get :pop_up do
+            begin
+              {scheme: "#{ENV['H5_HOST']}/#/expedite_openaward"}
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end               
+          end          
         end  
       end  
     end  
