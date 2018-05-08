@@ -11,7 +11,7 @@ module V1
         expose :items, using: ::V1::Entities::Mall::SectionItems, unless: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
           m.section_items
         end
-        expose :scheme, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
+        expose :url, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
           "#{ENV['H5_HOST']}/#/raffle/resourcelocation"
         end        
       end  
