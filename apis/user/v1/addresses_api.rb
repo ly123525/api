@@ -91,7 +91,7 @@ module V1
             begin
               authenticate_user
               @session_user.addresses.find_uuid(params[:uuid]).destroy!
-              nil
+              true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
