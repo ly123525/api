@@ -8,9 +8,10 @@ module V1
         expose :style do |m, o|
           m.type.underscore.split('/').last
         end
-        expose :items, using: ::V1::Entities::Mall::SectionItems do |m, o|
+        expose :items, using: ::V1::Entities::Mall::SectionItems, unless: {type: "Mall::Indices::Sections::WebView"} do |m, o|
           m.section_items
-        end  
+        end
+        expose :scheme, if: {type: "Mall::Indices::Sections::WebView"}  
       end  
     end   
   end  
