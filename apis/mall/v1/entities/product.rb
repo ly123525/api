@@ -24,7 +24,7 @@ module V1
             
       class SimpleProductByStyle < Grape::Entity
         expose :image do |m, o|
-          m.adaption_pictures.sorted.last.image.style_url('480w') rescue nil
+          m.style_cover.image.style_url('480w') rescue nil
         end
         expose :title do |m, o|
           m.product.name
@@ -71,7 +71,9 @@ module V1
           o[:style].uuid rescue nil
         end
         expose :image do |m, o|
-          o[:style].pictures.sorted.last.image.style_url('180w') rescue nil
+          binding.pry
+
+          o[:style].style_cover.image.style_url('180w') rescue nil
         end
         expose :max_quantity do |m, o|
           100
@@ -184,7 +186,7 @@ module V1
             "#{ENV['H5_HOST']}/#/mall/products?style_uuid=#{m.uuid}"
           end
           expose :image do |m, o| 
-            m.adaption_pictures.first.image.style_url('120w')
+            m.style_cover.image.style_url('120w')
           end
           expose :title do |m, o|
             m.product.name + " " + m.name

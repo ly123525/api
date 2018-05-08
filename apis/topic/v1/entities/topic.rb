@@ -3,7 +3,7 @@ module V1
     module Topic
       class TopicOfStyles < Grape::Entity
         expose :image do |m, o|
-          m.target.adaption_pictures.sorted.last.image.style_url('480w') rescue nil
+          m.target.style_cover.image.style_url('480w') rescue nil
         end
         expose :title do |m, o|
           m.target.product.name

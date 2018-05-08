@@ -9,7 +9,7 @@ module V1
           m.style.product.name + " " + m.style.name
         end
         expose :image do |m, o|
-          m.style.adaption_pictures.sorted.last.image.style_url('180w') rescue nil
+          m.style.style_cover.image.style_url('180w') rescue nil
         end
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
