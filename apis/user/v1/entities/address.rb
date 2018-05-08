@@ -15,11 +15,12 @@ module V1
         expose :name
         expose :province
         expose :city
+        expose :region
         expose :address
-        expose :mobile 
+        expose :phone
         expose :is_default
         expose :current_used do |m, o|
-          m.user_extra.present?
+          m.user_extra.try(:address_id)==m.id
         end
       end
     end
