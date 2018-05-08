@@ -15,7 +15,7 @@ module V1
       
       class MallIndex < Grape::Entity
         expose :web_view_url do |m, o|
-          "#{ENV['H5_HOST']}/#/raffle/resourcelocation"
+          "#{ENV['H5_HOST']}/#/activity/popup"
         end  
         expose :search_key do |m, o|
           "搜索结果"
