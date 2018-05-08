@@ -17,7 +17,7 @@ module V1
         expose :city
         expose :region
         expose :address
-        expose :phone
+        expose :mobile
         expose :is_default
         expose :current_used do |m, o|
           m.user_extra.try(:address_id)==m.id
