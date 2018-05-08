@@ -176,6 +176,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
+            requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
             optional :image1, type: File, desc: '上传凭证1'
@@ -187,8 +188,8 @@ module V1
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.with_lock do
-                app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.service_processing?
-                service.update!(description: params[:description], mobile: params[:mobile])
+                app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.created?
+                service.update!(description: params[:description], mobile: params[:mobile], refund_cause: params[:refund_cause])
                 service.update_picture!(params[:image1], params[:image2], params[:image3])
                 true
               end

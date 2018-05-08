@@ -4,7 +4,7 @@ module V1
       class DetailService < Grape::Entity
         expose :status do |m, o|
           case m.status
-            when "service_processing"
+            when "created"
               "#{m.service_name}等待商家确认"
             when "applied" 
               if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
@@ -19,7 +19,7 @@ module V1
           end 
         end
         expose :status_image do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.service_processing? || m.applied?
+          "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.created? || m.applied?
         end
         expose :created_at do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
@@ -74,7 +74,7 @@ module V1
       
       class DetailServiceOfProduct < DetailService
         expose :status_tips do |m, o|
-          if m.service_processing?
+          if m.created?
             "7日后未确认，平台将接入帮您处理"
           end  
         end  
@@ -82,22 +82,22 @@ module V1
           m.product_details
         end
         expose :cancel_apply do |m, o|
-          m.service_processing?
+          m.created?
         end
         
         expose :modify_apply do |m, o|
-          m.service_processing?
+          m.created?
         end  
         
         expose :platform_appeal do |m, o|
-          "lvsent://gogo.cn/im/chats?im_user_name=#{::Mall::Shop.first.im_user_name}" if m.service_processing?
+          "lvsent://gogo.cn/im/chats?im_user_name=#{::Mall::Shop.first.im_user_name}" if m.created?
         end    
       end
       
       class Services < Grape::Entity
         expose :status do |m, o|
           case m.status
-            when "service_processing"
+            when "created"
               "#{m.service_name}等待商家确认"
             when "applied" 
               if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
@@ -121,7 +121,7 @@ module V1
           "￥ "+m.refund_fee.to_s
         end
         expose :cancel_apply_scheme do |m, o|
-          m.service_processing? || m.applied?
+          m.created? || m.applied?
         end
         expose :express_scheme do |m, o|
          "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
