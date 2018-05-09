@@ -18,6 +18,7 @@ require 'colorize'
 require "redis"
 require "weixin_authorize"
 require "wx_pay"
+require './lib/wxpay'
 require "acts_as_list"
 require "alipay"
 unless ENV['SERVER_ENV']=='production'
@@ -26,7 +27,7 @@ unless ENV['SERVER_ENV']=='production'
 end
 
 # 预加载
-require_all 'apis', 'lib', 'middleware'
+require_all 'lib', 'apis', 'middleware'
 
 namespace = "api:base:auth"
 $redis = Cache.new(ENV['REDIS'], namespace)
