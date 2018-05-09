@@ -42,14 +42,13 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_uuid, type: String, desc: '订单 UUID'
-            requires :trade_type, type: String , default: 'APP', values: ['APP', 'JSAPI'], desc: '交易类型'
+            requires :trade_type, type: String , default: ::WxPay::TRADE_APP, values: [::WxPay::TRADE_APP, ::WxPay::TRADE_JSAPI], desc: '交易类型'
           end
           post 'wechat_pay' do
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
-              pay_method = params[:trade_type] == 'APP' ? ::Payment::PAY_METHOD_WECHAT : ::Payment::PAY_METHOD_WECHAT_MP
-              payment = ::Payment.create_by_order(order, pay_method)
+              payment = ::Payment.create_by_order(order, ::Payment.wx_trade_type_to_pay_method(params[:trade_type]))
               pay_params = {
                 # body:             '商品：我要卖机油'[0..63],
                 body: payment.trade_no,
@@ -61,15 +60,12 @@ module V1
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
                 time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
-              pay_params[:openid] = @session_user.wx_open_id if params[:trade_type] == 'JSAPI'
+              pay_params[:openid] = @session_user.wx_open_id if params[:trade_type] == ::WxPay::TRADE_JSAPI
    
               ret = WxPay::Service.invoke_unifiedorder pay_params, ::WxPay.config(params[:trade_type])
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
-              r = case params[:trade_type]
-              when 'APP' then WxPay::Service::generate_app_pay_req(app_params, ::WxPay.config(params[:trade_type]))
-              when 'JSAPI' then WxPay::Service::generate_js_pay_req(app_params, ::WxPay.config(params[:trade_type]))
-              end
+              r = WxPay::Service.send("generate_#{params[:trade_type].downcase}_pay_req", app_params, ::WxPay.config(params[:trade_type]))
               package = r.delete(:package)
               r[:package_value] = package
               r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/orders/payment_result?uuid=#{params[:order_uuid]}")
