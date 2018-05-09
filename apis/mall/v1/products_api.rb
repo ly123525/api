@@ -10,11 +10,7 @@ module V1
           end
           get do
             begin
-              user = begin
-                       ::Account::User.find_uuid(params[:user_uuid])
-                     rescue StandardError
-                       nil
-                     end
+              user = ::Account::User.find_uuid(params[:user_uuid])rescue nil
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               ::Mall::BrowseRecord.generate_browse_record user, style
               present style, with: ::V1::Entities::Mall::ProductByStyle, user: user
@@ -68,16 +64,8 @@ module V1
           end
           get :search do
             begin
-              user = begin
-                       ::Account::User.find_uuid(params[:user_uuid])
-                     rescue StandardError
-                       nil
-                     end
-              begin
-                user.mall_searches.find_or_create_by(content: params[:keywords])
-              rescue StandardError
-                nil
-              end
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              user.mall_searches.find_or_create_by(content: params[:keywords]) rescue nil
               styles = ::Mall::Style.recommended.joins(:product).where('mall_products.on_sale is true').search_by_keywords(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle
             rescue Exception => ex
@@ -93,11 +81,7 @@ module V1
           end
           get :comments do
             begin
-              user = begin
-                       ::Account::User.find_uuid(params[:user_uuid])
-                     rescue StandardError
-                       nil
-                     end
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               style = ::Mall::Style.find_uuid(params[:style_uuid])
               comments = style.product.comments.page(params[:page]).per(20)
               present comments, with: ::V1::Entities::Mall::Comments
@@ -115,11 +99,7 @@ module V1
           end
           get :all_fight_groups do
             begin
-              user = begin
-                       ::Account::User.find_uuid(params[:user_uuid])
-                     rescue StandardError
-                       nil
-                     end
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               product = ::Mall::Product.find_uuid(params[:product_uuid])
               fight_groups = product.random_waiting_fight_groups user
               present fight_groups, with: ::V1::Entities::Mall::FightGroups
