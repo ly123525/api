@@ -14,6 +14,9 @@ module V1
       end
       
       class MallIndex < Grape::Entity
+        expose :pop_up_url do |m, o|
+          "#{ENV['H5_HOST']}/#/activity/popup"
+        end  
         expose :search_key do |m, o|
           "搜索结果"
         end  

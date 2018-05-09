@@ -62,16 +62,13 @@ module V1
                 time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
               }
               pay_params[:openid] = @session_user.wx_open_id if params[:trade_type] == 'JSAPI'
-              trade_type_params = case params[:trade_type]
-              when 'APP' then {appid: ENV['WX_OPEN_APP_ID'], mch_id: ENV['WX_OPEN_MCH_ID'], key: ENV['WX_OPEN_API_KEY']}
-              when "JSAPI" then {appid: ENV['WX_MP_APP_ID'], mch_id: ENV['WX_MP_MCH_ID'], key: ENV['WX_MP_API_KEY']}  
-              end  
-              ret = WxPay::Service.invoke_unifiedorder pay_params, trade_type_params
+   
+              ret = WxPay::Service.invoke_unifiedorder pay_params, ::WxPay.config(params[:trade_type])
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
               r = case params[:trade_type]
-              when 'APP' then WxPay::Service::generate_app_pay_req(app_params, trade_type_params)
-              when 'JSAPI' then WxPay::Service::generate_js_pay_req(app_params, trade_type_params)
+              when 'APP' then WxPay::Service::generate_app_pay_req(app_params, ::WxPay.config(params[:trade_type]))
+              when 'JSAPI' then WxPay::Service::generate_js_pay_req(app_params, ::WxPay.config(params[:trade_type]))
               end
               package = r.delete(:package)
               r[:package_value] = package
