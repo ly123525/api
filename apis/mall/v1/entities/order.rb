@@ -202,7 +202,7 @@ module V1
           "实付 ¥#{m.total_fee}"
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.try(:order_items).try(:first).try(:style).try(:uuid)}" if m.received? or m.evaluated? or m.closed? or ((m.paid? && m.try(:fight_group).try(:completed?) && m.fight_group.present?) or (m.paid? && !m.fight_group.present?)
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.try(:order_items).try(:first).try(:style).try(:uuid)}" if m.received? or m.evaluated? or m.closed? or (m.paid? && m.try(:fight_group).try(:completed?) && m.fight_group.present?) or (m.paid? && !m.fight_group.present?)
         end
         expose :look_logistics_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}") if m.delivered?
