@@ -13,8 +13,8 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               topic = ::Topic::Topic.find_uuid(params[:uuid])
-              items = topic.topic_items.page(params[:page]).per(10)
-              present topic, with: ::V1::Entities::Topic::Topic, items: items
+              styles = ::Mall::Style.on_sale(topic.styles).page(params[:page]).per(10)
+              present topic, with: ::V1::Entities::Topic::Topic, styles: styles
             rescue Exception => ex
               server_error(ex)
             end                          
