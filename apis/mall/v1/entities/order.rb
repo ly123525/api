@@ -131,7 +131,7 @@ module V1
           end
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?  or m.closed?
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?  or m.closed? or m.servicing?
         end  
         expose :to_evaluate_scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
