@@ -15,6 +15,9 @@ module V1
         expose :remaining_time do |m, o|
           (m.expired_at.localtime-Time.now).to_i
         end
+        expose :head_images do |m, o|
+          m.user_avatars
+        end  
       end 
         
       
