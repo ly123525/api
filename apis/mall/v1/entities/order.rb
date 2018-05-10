@@ -92,11 +92,7 @@ module V1
           end  
         end
         expose :service_scheme do |m, o|
-          if m.service_details?
-            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.last.uuid}")
-          elsif m.service_express?
-            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.services.last.uuid}")
-          end
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.last.uuid}") if m.servicing? || m.refunded?
         end  
         expose :pay_remaining_time do |m, o|
           ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) if m.created?
