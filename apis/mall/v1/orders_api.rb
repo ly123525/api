@@ -208,6 +208,7 @@ module V1
           end
           post :comment do
             begin
+              app_error("评论内容不能为空", "Comments cannot be empty") if params[:content].blank?
               authenticate_user
               order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
               app_error("评论不能为空", "Comments cannot be empty") if !params[:content].present?

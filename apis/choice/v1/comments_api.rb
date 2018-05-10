@@ -28,6 +28,7 @@ module V1
           end
           post do
             begin
+              app_error("评论内容不能为空", "Comments cannot be empty") if params[:content].blank?
               authenticate_user
               article = ::Choice::Article.find_uuid(params[:article_uuid])
               comment=article.comments.new(user_id: @session_user.id, content: params[:content])
