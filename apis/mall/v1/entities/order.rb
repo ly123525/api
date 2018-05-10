@@ -91,6 +91,9 @@ module V1
             "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"          
           end  
         end
+        expose :service_scheme do |m, o|
+          m.servicing? || m.refunded?
+        end  
         expose :pay_remaining_time do |m, o|
           ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) if m.created?
         end    
@@ -241,6 +244,9 @@ module V1
             }
           end
         end
+        expose :service_scheme do |m, o|
+          m.servicing? || m.refunded?
+        end 
       end
       
       class OrderList < Grape::Entity
