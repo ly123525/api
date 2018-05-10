@@ -129,17 +129,17 @@ module V1
         expose :detail_scheme do |m, o|
           if m.refunded? && m.closed?
             if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
-              "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
+              "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}")
             else  
-              "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
+              "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}")
             end
           end  
         end
         expose :detail_url do |m, o|
           if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
-            "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
+            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}")
           else  
-            "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
+            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}")
           end
         end               
       end
