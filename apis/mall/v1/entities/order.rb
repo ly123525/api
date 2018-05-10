@@ -91,6 +91,14 @@ module V1
             "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"          
           end  
         end
+        expose :service_scheme do |m, o|
+          if m.service_details?
+            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.last.uuid}")
+          elsif m.service_express?
+            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.services.last.uuid}")
+          end
+          
+        end  
         expose :pay_remaining_time do |m, o|
           ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) if m.created?
         end    
@@ -131,7 +139,7 @@ module V1
           end
         end
         expose :buy_again_scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?  or m.closed?
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?  or m.closed? or m.servicing?
         end  
         expose :to_evaluate_scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
@@ -241,6 +249,9 @@ module V1
             }
           end
         end
+        expose :service_scheme do |m, o|
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.last.uuid}") if m.servicing? || m.refunded?
+        end 
       end
       
       class OrderList < Grape::Entity
