@@ -5,7 +5,7 @@ module V1
         expose :status do |m, o|
           case m.status
             when "created"
-              "#{m.service_name}等待商家确认"
+              "#{m.service_name}等待卖家确认"
             when "applied" 
               if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
                 "#{m.service_name} 卖家已确认,请填写快递信息" 
@@ -98,7 +98,7 @@ module V1
         expose :status do |m, o|
           case m.status
             when "created"
-              "#{m.service_name}等待商家确认"
+              "#{m.service_name}等待卖家确认"
             when "applied" 
               if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
                 "#{m.service_name} 卖家已确认,请填写快递信息" 
