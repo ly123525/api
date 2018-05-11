@@ -116,7 +116,7 @@ module V1
           m.service_target.try(:shop) || m.service_target.try(:order).try(:shop)
         end
         expose :product, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
-          m.service_target_type == 'Mall::Order' ? m.service_target.order_items.first : m.service_target
+          m.service_target_type == 'Mall::Order' ? m.service_target.try(:order_items).try(:first) : m.service_target
         end
         expose :total_fee do |m, o|
           "￥ "+m.refund_fee.to_s
