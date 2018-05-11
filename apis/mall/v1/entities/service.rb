@@ -110,7 +110,8 @@ module V1
             when "closed"
               "#{m.service_name} 申请已取消"
           end       
-        end  
+        end
+        expose :uuid  
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
           m.service_target.try(:shop) || m.service_target.try(:order).try(:shop)
         end
