@@ -163,7 +163,10 @@ module V1
         end
         expose :refund_casue_tips do |m, o|
           ['买错了', '不想买了', '其他']
-        end  
+        end
+        expose :refund_fee do |m, o|
+          "￥ #{m.total_fee}"
+        end   
         expose :mobile    
       end
       

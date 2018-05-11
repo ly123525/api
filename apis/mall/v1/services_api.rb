@@ -29,7 +29,6 @@ module V1
             requires :type_of, type: String, values: ['RefundService','ReturnAllService']
             requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
-            requires :refund_fee, type: String, desc: '退款金额'
             optional :mobile,  type: String, desc: '联系电话'
             optional :image1, type: File, desc: '上传凭证1'
             optional :image2, type: File, desc: '上传凭证2'
@@ -40,9 +39,10 @@ module V1
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
               app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
+              refund_fee = order.total_fee
               service = ::Mall::Service.type_of_service!(  order, params[:type_of], 
                                                 params[:refund_cause], params[:mobile],
-                                                params[:description], params[:refund_fee], 
+                                                params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:image1], params[:image2], params[:image3])
               present service, with: ::V1::Entities::Service::CreateServiceResult
@@ -60,7 +60,6 @@ module V1
             requires :type_of, type: String, values: ['RefundService','ReturnAllService']
             requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
-            requires :refund_fee, type: String, desc: '退款金额'
             optional :mobile,  type: String, desc: '联系电话'
             optional :images, type: Array[File], desc: '上传凭证'  
           end
@@ -68,9 +67,10 @@ module V1
             begin
               authenticate_user
               order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
+              refund_fee = order_item.total_price
               service = ::Mall::Service.type_of_service!(  order_item, params[:type_of], 
                                                 params[:refund_cause], params[:mobile],
-                                                params[:description], params[:refund_fee], 
+                                                params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:images])                                                                   
               nil
@@ -178,7 +178,6 @@ module V1
             requires :uuid, type: String, desc: '服务单UUID'
             requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
-            requires :refund_fee, type: String, desc: '退款金额'
             optional :mobile,  type: String, desc: '联系电话'
             optional :image1, type: File, desc: '上传凭证1'
             optional :image2, type: File, desc: '上传凭证2'
@@ -190,7 +189,7 @@ module V1
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.with_lock do
                 app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.created?
-                service.update!(description: params[:description], mobile: params[:mobile], refund_cause: params[:refund_cause], refund_fee: params[:refund_fee])
+                service.update!(description: params[:description], mobile: params[:mobile], refund_cause: params[:refund_cause])
                 service.update_picture!(params[:image1], params[:image2], params[:image3])
                 true
               end
