@@ -102,7 +102,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :uuid, type: String, desc: '服务单UUID'
-            requires :express, type: String, values: ['圆通','申通', '中通','顺丰','韵达','EMS', '宅急送', '天天' ] ,desc: '快递名称'
+            requires :express, type: String, values: ['圆通','申通', '中通','顺丰','韵达','汇通', '其他'] ,desc: '快递名称'
             requires :express_number, type: String, desc: '快递编号'
           end
           post :express do    

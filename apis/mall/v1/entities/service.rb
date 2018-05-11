@@ -68,7 +68,7 @@ module V1
         end
         expose :service_message
         expose :express_tpye do |m, o|
-          ['圆通','申通', '中通','顺丰','韵达','EMS', '宅急送', '天天' ]
+          ['圆通','申通', '中通','顺丰','韵达','汇通', '其他']
         end
       end  
       
