@@ -1,15 +1,18 @@
 module V1
   module Activity
-    class LotteryTicketsAPI < Grape::API
+    class LotteriesAPI < Grape::API
       namespace :activity do
-        resources :lottery_tickets do
+        resources :lotteries do
           desc "首页抽奖进度"
           params do
             optional :user_uuid, type: String, desc: '用户UUID'
           end
           get :progress_bar do
             begin
-              {current_foucs_on_count: 888000, target_focus_on_count: 1000000, scheme: "#{ENV['H5_HOST']}/#/expedite_openaward"}
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              activity = ::Activity.where(status: :not_lottery).first
+              focus_count = activity.focus.count
+              present activity, with: ::V1::Entities::Activity::Activity, focus_count: focus_count
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -21,6 +24,7 @@ module V1
             optional :user_uuid, type: String, desc: '用户UUID'
           end
           get  do
+            
             {
               current_foucs_on_count: 888000,
               target_focus_on_count: 1000000, 
