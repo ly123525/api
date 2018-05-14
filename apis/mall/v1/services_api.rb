@@ -45,6 +45,7 @@ module V1
                                                 params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:image1], params[:image2], params[:image3])
+              service.service_target.update!(updated_at: Time.now)
               present service, with: ::V1::Entities::Service::CreateServiceResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -145,6 +146,7 @@ module V1
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.close!
+              service.service_target.update(updated_at: Time.now)
               true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -191,6 +193,7 @@ module V1
                 app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.created?
                 service.update!(description: params[:description], mobile: params[:mobile], refund_cause: params[:refund_cause])
                 service.update_picture!(params[:image1], params[:image2], params[:image3])
+                service.service_target.update(updated_at: Time.now)
                 true
               end
             rescue ActiveRecord::RecordNotFound
