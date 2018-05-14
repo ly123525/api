@@ -45,8 +45,12 @@ module V1
             "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
-          elsif m.servicing?
-            "售后处理中"            
+          elsif m.paid_servicing?
+            "待发货,售后处理中"
+          elsif m.delivered_servicing?
+            "待收货,售后处理中"
+          elsif m.received_servicing?
+            "待评价,售后处理中"                
           elsif m.paid?
             "等待卖家发货"
           elsif m.delivered?
@@ -191,8 +195,12 @@ module V1
             "待支付" 
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
-          elsif m.servicing?
-            "售后处理中"            
+          elsif m.paid_servicing?
+            "待发货,售后处理中"
+          elsif m.delivered_servicing?
+            "待收货,售后处理中"
+          elsif m.received_servicing?
+            "待评价,售后处理中"            
           elsif m.paid?
             "待发货"
           elsif m.delivered?
