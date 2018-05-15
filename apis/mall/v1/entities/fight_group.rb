@@ -53,7 +53,7 @@ module V1
         expose :fight_group_remaining_time do |m, o|
           unless m.fight_group.present? && m.fight_group.completed?
             if m.try(:fight_group).try(:expired_at)
-              (m.try(:fight_group).try(:expired_at)-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 
+              (m.try(:fight_group).try(:expired_at)-Time.now).to_i > 0 ? (m.fight_group.expired_at-Time.now).to_i : 0 
             end  
           end
         end
