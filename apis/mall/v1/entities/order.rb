@@ -289,7 +289,7 @@ module V1
         end
         expose :remaining_time do |m, o|
           if o[:fight_group] && o[:fight_group].waiting?
-            (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? (o[:fight_group].expired_at.localtime-Time.now).to_i : 0
+            (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? ((o[:fight_group].expired_at.localtime-Time.now).to_i * 1000) : 0
           else
             0  
           end 
