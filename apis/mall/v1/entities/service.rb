@@ -125,7 +125,7 @@ module V1
           m.created? || m.applied?
         end
         expose :express_scheme do |m, o|
-         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.service_message.present?
+         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.express.present?
         end
         expose :detail_scheme do |m, o|
           if m.refunded? && m.closed?
