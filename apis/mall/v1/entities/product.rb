@@ -39,7 +39,7 @@ module V1
           "¥ " + m.price.to_s
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}" if inner_app?
+          "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
         end
       end
       
