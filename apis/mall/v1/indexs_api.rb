@@ -27,7 +27,8 @@ module V1
           get :page do
             begin
               styles = ::Mall::Style.recommended.joins(:product).where('mall_products.on_sale is true').sorted.page(params[:page]).per(10)
-              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle
+              inner_app = true if inner_app?
+              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
