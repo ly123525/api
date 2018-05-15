@@ -211,7 +211,7 @@ module V1
           get :services do
             begin
               authenticate_user
-              services = @session_user.mall_services.order(updated_at: :desc)
+              services = @session_user.mall_services.reorder(updated_at: :desc)
               present services, with: ::V1::Entities::Service::Services
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
