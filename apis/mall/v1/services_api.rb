@@ -37,7 +37,6 @@ module V1
           post :order do
             begin
               authenticate_user
-              logger.info "#{params[:image1]}"
               order = @session_user.orders.find_uuid(params[:order_uuid])
               app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
               refund_fee = order.total_fee
