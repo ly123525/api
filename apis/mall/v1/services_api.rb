@@ -46,7 +46,6 @@ module V1
                                                 params[:description], refund_fee, 
                                                 @session_user)
               service.create_picture!(params[:image1], params[:image2], params[:image3])
-              service.service_target.update!(updated_at: Time.now)
               present service, with: ::V1::Entities::Service::CreateServiceResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
