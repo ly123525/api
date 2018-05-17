@@ -302,13 +302,13 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{o[:fight_group].uuid}",
               description: '快来拼单吧'
             }
-          else
-            {
-              title: '我在全民拼选购了商品，赶紧来下单吧',
-              image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
-              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.style.uuid}",
-              description: '快来下单吧'
-            }
+          # else
+          #   {
+          #     title: '我在全民拼选购了商品，赶紧来下单吧',
+          #     image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
+          #     url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.style.uuid}",
+          #     description: '快来下单吧'
+          #   }
           end
         end
       end 
