@@ -11,7 +11,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               activity = ::Activity.where(status: false).first
-              focus_count = activity.focus.count
+              focus_count = activity.focus_ons.count
               present activity, with: ::V1::Entities::Activity::Activity, focus_count: focus_count
             rescue Exception => ex
               server_error(ex)
@@ -25,7 +25,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               activity = ::Activity.where(status: false).first
-              focus_count = activity.focus.count
+              focus_count = activity.focus_ons.count
               
             rescue Exception => ex
               server_error(ex)
@@ -65,7 +65,10 @@ module V1
           post :focus_on do
             begin
               authenticate_user
-              ::Activity.focus.create! user: @session_user
+              activity = ::Activity.where(status: false).first
+              app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
+              focus_on = activity.focus_ons.create! user: @session_user
+              ::Lotteries::Smart.create!(user: @session_user)  #不应该是smart类,应该灵活些，下次活动还要改
               true
             rescue Exception => ex
               server_error(ex)
