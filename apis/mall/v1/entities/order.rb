@@ -174,8 +174,8 @@ module V1
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
-              title: "来拼",
-              summary: "来拼"
+              title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
+              summary: ""
             }
           end
         end
@@ -252,8 +252,8 @@ module V1
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
-              title: "来拼",
-              summary: "来拼"
+              title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
+              summary: ""
             }
           end
         end
@@ -297,10 +297,10 @@ module V1
         expose :share do |m, o|
           if o[:fight_group]
             {
-              title: '我在全民拼选购了商品，赶紧来拼单吧',
+              title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (o[:fight_group].style.style_cover.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{o[:fight_group].uuid}",
-              description: '快来拼单吧'
+              description: ''
             }
           # else
           #   {

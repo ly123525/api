@@ -190,7 +190,7 @@ module V1
             m.product.name + " " + m.name
           end
           expose :summary do |m, o|
-            "快来拼单吧"
+            ""
           end
         end
       end
