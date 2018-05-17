@@ -10,11 +10,9 @@ module V1
           get :progress_bar do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where(status: :not_lottery).first
+              activity = ::Activity.where(status: false).first
               focus_count = activity.focus.count
               present activity, with: ::V1::Entities::Activity::Activity, focus_count: focus_count
-            rescue ActiveRecord::RecordNotFound
-              app_uuid_error
             rescue Exception => ex
               server_error(ex)
             end            
@@ -24,12 +22,18 @@ module V1
             optional :user_uuid, type: String, desc: '用户UUID'
           end
           get  do
-            
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              activity = ::Activity.where(status: false).first
+              focus_count = activity.focus.count
+              
+            rescue Exception => ex
+              server_error(ex)
+            end   
             {
-              current_foucs_on_count: 888000,
+              current_focus_on_count: 888000,
               target_focus_on_count: 1000000, 
-              scheme: "#{ENV['H5_HOST']}/#/expedite_openaward",
-              foucs_on_or_not: false,
+              focus_on_or_not: false,
               benz: [
                   {image: 'https://image.ggoo.net.cn/201804/2018041517512699189b7b188-375-375.jpg', scheme: 'www.baidu.com'},
                   {image: 'https://image.ggoo.net.cn/201804/2018041517521238967d60ef5-375-375.jpg', scheme: 'www.baidu.com'},
@@ -52,7 +56,21 @@ module V1
               ]
               
             }
-          end     
+          end
+          desc "活动关注"
+          params do 
+            requires :user_uuid, type: String, desc: '用户 UIID'
+            requires :token, type: String, desc: '用户访问令牌'
+          end
+          post :focus_on do
+            begin
+              authenticate_user
+              ::Activity.focus.create! user: @session_user
+              true
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end         
         end  
       end    
     end  
