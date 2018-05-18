@@ -13,7 +13,7 @@ module V1
           get do
             begin
               shop = ::Mall::Shop.find_uuid(params[:uuid])
-              styles = ::Mall::Style.on_sale(shop.styles).order_by(params[:sort_rule]).page(params[:page]).per(20)
+              styles = ::Mall::Style.on_sale(shop.styles).recommended.order_by(params[:sort_rule]).page(params[:page]).per(20)
               present shop, with: ::V1::Entities::Mall::HomePageOfShop, styles: styles
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
