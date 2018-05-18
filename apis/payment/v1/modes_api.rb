@@ -58,7 +58,7 @@ module V1
                 notify_url:       ENV['WX_OPEN_PAY_NOTIFY_URL'],
                 trade_type:       params[:trade_type],
                 nonce_str:        SecureRandom.uuid.tr('-', ''),
-                time_expire:      order.expired_at.localtime.strftime("%Y%m%d%H%M%S")
+                time_expire:      (Time.now+2.minute).localtime.strftime("%Y%m%d%H%M%S")
               }
               pay_params[:openid] = @session_user.wx_open_id if params[:trade_type] == ::WxPay::TRADE_JSAPI
    
@@ -120,7 +120,7 @@ module V1
               }.to_json(ascii_only: true), 
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
-              timeout_express: order.timeout_express_for_alipay)
+              timeout_express: "2m")
               {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/orders/payment_result?uuid=#{params[:order_uuid]}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
