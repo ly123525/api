@@ -188,7 +188,6 @@ module V1
           post :update do
             begin
               authenticate_user
-              binding.pry
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.with_lock do
                 app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.created?
