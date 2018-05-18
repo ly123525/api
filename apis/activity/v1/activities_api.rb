@@ -70,7 +70,8 @@ module V1
               activity = ::Activity.where(status: false).first
               app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
               focus_on = activity.focus_ons.create! user: @session_user
-              ::Lotteries::Smart.create!(user: @session_user)  #不应该是smart类,应该灵活些，下次活动还要改
+              lottery =::Lotteries::Smart.create!(user: @session_user)  #不应该是smart类,应该灵活些，下次活动还要改
+              ::ActivityItem.create!(activity: activity, target: focus_on, result: lottery )
               true
             rescue Exception => ex
               server_error(ex)
