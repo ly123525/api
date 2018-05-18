@@ -44,7 +44,7 @@ module V1
           o[:smarts]
         end    
         expose :histroy_messages do |m, o|
-          "当前为第一期"
+          "暂无历史开奖,本期为第一期开奖"
         end    
       end    
     end  
