@@ -18,6 +18,7 @@ module V1
           end
           post do
             begin
+              Grape::API.logger.info "===================#{params.to_s}"
               authenticate_user
               app_error("无效的手机号码，请重新输入", "Invalid phone number") unless valid_phone?
               address=@session_user.addresses.create!(name: params[:name], 
