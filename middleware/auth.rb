@@ -8,6 +8,7 @@ module API
       request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
       params = request.params
       Grape::API.logger.info "===================#{params.to_s}"
+      Grape::API.logger.info "===================#{request.headers.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
       Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
       Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
