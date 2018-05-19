@@ -6,7 +6,6 @@ module API
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
       return if ENV['SERVER_ENV']=='development'
       request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
-      Grape::API.logger.info "===================#{request.to_s}"
       params = request.params
       Grape::API.logger.info "===================#{params.to_s}"
       Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
