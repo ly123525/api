@@ -53,7 +53,7 @@ module V1
         expose :fight_group_remaining_time do |m, o|
           unless m.fight_group.present? && m.fight_group.completed?
             if m.try(:fight_group).try(:expired_at)
-              (m.try(:fight_group).try(:expired_at)-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 
+              (m.try(:fight_group).try(:expired_at)-Time.now).to_i > 0 ? (m.fight_group.expired_at-Time.now).to_i : 0 
             end  
           end
         end
@@ -65,10 +65,10 @@ module V1
         end
         expose :share do |m, o|
           {
-            title: '我在全民拼选购了商品，赶紧来拼单吧',
+            title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
             image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
             url: "#{ENV['H5_HOST']}/#/mall/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
-            summary: '快来拼单吧'
+            summary: ''
           }
         end       
       end    

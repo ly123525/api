@@ -45,8 +45,12 @@ module V1
             "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
-          elsif m.servicing?
-            "售后处理中"            
+          elsif m.paid_servicing?
+            "待发货,售后处理中"
+          elsif m.delivered_servicing?
+            "待收货,售后处理中"
+          elsif m.received_servicing?
+            "待评价,售后处理中"                
           elsif m.paid?
             "等待卖家发货"
           elsif m.delivered?
@@ -142,7 +146,7 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?  or m.closed? or m.servicing?
         end  
         expose :to_evaluate_scheme do |m, o|
-          "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
+          "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated? and !m.received_servicing?
         end
         expose :pay_center_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{m.uuid}") if (m.created? && m.expired_at >= Time.now)
@@ -170,8 +174,8 @@ module V1
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
-              title: "来拼",
-              summary: "来拼"
+              title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
+              summary: ""
             }
           end
         end
@@ -191,8 +195,12 @@ module V1
             "待支付" 
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
-          elsif m.servicing?
-            "售后处理中"            
+          elsif m.paid_servicing?
+            "待发货,售后处理中"
+          elsif m.delivered_servicing?
+            "待收货,售后处理中"
+          elsif m.received_servicing?
+            "待评价,售后处理中"            
           elsif m.paid?
             "待发货"
           elsif m.delivered?
@@ -216,7 +224,7 @@ module V1
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}") if (m.delivered? && !m.servicing?)
         end
         expose :to_evaluate_scheme do |m, o|
-          "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated?
+          "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated? and !m.received_servicing?
         end
         expose :pay_center_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{m.uuid}") if m.created?
@@ -244,8 +252,8 @@ module V1
             {
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
-              title: "来拼",
-              summary: "来拼"
+              title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
+              summary: ""
             }
           end
         end
@@ -281,7 +289,7 @@ module V1
         end
         expose :remaining_time do |m, o|
           if o[:fight_group] && o[:fight_group].waiting?
-            (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? (o[:fight_group].expired_at.localtime-Time.now).to_i : 0
+            (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? ((o[:fight_group].expired_at.localtime-Time.now).to_i * 1000) : 0
           else
             0  
           end 
@@ -289,18 +297,18 @@ module V1
         expose :share do |m, o|
           if o[:fight_group]
             {
-              title: '我在全民拼选购了商品，赶紧来拼单吧',
+              title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (o[:fight_group].style.style_cover.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{o[:fight_group].uuid}",
-              description: '快来拼单吧'
+              description: ''
             }
-          else
-            {
-              title: '我在全民拼选购了商品，赶紧来拼单吧',
-              image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
-              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.product.uuid}",
-              description: '快来拼单吧'
-            }
+          # else
+          #   {
+          #     title: '我在全民拼选购了商品，赶紧来下单吧',
+          #     image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
+          #     url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.style.uuid}",
+          #     description: '快来下单吧'
+          #   }
           end
         end
       end 

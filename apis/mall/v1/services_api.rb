@@ -145,6 +145,7 @@ module V1
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.close!
+              service.service_target.update(updated_at: Time.now)
               true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -179,6 +180,7 @@ module V1
             requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
             requires :description, type: String, desc: '退款说明'
             optional :mobile,  type: String, desc: '联系电话'
+            optional :delete_image_url, type: Array[String], desc: '删除的图片的url'
             optional :image1, type: File, desc: '上传凭证1'
             optional :image2, type: File, desc: '上传凭证2'
             optional :image3, type: File, desc: '上传凭证3'
@@ -190,7 +192,8 @@ module V1
               service.with_lock do
                 app_error("商家已受理,无法修改", "Applyed! Can't modify!")  unless service.created?
                 service.update!(description: params[:description], mobile: params[:mobile], refund_cause: params[:refund_cause])
-                service.update_picture!(params[:image1], params[:image2], params[:image3])
+                service.update_picture!(params[:image1], params[:image2], params[:image3], params[:delete_image_url])
+                service.service_target.update(updated_at: Time.now)
                 true
               end
             rescue ActiveRecord::RecordNotFound
@@ -208,7 +211,7 @@ module V1
           get :services do
             begin
               authenticate_user
-              services = @session_user.mall_services
+              services = @session_user.mall_services.reorder(updated_at: :desc)
               present services, with: ::V1::Entities::Service::Services
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
