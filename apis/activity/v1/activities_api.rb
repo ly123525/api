@@ -26,7 +26,7 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               activity = ::Activity.where(status: false).first
               focus_count = activity.focus_ons.count
-              benzs = ::Topic::Topic.where(activity_tags: '奔驰').limit(3)
+              benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
               present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts 
             rescue Exception => ex
