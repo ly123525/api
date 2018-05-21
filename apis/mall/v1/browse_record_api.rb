@@ -12,7 +12,10 @@ module V1
           get do
             begin
               authenticate_user
-              records = @session_user.browse_records.page(params[:page]).per(10)
+              style_ids = @session_user.browse_records.map(&:style_id)
+              styles = ::Mall::Style.where(id: style_ids)
+              style_ids = ::Mall::Style.on_sale(styles).ids
+              records = @session_user.browse_records.where(style_id: style_ids).page(params[:page]).per(10)
               present records, with: ::V1::Entities::Mall::BrowseRecords
             rescue ActiveRecord::RecordNotFound
               app_uuid_error

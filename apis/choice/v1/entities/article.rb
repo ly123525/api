@@ -52,7 +52,7 @@ module V1
         expose :title
         expose :summary
         expose :shop, using: ::V1::Entities::Mall::Shop
-        expose :images do |m, o|
+        expose :image do |m, o|
           m.pictures.first.image.style_url('480w') rescue nil
         end
         expose :scheme do |m, o|
