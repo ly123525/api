@@ -20,6 +20,9 @@ module V1
       end  
       
       class ActivityDetails < Grape::Entity
+        expose :explain_scheme do |m, o|
+          "#{ENV['H5_HOST']}/#/activity/explain"
+        end 
         expose :current_foucs_on_count do |m, o|
           o[:focus_count]
         end
