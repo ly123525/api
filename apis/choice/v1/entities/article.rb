@@ -52,8 +52,11 @@ module V1
         expose :title
         expose :summary
         expose :shop, using: ::V1::Entities::Mall::Shop
-        expose :images do |m, o|
-          m.pictures.map{|picture| picture.image.style_url('480w') } rescue nil
+        expose :image do |m, o|
+          m.pictures.first.image.style_url('480w') rescue nil
+        end
+        expose :scheme do |m, o|
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}")
         end
       end
 
