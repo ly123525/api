@@ -21,9 +21,9 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
         end
         expose :activity_tags do |m, o|
-          if m.benz_tags?
+          if m.product.benz_tags?
             "抽奖得奔驰"
-          elsif m.smart_tags?
+          elsif m.product.smart_tags?
             "抽奖得Smart"  
           end  
         end 
@@ -49,9 +49,9 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
         end
         expose :activity_tags do |m, o|
-          if m.benz_tags?
+          if m.product.benz_tags?
             "抽奖得奔驰"
-          elsif m.smart_tags?
+          elsif m.product.smart_tags?
             "抽奖得Smart"  
           end  
         end
@@ -207,17 +207,17 @@ module V1
             ""
           end
           expose :activity_tags do |m, o|
-            if m.benz_tags?
+            if m.product.benz_tags?
               "抽奖得奔驰"
-            elsif m.smart_tags?
+            elsif m.product.smart_tags?
               "抽奖得Smart"  
             end  
           end
         end
         expose :activity_tags do |m, o|
-          if m.benz_tags?
+          if m.product.benz_tags?
             "抽奖得奔驰"
-          elsif m.smart_tags?
+          elsif m.product.smart_tags?
             "抽奖得Smart"  
           end  
         end         
