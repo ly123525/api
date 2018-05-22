@@ -72,7 +72,7 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            optional :from, type: String, values: ['order', 'personal'], default: 'order', desc: 'order: 从订单跳转到地址, personal: 从个人中心跳转到地址'
+            optional :from, type: String, values: ['order', 'personal_center'], default: 'order', desc: 'order: 从订单跳转到地址, personal: 从个人中心跳转到地址'
           end
           get do
             begin
