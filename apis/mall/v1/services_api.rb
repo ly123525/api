@@ -38,13 +38,17 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
-              app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
-              refund_fee = order.total_fee
-              service = ::Mall::Service.type_of_service!(  order, params[:type_of], 
-                                                params[:refund_cause], params[:mobile],
-                                                params[:description], refund_fee, 
-                                                @session_user)
-              service.create_picture!(params[:image1], params[:image2], params[:image3])
+              service=nil
+              order.with_lock do
+                app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
+                app_error("有未处理完的售后单,请勿重新申请", "Has One! Can't Apply!")  if order.services.where(:status=>["created","applied","refunded"]).count > 0
+                refund_fee = order.total_fee
+                service = ::Mall::Service.type_of_service!(  order, params[:type_of],
+                                                             params[:refund_cause], params[:mobile],
+                                                             params[:description], refund_fee,
+                                                             @session_user)
+                service.create_picture!(params[:image1], params[:image2], params[:image3])
+              end
               present service, with: ::V1::Entities::Service::CreateServiceResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -219,7 +223,8 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end 
-          end       
+          end
+          
         end
       end  
     end  
