@@ -12,7 +12,7 @@ module V1
           get do
             begin
               authenticate_user
-              message = ::Message.last
+              message = @session_user.last_message
               present message, with: ::V1::Entities::User::Message, user: @session_user
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -47,7 +47,7 @@ module V1
           get :destail do
             begin
               authenticate_user
-              message = ::Message.last
+              message = @session_user.last_message
               ::MessageReadRecord.find_or_create_by_message_and_user message, @session_user
               messages = @session_user.list_messages.page(params[:page]).per(10)
               present messages, with: ::V1::Entities::User::Messages

@@ -35,7 +35,8 @@ module V1
         end
         expose :time do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S') 
-        end      
+        end
+        expose :scheme      
       end    
     end  
   end  
