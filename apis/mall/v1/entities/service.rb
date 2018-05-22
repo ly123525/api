@@ -75,7 +75,7 @@ module V1
       class DetailServiceOfProduct < DetailService
         expose :status_tips do |m, o|
           if m.created?
-            "7日后未确认，平台将接入帮您处理"
+            "48未确认，平台将介入帮您处理"
           end  
         end  
         expose :product_details do |m, o|

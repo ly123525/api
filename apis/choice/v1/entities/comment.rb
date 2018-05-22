@@ -7,7 +7,7 @@ module V1
           m.user.nickname
         end
         expose :head_image do |m, o|
-          m.user.picture.image.style_url('120w') rescue nil
+          m.user.picture.image.style_url('120w') rescue "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/head.png?x-oss-process=style/120w"
         end
         expose :content
         expose :created_at do |m, o|

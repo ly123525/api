@@ -1,6 +1,6 @@
 module V1
   module Entities
-    module Mall
+    module Mall  
       class ProductByOrderItem < Grape::Entity
         expose :image do |m, o|
           m.picture.image.style_url('160w') rescue nil
@@ -27,7 +27,7 @@ module V1
           m.style_cover.image.style_url('480w') rescue nil
         end
         expose :title do |m, o|
-          m.product.name
+          m.full_name
         end
         expose :style_name do |m, o|
           m.name
@@ -40,6 +40,13 @@ module V1
         end
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
+        end
+        expose :activity_tags do |m, o|
+          if m.product.benz_tags?
+            "抽奖得奔驰"
+          elsif m.product.smart_tags?
+            "抽奖得Smart"  
+          end  
         end
       end
       
@@ -104,7 +111,7 @@ module V1
           m.adaption_pictures.map{|picture| picture.image.style_url('480w') } rescue nil
         end
         expose :title do |m, o|
-          m.product.name + " " + m.name
+          m.full_name
         end
         expose :slogan do |m, o|
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
@@ -192,7 +199,21 @@ module V1
           expose :summary do |m, o|
             ""
           end
+          expose :activity_tags do |m, o|
+            if m.product.benz_tags?
+              "抽奖得奔驰"
+            elsif m.product.smart_tags?
+              "抽奖得Smart"  
+            end  
+          end
         end
+        expose :activity_tags do |m, o|
+          if m.product.benz_tags?
+            "抽奖得奔驰"
+          elsif m.product.smart_tags?
+            "抽奖得Smart"  
+          end  
+        end         
       end
     end
   end
