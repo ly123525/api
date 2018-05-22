@@ -29,7 +29,7 @@ module V1
           post do
             begin
               authenticate_user
-              message = ::Message.last
+              message = @session_user.last_message
               ::MessageReadRecord.find_or_create_by_message_and_user message, @session_user
               true
             rescue ActiveRecord::RecordNotFound
