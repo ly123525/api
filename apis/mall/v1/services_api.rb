@@ -207,11 +207,12 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
+            optional :page, type: Integer, default: 1, desc: '分页页码'
           end
           get :services do
             begin
               authenticate_user
-              services = @session_user.mall_services.reorder(updated_at: :desc)
+              services = @session_user.mall_services.reorder(updated_at: :desc).page(params[:page]).per(10)
               present services, with: ::V1::Entities::Service::Services
             rescue ActiveRecord::RecordNotFound
               app_uuid_error

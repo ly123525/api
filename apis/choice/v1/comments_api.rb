@@ -6,11 +6,12 @@ module V1
           desc  "评论列表"
           params do
             requires :article_uuid, type: String,  desc: "文章 UUID"
+            optional :page, type: Integer, default: 1, desc: '分页页码'
           end
           get do
             begin
               article = ::Choice::Article.find_uuid(params[:article_uuid])
-              comments = article.comments
+              comments = article.comments.page(params[:page]).per(20)
               present comments, with: ::V1::Entities::Choice::Comments
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
