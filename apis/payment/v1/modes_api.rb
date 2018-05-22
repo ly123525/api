@@ -19,9 +19,9 @@ module V1
                   title: item.product_name,
                   style_name: item.style_name,
                   image: (item.picture.image.style_url('160w') rescue nil),
-                  price: "¥ " + item.style.price.to_s,
+                  price: order.fight_group.present? ? ("¥ " + item.style.price.to_s):("¥ " + item.style.original_price.to_s),
                   quantity_str: "x#{item.quantity}",
-                  total_fee: @session_user.is_developer? ? "￥ 0.1"  : ("￥ " + (item.style.price * item.quantity).to_s),
+                  total_fee: @session_user.is_developer? ? "￥ 0.1"  : order.actual_payment,
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}"
                 },
                 modes:[
