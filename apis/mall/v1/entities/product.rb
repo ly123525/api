@@ -21,9 +21,9 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
         end
         expose :activity_tags do |m, o|
-          if m.product.benz_tags?
+          if m.benz_tags?
             "抽奖得奔驰"
-          elsif m.product.smart_tags?
+          elsif m.smart_tags?
             "抽奖得Smart"  
           end  
         end 
