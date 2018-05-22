@@ -34,7 +34,7 @@ module V1
           m.style_cover.image.style_url('480w') rescue nil
         end
         expose :title do |m, o|
-          m.product.name
+          m.full_name
         end
         expose :style_name do |m, o|
           m.name
@@ -118,7 +118,7 @@ module V1
           m.adaption_pictures.map{|picture| picture.image.style_url('480w') } rescue nil
         end
         expose :title do |m, o|
-          m.product.name + " " + m.name
+          m.full_name
         end
         expose :slogan do |m, o|
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
