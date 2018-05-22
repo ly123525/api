@@ -2,15 +2,13 @@ module API
   class Auth < Grape::Middleware::Base
 
     def before
-      return if env['PATH_INFO'].include?('/doc/swagger_doc')
-      return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
       return if ENV['SERVER_ENV']=='development'
-      request = Grape::Request.new(@env, build_params_with: @options[:build_params_with])
-      params = request.params
-      Grape::API.logger.info "===================#{params.to_s}"
-      Grape::API.logger.info "===================#{env['HTTP_SIGNATURE']}"
-      Grape::API.logger.info "===================#{env['HTTP_TIMESTAMP']}"
-      Grape::API.logger.info "===================#{env['HTTP_NONCE']}"
+      return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
+      if env['CONTENT_TYPE'] && env['CONTENT_TYPE'].include?(Grape::ContentTypes::CONTENT_TYPES[:json])
+        params = JSON.parse(env["rack.input"].read)
+      else
+        params = Grape::Request.new(@env, build_params_with: @options[:build_params_with]).params
+      end
       params['signature'] = env['HTTP_SIGNATURE']
       params['timestamp'] = env['HTTP_TIMESTAMP']
       params['nonce'] = env['HTTP_NONCE']
