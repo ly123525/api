@@ -48,6 +48,13 @@ module V1
             "抽奖得Smart"  
           end  
         end
+        expose :activity_category do |m, o|
+          if m.product.benz_tags?
+            "Benz"
+          elsif m.product.smart_tags?
+            "Smart"  
+          end        
+        end
       end
       
       class ProductsByStyles < SimpleProductByStyle
@@ -206,6 +213,13 @@ module V1
               "抽奖得Smart"  
             end  
           end
+          expose :activity_category do |m, o|
+            if m.product.benz_tags?
+              "Benz"
+            elsif m.product.smart_tags?
+              "Smart"  
+            end        
+          end
         end
         expose :activity_tags do |m, o|
           if m.product.benz_tags?
@@ -213,6 +227,13 @@ module V1
           elsif m.product.smart_tags?
             "抽奖得Smart"  
           end  
+        end
+        expose :activity_category do |m, o|
+          if m.product.benz_tags?
+            "Benz"
+          elsif m.product.smart_tags?
+            "Smart"  
+          end        
         end         
       end
     end

@@ -28,7 +28,8 @@ module V1
               focus_count = activity.focus_ons.count
               benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
-              present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts 
+              inner_app = inner_app? request
+              present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app 
             rescue Exception => ex
               server_error(ex)
             end   
