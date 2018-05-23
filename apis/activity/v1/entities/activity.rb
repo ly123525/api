@@ -38,7 +38,7 @@ module V1
         end
         expose :share do |m, o|
           {
-            url: "#{ENV['H5_HOST']}/#/",
+            url: "#{ENV['H5_HOST']}/#/expedite_openaward",
             image: "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/logo_3x.png",
             title: '奔驰开回家做人生赢家',
             summary: '成功发起5人拼单即可获取奔驰轿车抽奖劵'
