@@ -11,8 +11,11 @@ module V1
         expose :items, using: ::V1::Entities::Mall::SectionItems, unless: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
           m.section_items
         end
+        expose :url, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
+          "#{ENV['H5_HOST']}/#/raffle/resourcelocation"          
+        end  
         expose :activity_scheme, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/raffle/resourcelocation")
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64(m.scheme)
         end
         expose :width, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
           3
