@@ -16,6 +16,8 @@ module V1
               "#{m.service_name} 已退款"
             when "closed"
               "#{m.service_name} 申请已取消"
+            when "rejected"
+              "#{m.service_name} 已驳回"  
           end 
         end
         expose :status_image do |m, o|
@@ -109,6 +111,8 @@ module V1
               "#{m.service_name} 已退款"
             when "closed"
               "#{m.service_name} 申请已取消"
+            when "rejected"
+              "#{m.service_name} 已驳回"               
           end       
         end
         expose :uuid  
