@@ -16,6 +16,16 @@ module V1
         expose :created_at do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d')
         end
+        expose :level do |m, o|
+          case m.level
+            when 1
+              "好评"
+            when 2
+              "中评"
+            when 3
+              "差评"
+          end    
+        end  
       end
     end
   end
