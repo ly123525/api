@@ -9,7 +9,7 @@ module V1
           m.class.to_s.split("::").last
         end  
         expose :color_status do |m ,o|
-          m.not_winning?
+          ！m.not_winning?
         end  
         expose :status_tips do |m, o|
           if m.not_lottery?
