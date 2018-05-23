@@ -43,6 +43,7 @@ module V1
             begin
               authenticate_user
               activity = ::Activity.where(status: false).first
+              app_error('已经开奖了,不能再关注了', 'No more attention') unless activity.present?
               app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
               focus_on = activity.focus_ons.create! user: @session_user
               lottery =::Lotteries::Smart.create!(user: @session_user)  #不应该是smart类,应该灵活些，下次活动还要改
