@@ -25,7 +25,8 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               activity = ::Activity.where(status: false).first
-              focus_count = activity.focus_ons.count
+              app_error('活动已经结束', 'The activity is over') unless activity.present?
+              focus_count = activity.focus_ons.count rescue 1000000
               benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
               inner_app = inner_app? request
