@@ -12,12 +12,12 @@ module V1
           m.not_winning?
         end  
         expose :status_tips do |m, o|
-          if m.not_winning?
-            "未中奖"
+          if m.not_lottery?
+            "未开奖"
           elsif m.the_winning?
             "中奖"
-          elsif m.not_lottery?
-            "未开奖"  
+          elsif m.not_winning?
+            "未中奖"  
           end  
         end
         expose :number
