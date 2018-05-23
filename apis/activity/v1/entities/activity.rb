@@ -15,7 +15,11 @@ module V1
       
       class ActivityTag < Grape::Entity
         expose :scheme do |m, o|
-          m.app_outer_scheme
+          if o[:inner_app]
+            m.app_inner_h5_scheme
+          else
+            m.app_outer_scheme   
+          end
         end  
       end  
       
