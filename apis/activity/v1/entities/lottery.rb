@@ -35,7 +35,7 @@ module V1
             case o[:os]
               when 'Android'
                 "http://a.app.qq.com/o/simple.jsp?pkgname=com.lst.go"
-              when 'Ios'
+              when 'IOS'
                 'https://itunes.apple.com/cn/app/id1369799402?mt=8' 
             end     
           end  
