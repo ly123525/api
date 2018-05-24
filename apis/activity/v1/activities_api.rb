@@ -29,8 +29,9 @@ module V1
               focus_count = activity.focus_ons.count rescue 1000000
               benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
+              activities = ::Activity.where(status: true).order(id: :desc).limit(3)
               inner_app = inner_app? request
-              present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app 
+              present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app, activities: activities 
             rescue Exception => ex
               server_error(ex)
             end   
@@ -56,7 +57,20 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end              
-          end         
+          end
+          desc "中奖历史"
+          params do
+            optional :user_uuid, type: String, desc: '用户UUID'            
+          end
+          get :history do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              activities = ::Activity.where(status: true).order(id: :desc)
+              present activities, with: ::V1::Entities::Activity::LotteryResultHistory                
+            rescue Exception => ex
+              server_error(ex)
+            end                        
+          end             
         end  
       end    
     end  

@@ -25,7 +25,7 @@ module V1
         end
         expose :number
         expose :nper do |m, o|
-          "第一期"
+          m.activity_item.activity.name
         end
         expose :list_url do |m, o|
           "#{ENV['H5_HOST']}/#/raffletickets" if o[:inner_app]
@@ -63,7 +63,7 @@ module V1
         end
         expose :number
         expose :nper do |m, o|
-          "第一期"
+          m.activity_item.activity.name
         end     
       end  
     end
