@@ -20,6 +20,7 @@ module V1
           desc "活动详情页"
           params do
             optional :user_uuid, type: String, desc: '用户UUID'
+            optional :for_app, type: Boolean, default: true, desc: '时候在APP内, 默认为true, 在APP内'
           end
           get  do
             begin
@@ -30,7 +31,7 @@ module V1
               benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
               activities = ::Activity.where(status: true).order(id: :desc).limit(3)
-              inner_app = inner_app? request
+              inner_app = params[:for_app]
               present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app, activities: activities 
             rescue Exception => ex
               server_error(ex)

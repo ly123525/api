@@ -23,14 +23,16 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UIID'
             requires :token, type: String, desc: '用户访问令牌'
-            requires :lottery_uuid, type: String, desc: '抽奖券 UUID'            
+            requires :lottery_uuid, type: String, desc: '抽奖券 UUID'
+            optional :for_app, type: Boolean, default: true, desc: '时候在APP内, 默认为true, 在APP内'
+            optional :os, type: String, values: ['IOS', 'Android'], desc: '微信内需要的机型'            
           end    
           get :show do
             begin 
               authenticate_user
               lottery = @session_user.lotteries.find_uuid(params[:lottery_uuid])
-              inner_app = inner_app? request
-              os = request.headers['System'].split(' ')[0] rescue nil
+              inner_app = params[:for_app]
+              os = params[:os]
               present lottery, with: ::V1::Entities::Activity::Lottery, inner_app: inner_app, os: os, user: @session_user
             rescue ActiveRecord::RecordNotFound
               app_uuid_error              

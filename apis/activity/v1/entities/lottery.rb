@@ -19,7 +19,7 @@ module V1
             "未开奖"
           elsif m.the_winning?
             "中奖"
-          elsif m.not_winning?
+          elsif !m.not_winning?
             "未中奖"  
           end  
         end
