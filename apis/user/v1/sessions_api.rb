@@ -56,7 +56,7 @@ module V1
               user_info = wx_auth.get_oauth_userinfo(access_info.result['openid'], access_info.result['access_token'])
               app_error("获取用户信息失败", 'WX user info access denied') unless user_info.ok?
               user_and_token = ::Account::User.wx_unionid_login!(user_info.result, params[:type])
-              wx_auth.token_store.refresh_token
+              wx_auth.token_store.access_token
               client_info_record(request, user_and_token[1])
               present user_and_token[0], with: ::V1::Entities::User::UserForLogin, token: user_and_token[1]
             rescue Exception => ex
