@@ -1,3 +1,12 @@
+module WeixinAuthorize
+  module Token
+    class Store
+      def self.init_with(client)
+          RedisStore.new(client)
+      end
+    end  
+  end    
+end      
 namespace = "weixin:authorize"
 redis = Redis.new(url: ENV['REDIS'])
 redis = Redis::Namespace.new(namespace, redis: redis)
