@@ -16,6 +16,7 @@ require 'umeng/client'
 require 'kaminari'
 require 'colorize'
 require "redis"
+require "redis-namespace"
 require "weixin_authorize"
 require "wx_pay"
 require './lib/wxpay'
