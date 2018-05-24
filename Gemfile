@@ -35,6 +35,7 @@ gem 'mini_magick', '4.0.2'
 gem 'colorize', '0.7.5'
 # 缓存
 gem 'redis', '4.0.1'
+gem 'redis-namespace', '~> 1.6'
 # 分页
 gem 'kaminari', '1.1.1'
 
