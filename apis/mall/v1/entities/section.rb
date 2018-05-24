@@ -12,8 +12,17 @@ module V1
           m.section_items
         end
         expose :url, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
-          "#{ENV['H5_HOST']}/#/raffle/resourcelocation"
-        end        
+          "#{ENV['H5_HOST']}/#/raffle/resourcelocation"          
+        end  
+        expose :activity_scheme, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64(m.scheme)
+        end
+        expose :width, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
+          3
+        end
+        expose :hight, if: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
+          1
+        end            
       end  
     end   
   end  

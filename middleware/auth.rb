@@ -14,7 +14,7 @@ module API
       params['timestamp'] = env['HTTP_TIMESTAMP']
       params['nonce'] = env['HTTP_NONCE']
       env['api.endpoint'].error!({error: "internal error!"},401) unless verify?(params)
-      base_auth_record=$redis.write(params['signature'], params['nonce'], Time.now + 12.hour)
+      base_auth_record=$redis.write(env['HTTP_SIGNATURE'], params['nonce'], Time.now + 12.hour)
     end
 
     # 签名算法

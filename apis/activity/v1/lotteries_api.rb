@@ -29,7 +29,9 @@ module V1
             begin 
               authenticate_user
               lottery = @session_user.lotteries.find_uuid(params[:lottery_uuid])
-              present lottery, with: ::V1::Entities::Activity::Lottery
+              inner_app = inner_app? request
+              os = request.headers['System'].split(' ')[0] rescue nil
+              present lottery, with: ::V1::Entities::Activity::Lottery, inner_app: inner_app, os: os, user: @session_user
             rescue ActiveRecord::RecordNotFound
               app_uuid_error              
             rescue Exception => ex

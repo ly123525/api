@@ -21,6 +21,33 @@ module V1
             m.app_outer_scheme   
           end
         end  
+      end
+      
+      class LotteryResult < Grape::Entity
+        expose :number
+        expose :user_name do |m, o|
+          ::Lottery.find_by_number(m.number).user.nickname
+        end
+        expose :result_name do |m, o|
+          case ::Lottery.find_by_number(m.number).type.to_s
+           when "Lotteries::Benz"
+             "奔驰E"
+           when "Lotteries::Smart"
+             "Smart"
+          end      
+        end    
+      end    
+      
+      class LotteryResultHistory < Grape::Entity
+        expose :nper do |m, o|
+          m.name
+        end
+        expose :time do |m ,o|
+          m.end_at.localtime.strftime('%y.%m.%d')
+        end    
+        expose :infos, using: ::V1::Entities::Activity::LotteryResult do |m, o|
+          m.lottery_results
+        end  
       end  
       
       class ActivityDetails < Grape::Entity
@@ -38,7 +65,7 @@ module V1
         end
         expose :share do |m, o|
           {
-            url: "#{ENV['H5_HOST']}/#/",
+            url: "#{ENV['H5_HOST']}/#/expedite_openaward",
             image: "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/logo_3x.png",
             title: '奔驰开回家做人生赢家',
             summary: '成功发起5人拼单即可获取奔驰轿车抽奖劵'
@@ -50,8 +77,8 @@ module V1
         expose :smarts, using: ::V1::Entities::Activity::ActivityTag do |m, o|
           o[:smarts]
         end    
-        expose :histroy_messages do |m, o|
-          "暂无历史开奖,本期为第一期开奖"
+        expose :histroy_messages, using: ::V1::Entities::Activity::LotteryResultHistory do |m, o|
+          o[:activities]
         end    
       end    
     end  
