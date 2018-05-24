@@ -237,7 +237,10 @@ module V1
         end
         expose :activity_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.product.benz_tags? || m.product.smart_tags?
-        end           
+        end
+        expose :mini_purchase_quantity do |m, o|
+          m.product.mini_purchase_quantity
+        end             
       end
     end
   end
