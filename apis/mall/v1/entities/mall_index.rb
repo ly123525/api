@@ -16,7 +16,13 @@ module V1
       class MallIndex < Grape::Entity
         expose :pop_up_url do |m, o|
           "#{ENV['H5_HOST']}/#/activity/popup"
-        end  
+        end
+        expose :pop_up_image do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/index_pop.png"
+        end
+        expose :pop_up_scheme do |m, o|
+          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
+        end      
         expose :search_key do |m, o|
           "搜索结果"
         end  

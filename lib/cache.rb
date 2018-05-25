@@ -3,7 +3,9 @@ class Cache
 
   # 使用默认配置初始化
   def initialize(redis_url, namespace)
-    @cache = Redis.new(:url => redis_url, namespace: namespace)
+    # @cache = Redis.new(:url => redis_url, namespace: namespace)
+    redis = Redis.new(url: ENV['REDIS'])
+    @cache = Redis::Namespace.new(namespace, redis: redis)
   end
   
   # 缓存是否存活
