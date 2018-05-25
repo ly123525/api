@@ -50,9 +50,9 @@ module V1
         end
         expose :activity_image do |m, o|
           if m.product.benz_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/120w"
           elsif m.product.smart_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/120w"
           end
         end
         expose :activity_category do |m, o|
@@ -222,9 +222,9 @@ module V1
           end
           expose :activity_image do |m, o|
             if m.product.benz_tags?
-              "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+              "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/120w"
             elsif m.product.smart_tags?
-              "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+              "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/120w"
             end
           end          
           expose :activity_category do |m, o|
@@ -244,9 +244,9 @@ module V1
         end
         expose :activity_image do |m, o|
           if m.product.benz_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/120w"
           elsif m.product.smart_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/120w"
           end
         end
         expose :activity_category do |m, o|
