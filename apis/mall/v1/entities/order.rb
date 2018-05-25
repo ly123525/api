@@ -309,23 +309,23 @@ module V1
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.try(:order,'id desc').try(:first).uuid}") if m.servicing? || m.refunded?
         end
         expose :activity_tags do |m, o|
-          if m.product.benz_tags?
+          if m.order_items.first.product.benz_tags?
             "抽奖得奔驰"
-          elsif m.product.smart_tags?
+          elsif m.order_items.first.product.smart_tags?
             "抽奖得Smart"
           end
         end
         expose :activity_image do |m, o|
-          if m.product.benz_tags?
+          if m.order_items.first.product.benz_tags?
             "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
-          elsif m.product.smart_tags?
+          elsif m.order_items.first.product.smart_tags?
             "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
           end
         end
         expose :activity_category do |m, o|
-          if m.product.benz_tags?
+          if m.order_items.first.product.benz_tags?
             "Benz"
-          elsif m.product.smart_tags?
+          elsif m.order_items.first.product.smart_tags?
             "Smart"
           end
         end
