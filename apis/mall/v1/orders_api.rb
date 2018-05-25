@@ -37,7 +37,7 @@ module V1
           post do
             begin
               authenticate_user
-              app_error("您已经参与过次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid] 
+              app_error("您已经参与过此次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid]
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?

@@ -21,7 +21,7 @@ module V1
                   image: (item.picture.image.style_url('160w') rescue nil),
                   price: order.fight_group.present? ? ("¥ " + item.style.price.to_s):("¥ " + item.style.original_price.to_s),
                   quantity_str: "x#{item.quantity}",
-                  total_fee: order.actual_payment,
+                  total_fee: @session_user.is_developer? ? "￥ 0.1"  : order.actual_payment,
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}"
                 },
                 modes:[
