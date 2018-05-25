@@ -1,6 +1,6 @@
 module V1
   module Entities
-    module Mall  
+    module Mall
       class ProductByOrderItem < Grape::Entity
         expose :image do |m, o|
           m.picture.image.style_url('160w') rescue nil
@@ -21,7 +21,7 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
         end
       end
-            
+
       class SimpleProductByStyle < Grape::Entity
         expose :image do |m, o|
           m.style_cover.image.style_url('480w') rescue nil
@@ -45,29 +45,36 @@ module V1
           if m.product.benz_tags?
             "抽奖得奔驰"
           elsif m.product.smart_tags?
-            "抽奖得Smart"  
-          end  
+            "抽奖得Smart"
+          end
+        end
+        expose :activity_image do |m, o|
+          if m.product.benz_tags?
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+          elsif m.product.smart_tags?
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+          end
         end
         expose :activity_category do |m, o|
           if m.product.benz_tags?
             "Benz"
           elsif m.product.smart_tags?
-            "Smart"  
-          end        
+            "Smart"
+          end
         end
       end
-      
+
       class ProductsByStyles < SimpleProductByStyle
         expose :black_label do |m, o|
           "已失效" if m.deleted?
         end
       end
-      
+
       class ProductsForChoice < Grape::Entity
         expose :category_bar
         expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles
       end
-      
+
       class ProductForOrder < SimpleProductByStyle
         expose :quantity_str do |m, o|
           "x" + o[:quantity].to_s
@@ -79,7 +86,7 @@ module V1
           100
         end
       end
-      
+
       class ProductForChoice < Grape::Entity
         expose :style_uuid do |m, o|
           o[:style].uuid rescue nil
@@ -106,7 +113,7 @@ module V1
           o[:styles_for_choice]
         end
       end
-      
+
       class ProductByStyle < Grape::Entity
         expose :uuid do |m, o|
           m.product.uuid
@@ -149,7 +156,7 @@ module V1
         end
         expose :max_quantity do |m, o|
           100
-        end 
+        end
         expose :detail_url do |m, o|
           if m.product.details_url.present?
             m.product.details_url
@@ -167,8 +174,8 @@ module V1
           m.product.fight_groups.where.not(user: o[:user]).waiting.not_expired.sorted
         end
         expose :all_groups_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0  
-        end  
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0
+        end
         expose :comments_count do |m, o|
           m.product.comments.count
         end
@@ -180,7 +187,7 @@ module V1
         end
         expose :comments_scheme do |m, o|
            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/commodity/evaluate?style_uuid=#{m.uuid}")
-        end  
+        end
         expose :styles do |m, o|
           m.product.styles_for_choice(m.labels)
         end
@@ -193,11 +200,11 @@ module V1
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
         end
-        expose :share do 
+        expose :share do
           expose :url do |m, o|
             "#{ENV['H5_HOST']}/#/mall/products?style_uuid=#{m.uuid}"
           end
-          expose :image do |m, o| 
+          expose :image do |m, o|
             m.style_cover.image.style_url('120w')
           end
           expose :title do |m, o|
@@ -210,37 +217,51 @@ module V1
             if m.product.benz_tags?
               "抽奖得奔驰"
             elsif m.product.smart_tags?
-              "抽奖得Smart"  
-            end  
+              "抽奖得Smart"
+            end
           end
+          expose :activity_image do |m, o|
+            if m.product.benz_tags?
+              "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+            elsif m.product.smart_tags?
+              "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+            end
+          end          
           expose :activity_category do |m, o|
             if m.product.benz_tags?
               "Benz"
             elsif m.product.smart_tags?
-              "Smart"  
-            end        
+              "Smart"
+            end
           end
         end
         expose :activity_tags do |m, o|
           if m.product.benz_tags?
             "抽奖得奔驰"
           elsif m.product.smart_tags?
-            "抽奖得Smart"  
-          end  
+            "抽奖得Smart"
+          end
+        end
+        expose :activity_image do |m, o|
+          if m.product.benz_tags?
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+          elsif m.product.smart_tags?
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+          end
         end
         expose :activity_category do |m, o|
           if m.product.benz_tags?
             "Benz"
           elsif m.product.smart_tags?
-            "Smart"  
-          end        
+            "Smart"
+          end
         end
         expose :activity_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.product.benz_tags? || m.product.smart_tags?
         end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
-        end             
+        end
       end
     end
   end
