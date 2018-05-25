@@ -205,30 +205,24 @@ module V1
         end
         # expose :im_scheme
         expose :activity_tags do |m, o|
-          m.order_items do |order_item|
-            if order_item.product.benz_tags?
-              "抽奖得奔驰"
-            elsif order_item.product.smart_tags?
-              "抽奖得Smart"
-            end
+          if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
+            "抽奖得奔驰"
+          elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
+            "抽奖得Smart"
           end
         end
         expose :activity_image do |m, o|
-          m.order_items do |order_item|
-            if order_item.product.benz_tags?
-              "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
-            elsif order_item.product.smart_tags?
-              "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
-            end
+          if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+          elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
           end
         end
         expose :activity_category do |m, o|
-          m.order_items do |order_item|
-            if order_item.product.benz_tags?
-              "Benz"
-            elsif order_item.product.smart_tags?
-              "Smart"
-            end
+          if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
+            "Benz"
+          elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
+            "Smart"
           end
         end
       end
@@ -309,23 +303,23 @@ module V1
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.try(:order,'id desc').try(:first).uuid}") if m.servicing? || m.refunded?
         end
         expose :activity_tags do |m, o|
-          if m.order_items.first.product.benz_tags?
+          if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
             "抽奖得奔驰"
-          elsif m.order_items.first.product.smart_tags?
+          elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
             "抽奖得Smart"
           end
         end
         expose :activity_image do |m, o|
-          if m.order_items.first.product.benz_tags?
+          if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
             "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
-          elsif m.order_items.first.product.smart_tags?
+          elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
             "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
           end
         end
         expose :activity_category do |m, o|
-          if m.order_items.first.product.benz_tags?
+          if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
             "Benz"
-          elsif m.order_items.first.product.smart_tags?
+          elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
             "Smart"
           end
         end
