@@ -26,9 +26,9 @@ module V1
         end
         expose :activity_image do |m, o|
           if o[:style].product.benz_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
           elsif o[:style].product.smart_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
           end
         end
         expose :activity_category do |m, o|
@@ -213,9 +213,9 @@ module V1
         end
         expose :activity_image do |m, o|
           if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
           elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
           end
         end
         expose :activity_category do |m, o|
@@ -311,9 +311,9 @@ module V1
         end
         expose :activity_image do |m, o|
           if m.try(:order_items).try(:first).try(:product).try(:benz_tags?)
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
           elsif m.try(:order_items).try(:first).try(:product).try(:smart_tags?)
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png"
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
           end
         end
         expose :activity_category do |m, o|
