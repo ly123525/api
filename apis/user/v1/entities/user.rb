@@ -58,7 +58,7 @@ module V1
           {name: "足迹", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/footprints"), icon: "#{ENV['IMAGE_DOMAIN']}/app/history_icon.png", dot_display: false },
           {name: "官方客服", scheme: "lvsent://gogo.cn/im/chats?im_user_name=#{::Mall::Shop.first.im_user_name}", icon: "#{ENV['IMAGE_DOMAIN']}/app/official_service_icon.png", dot_display: false },
           {name: "收藏", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/collections"), icon: "#{ENV['IMAGE_DOMAIN']}/app/collect_icon.png", dot_display: false },
-          {name: "奖券", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward"), icon: "#{ENV['IMAGE_DOMAIN']}/app/lottery.png", dot_display: false }
+          {name: "奖券", scheme: "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/raffletickets"), icon: "#{ENV['IMAGE_DOMAIN']}/app/lottery.png", dot_display: false }
         ]
         end
       end
