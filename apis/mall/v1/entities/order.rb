@@ -288,50 +288,54 @@ module V1
       end
 
       class OrderPayResult < Grape::Entity
-        expose :status_image do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/chenggong3.png?x-oss-process=style/160w" if m.paid?
-        end
-        expose :status_tips do |m, o|
-          if m.paid?
-            "支付成功"
-          elsif m.created?
-            "支付失败"
-          end
+        expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
+          m.order_items
         end
         expose :title do |m, o|
-          if o[:fight_group] && o[:fight_group].waiting?
-            "还差#{o[:fight_group].residual_quantity}人，赶快邀请好友拼单吧～"
-          end
-        end
-        expose :desc do |m, o|
-          if o[:fight_group] && o[:fight_group].waiting?
+          if o[:fight_group].try(:completed?)
+            "拼单成功, 商家正在努力发货, 请耐心等待..."
+          elsif !o[:fight_group].present?  
+            "下单成功, 商家正在努力发货"
+          end  
+        end          
+        expose :tips do |m, o|
+          if o[:fight_group].try(:waiting?) && o[:inner_app]
             "拼单人满后立即发货"
           end
         end
         expose :remaining_time do |m, o|
-          if o[:fight_group] && o[:fight_group].waiting?
+          if  o[:fight_group].try(:waiting?)
             (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? ((o[:fight_group].expired_at.localtime-Time.now).to_i * 1000) : 0
-          else
-            0
           end
         end
-        expose :share do |m, o|
-          if o[:fight_group]
+        expose :residual_quantity do |m, o|          
+          o[:fight_group].residual_quantity if o[:fight_group].try(:waiting?)
+        end
+        expose :user_images do |m, o|
+          o[:fight_group].user_avatars if o[:fight_group]
+        end
+        expose :lottery_tips do |m, o|          
+          m.fight_group_completed_lottery_tips if o[:fight_group].try(:completed?) && o[:fight_group].participants.include?(o[:user]) 
+        end     
+        expose :inviting_friends_info do |m, o|
+          if o[:fight_group].try(:waiting?) && o[:inner_app]
             {
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (o[:fight_group].style.style_cover.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{o[:fight_group].uuid}",
               description: ''
-            }
-          # else
-          #   {
-          #     title: '我在全民拼选购了商品，赶紧来下单吧',
-          #     image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
-          #     url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.order_items.first.style.uuid}",
-          #     description: '快来下单吧'
-          #   }
+            }#分享的时候url要加上fight_group_uuid
           end
         end
+        expose :participate_fight_group do |m, o|
+           o[:fight_group].try(:waiting?) && !o[:inner_app] 
+        end
+        expose :lottery_list do |m, o|
+          "#{ENV['H5_HOST']}/#/raffletickets" if o[:fight_group].try(:completed?)
+        end
+        expose :order_list do |m, o|
+          "lvsent://" unless o[:fight_group]
+        end      
       end
     end
   end
