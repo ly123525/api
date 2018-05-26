@@ -17,6 +17,27 @@ module V1
         expose :settlement do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
         end
+        expose :activity_tags do |m, o|
+          if o[:style].product.benz_tags?
+            "抽奖得奔驰"
+          elsif o[:style].product.smart_tags?
+            "抽奖得Smart"
+          end
+        end
+        expose :activity_image do |m, o|
+          if o[:style].product.benz_tags?
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
+          elsif o[:style].product.smart_tags?
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
+          end
+        end
+        expose :activity_category do |m, o|
+          if o[:style].product.benz_tags?
+            "Benz"
+          elsif o[:style].product.smart_tags?
+            "Smart"
+          end
+        end
       end
       class Express < Grape::Entity
         expose :express_number
@@ -30,13 +51,13 @@ module V1
         end
         expose :express_scheme do |m, o|
            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}")
-        end  
+        end
         expose :express_at do |m, o|
           if m.delivered?
             Time.now.localtime.strftime('%Y-%m-%d')
           end
         end
-      end  
+      end
       class Order < Grape::Entity
         expose :status do |m, o|
           if m.closed?
@@ -50,7 +71,7 @@ module V1
           elsif m.delivered_servicing?
             "待收货,售后处理中"
           elsif m.received_servicing?
-            "待评价,售后处理中"                
+            "待评价,售后处理中"
           elsif m.paid?
             "等待卖家发货"
           elsif m.delivered?
@@ -58,7 +79,7 @@ module V1
           elsif m.received?
             "待评价"
           elsif m.refunded?
-            "已退款"    
+            "已退款"
           else
             "已完成"
           end
@@ -69,7 +90,7 @@ module V1
           elsif m.fight_group.present? && m.fight_group.waiting? && m.paid?
             "邀请好友拼单"
           elsif m.servicing?
-            "请前往我的退/换货中查看"  
+            "请前往我的退/换货中查看"
           elsif m.paid?
             "正在准备货品"
           elsif m.delivered?
@@ -82,7 +103,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             "#{ENV['IMAGE_DOMAIN']}/app/my_pindan_icon_white.png?x-oss-process=style/120w"
           elsif m.servicing?
-            ""    
+            ""
           elsif m.paid?
             "#{ENV['IMAGE_DOMAIN']}/app/my_fahuo_icon_white.png?x-oss-process=style/120w"
           elsif m.delivered?
@@ -92,8 +113,8 @@ module V1
           elsif m.refunded?
             "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"
           elsif m.created?
-            "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"          
-          end  
+            "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w"
+          end
         end
         expose :service_scheme do |m, o|
           if m.service_details?
@@ -101,17 +122,17 @@ module V1
           elsif m.service_express?
             "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.services.try(:order,'id desc').try(:first).uuid}")
           end
-          
-        end  
+
+        end
         expose :pay_remaining_time do |m, o|
           ((m.expired_at-Time.now).to_i > 0 ? (m.expired_at-Time.now).to_i : 0 ) if m.created?
-        end    
+        end
         expose :fight_group, using: ::V1::Entities::Mall::FightGroupForOrder do |m, o|
           (m.paid? && m.try(:fight_group).try(:waiting?)) ? m : nil
         end
         expose :express, using: ::V1::Entities::Mall::Express do |m, o|
-          m unless (m.created? || m.paid? || m.closed? || m.refunded?) 
-        end  
+          m unless (m.created? || m.paid? || m.closed? || m.refunded?)
+        end
         expose :address do |m, o|
           {
             consignee: m.consignee,
@@ -133,8 +154,8 @@ module V1
             [
               {title: "订单编号", content: m.number},
               {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
-            ]            
-          else  
+            ]
+          else
           [
             {title: "订单编号", content: m.number},
             {title: "支付方式", content: m.try(:real_payment).try(:payment_method_name)},
@@ -144,7 +165,7 @@ module V1
         end
         expose :buy_again_scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.order_items.first.style.uuid}" if m.received? or m.evaluated?  or m.closed? or m.servicing?
-        end  
+        end
         expose :to_evaluate_scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated? and !m.received_servicing?
         end
@@ -153,7 +174,7 @@ module V1
         end
         expose :to_refund_scheme do |m, o|
            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/apply?order_uuid=#{m.uuid}") unless (m.created? || m.closed? || m.servicing? ||m.refunded? || m.fight_group.try(:waiting?) || m.evaluated?)
-        end  
+        end
         expose :can_be_hasten do |m, o|
           if m.fight_group.present?
             m.fight_group.completed? && m.paid? && !m.servicing?
@@ -163,10 +184,10 @@ module V1
         end
         expose :confirmable do |m, o|
           if m.fight_group.present?
-            ((m.delivered? || m.paid?) && m.fight_group.completed? && !m.servicing? ) 
+            ((m.delivered? || m.paid?) && m.fight_group.completed? && !m.servicing? )
           else
-            (m.delivered? || m.paid?) && !m.servicing?            
-          end  
+            (m.delivered? || m.paid?) && !m.servicing?
+          end
         end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
@@ -184,7 +205,7 @@ module V1
         end
         # expose :im_scheme
       end
-      
+
       class Orders < Grape::Entity
         expose :uuid
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
@@ -192,7 +213,7 @@ module V1
           if m.closed?
             "交易关闭"
           elsif m.created?
-            "待支付" 
+            "待支付"
           elsif m.fight_group.present? && m.fight_group.waiting?
             "拼单中"
           elsif m.paid_servicing?
@@ -200,7 +221,7 @@ module V1
           elsif m.delivered_servicing?
             "待收货,售后处理中"
           elsif m.received_servicing?
-            "待评价,售后处理中"            
+            "待评价,售后处理中"
           elsif m.paid?
             "待发货"
           elsif m.delivered?
@@ -208,9 +229,9 @@ module V1
           elsif m.received?
             "待评价"
           elsif m.refunded?
-            "已退款"   
+            "已退款"
           elsif m.evaluated?
-            "已完成"  
+            "已完成"
           end
         end
         expose :order_items, as: :products, using: ::V1::Entities::Mall::ProductByOrderItem
@@ -243,7 +264,7 @@ module V1
           if m.fight_group.present?
             m.delivered? && !m.servicing? && m.fight_group.completed?
           else
-            m.delivered? && !m.servicing?         
+            m.delivered? && !m.servicing?
           end
         end
         expose :inviting_friends_info do |m, o|
@@ -259,26 +280,26 @@ module V1
         end
         expose :service_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.services.try(:order,'id desc').try(:first).uuid}") if m.servicing? || m.refunded?
-        end 
+        end
       end
-      
+
       class OrderList < Grape::Entity
         expose :orders, using: ::V1::Entities::Mall::Orders
       end
-      
+
       class OrderPayResult < Grape::Entity
         expose :status_image do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/chenggong3.png?x-oss-process=style/160w" if m.paid? 
+          "#{ENV['IMAGE_DOMAIN']}/app/chenggong3.png?x-oss-process=style/160w" if m.paid?
         end
         expose :status_tips do |m, o|
           if m.paid?
             "支付成功"
           elsif m.created?
-            "支付失败"  
-          end    
-        end    
+            "支付失败"
+          end
+        end
         expose :title do |m, o|
-          if o[:fight_group] && o[:fight_group].waiting? 
+          if o[:fight_group] && o[:fight_group].waiting?
             "还差#{o[:fight_group].residual_quantity}人，赶快邀请好友拼单吧～"
           end
         end
@@ -291,8 +312,8 @@ module V1
           if o[:fight_group] && o[:fight_group].waiting?
             (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? ((o[:fight_group].expired_at.localtime-Time.now).to_i * 1000) : 0
           else
-            0  
-          end 
+            0
+          end
         end
         expose :share do |m, o|
           if o[:fight_group]
@@ -311,8 +332,7 @@ module V1
           #   }
           end
         end
-      end 
-        
+      end
     end
   end
 end
