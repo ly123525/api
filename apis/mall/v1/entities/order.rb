@@ -279,6 +279,9 @@ module V1
         expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
           m.order_items
         end
+        expose :style_uuid do |m, o|
+          m.order_items.first.style.uuid if o[:fight_group].try(:waiting?) && !o[:inner_app]
+        end  
         expose :title do |m, o|
           if o[:fight_group].try(:completed?)
             "拼单成功, 商家正在努力发货, 请耐心等待..."
