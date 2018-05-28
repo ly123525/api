@@ -21,25 +21,13 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
         end
         expose :activity_tags do |m, o|
-          if m.try(:product).try(:benz_tags?)
-            "抽奖得奔驰"
-          elsif m.try(:product).try(:smart_tags?)
-            "抽奖得Smart"
-          end
+          m.try(:product).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          if m.try(:product).try(:benz_tags?)
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
-          elsif m.try(:product).try(:smart_tags?)
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
-          end
+          m.try(:product).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          if m.try(:product).try(:benz_tags?)
-            "Benz"
-          elsif m.try(:product).try(:smart_tags?)
-            "Smart"
-          end
+          m.try(:product).try(:activity_category)
         end
       end
 
@@ -63,25 +51,13 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
         end
         expose :activity_tags do |m, o|
-          if m.product.benz_tags?
-            "抽奖得奔驰"
-          elsif m.product.smart_tags?
-            "抽奖得Smart"
-          end
+          m.try(:product).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          if m.product.benz_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
-          elsif m.product.smart_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
-          end
+          m.try(:product).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          if m.product.benz_tags?
-            "Benz"
-          elsif m.product.smart_tags?
-            "Smart"
-          end
+          m.try(:product).try(:activity_category)
         end
       end
 
@@ -235,47 +211,23 @@ module V1
             ""
           end
           expose :activity_tags do |m, o|
-            if m.product.benz_tags?
-              "抽奖得奔驰"
-            elsif m.product.smart_tags?
-              "抽奖得Smart"
-            end
+            m.try(:product).try(:activity_tags)
           end
           expose :activity_image do |m, o|
-            if m.product.benz_tags?
-              "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
-            elsif m.product.smart_tags?
-              "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
-            end
+            m.try(:product).try(:activity_image)
           end          
           expose :activity_category do |m, o|
-            if m.product.benz_tags?
-              "Benz"
-            elsif m.product.smart_tags?
-              "Smart"
-            end
+            m.try(:product).try(:activity_category)
           end
         end
         expose :activity_tags do |m, o|
-          if m.product.benz_tags?
-            "抽奖得奔驰"
-          elsif m.product.smart_tags?
-            "抽奖得Smart"
-          end
+          m.try(:product).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          if m.product.benz_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
-          elsif m.product.smart_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
-          end
+          m.try(:product).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          if m.product.benz_tags?
-            "Benz"
-          elsif m.product.smart_tags?
-            "Smart"
-          end
+          m.try(:product).try(:activity_category)
         end
         expose :activity_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.product.benz_tags? || m.product.smart_tags?

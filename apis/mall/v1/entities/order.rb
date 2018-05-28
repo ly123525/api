@@ -18,25 +18,13 @@ module V1
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
         end
         expose :activity_tags do |m, o|
-          if o[:style].product.benz_tags?
-            "抽奖得奔驰"
-          elsif o[:style].product.smart_tags?
-            "抽奖得Smart"
-          end
+          o[:style].try(:product).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          if o[:style].product.benz_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
-          elsif o[:style].product.smart_tags?
-            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
-          end
+          o[:style].try(:product).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          if o[:style].product.benz_tags?
-            "Benz"
-          elsif o[:style].product.smart_tags?
-            "Smart"
-          end
+          o[:style].try(:product).try(:activity_category)
         end
       end
       class Express < Grape::Entity
