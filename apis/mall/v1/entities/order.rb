@@ -312,7 +312,7 @@ module V1
           o[:fight_group].residual_quantity if o[:fight_group].try(:waiting?)
         end
         expose :user_images do |m, o|
-          o[:fight_group].user_avatars if o[:fight_group]
+          o[:fight_group].user_avatars(false) if o[:fight_group]
         end
         expose :lottery_tips do |m, o|          
           m.fight_group_completed_lottery_tips if o[:fight_group].try(:completed?) && o[:fight_group].participants.include?(o[:user]) 
