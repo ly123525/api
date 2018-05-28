@@ -19,6 +19,27 @@ module V1
         end
         expose :price do |m, o|
           m.style.price.to_s
+        end
+        expose :activity_tags do |m, o|
+          if m.style.try(:product).try(:benz_tags?)
+            "抽奖得奔驰"
+          elsif m.style.try(:product).try(:smart_tags?)
+            "抽奖得Smart"
+          end
+        end
+        expose :activity_image do |m, o|
+          if m.style.try(:product).try(:benz_tags?)
+            "#{ENV['IMAGE_DOMAIN']}/app/style_benz.png?x-oss-process=style/80w"
+          elsif m.style.try(:product).try(:smart_tags?)
+            "#{ENV['IMAGE_DOMAIN']}/app/style_smart.png?x-oss-process=style/80w"
+          end
+        end
+        expose :activity_category do |m, o|
+          if m.style.try(:product).try(:benz_tags?)
+            "Benz"
+          elsif m.style.try(:product).try(:smart_tags?)
+            "Smart"
+          end
         end          
       end  
     end  
