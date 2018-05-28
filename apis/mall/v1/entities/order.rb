@@ -322,7 +322,7 @@ module V1
             {
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (o[:fight_group].style.style_cover.image.style_url('300w') rescue nil),
-              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{o[:fight_group].uuid}",
+              url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{o[:fight_group].uuid}",
               description: ''
             }
           end
