@@ -381,7 +381,7 @@ module V1
           "#{ENV['H5_HOST']}/#/raffletickets" if o[:fight_group].try(:completed?)
         end
         expose :order_list do |m, o|
-          "lvsent://gogo.cn/mall/orders" unless o[:fight_group]
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}" unless o[:fight_group]
         end      
       end
     end
