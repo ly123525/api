@@ -22,7 +22,9 @@ require "wx_pay"
 require './lib/wxpay'
 require "acts_as_list"
 require "alipay"
-require 'newrelic_rpm'
+if  ENV['SERVER_ENV']=='production' || ENV['SERVER_ENV']=='staging'
+  require 'newrelic_rpm'
+end
 unless ENV['SERVER_ENV']=='production'
   require 'pry_debug'
   require 'pry-nav'
