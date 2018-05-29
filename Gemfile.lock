@@ -148,6 +148,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
     netrc (0.11.0)
+    newrelic_rpm (5.1.0.344)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     paranoia (2.2.0)
@@ -242,6 +243,7 @@ DEPENDENCIES
   mail (= 2.6.4)
   mini_magick (= 4.0.2)
   mysql2 (= 0.3.21)
+  newrelic_rpm
   paranoia (= 2.2)
   pry-nav (= 0.2.4)
   pry_debug (= 0.0.1)
