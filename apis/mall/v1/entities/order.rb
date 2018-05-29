@@ -294,6 +294,9 @@ module V1
             "拼单人满后立即发货"
           end
         end
+        expose :styles do |m, o|
+          m.try(:order_items).try(:first).try(:product).try(:styles_for_choice, m.labels) if o[:fight_group].try(:waiting?) && !o[:inner_app]
+        end
         expose :remaining_time do |m, o|
           if  o[:fight_group].try(:waiting?)
             (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? ((o[:fight_group].expired_at.localtime-Time.now).to_i * 1000) : 0
@@ -319,7 +322,7 @@ module V1
           end
         end
         expose :participate_fight_group do |m, o|
-           o[:fight_group].try(:waiting?) && !o[:inner_app] 
+           o[:fight_group].try(:waiting?) && !o[:inner_app] && !o[:fight_group].try(:participants).include?(o[:user])
         end
         expose :lottery_list do |m, o|
           "#{ENV['H5_HOST']}/#/raffletickets" if o[:fight_group].try(:completed?)
