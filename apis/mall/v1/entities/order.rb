@@ -18,13 +18,13 @@ module V1
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
         end
         expose :activity_tags do |m, o|
-          o[:style].try(:activity_tags)
+          o[:style].try(:product).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          o[:style].try(:activity_image)
+          o[:style].try(:product).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          o[:style].try(:activity_category)
+          o[:style].try(:product).try(:activity_category)
         end
       end
       class Express < Grape::Entity
