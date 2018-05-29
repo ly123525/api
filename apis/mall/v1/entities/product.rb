@@ -51,16 +51,13 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
         end
         expose :activity_tags do |m, o|
-          # m.try(:product).try(:activity_tags)
-          "抽奖得奔驰"
+          m.try(:product).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          # m.try(:product).try(:activity_image)
-          "https://image.ggoo.net.cn/app/style_benz.png?x-oss-process=style/80w"
+          m.try(:product).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          # m.try(:product).try(:activity_category)
-          "Benz"
+          m.try(:product).try(:activity_category)
         end
       end
 
