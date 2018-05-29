@@ -219,6 +219,9 @@ module V1
           expose :activity_category do |m, o|
             m.try(:product).try(:activity_category)
           end
+          expose :activity_lottery_tips do |m, o|
+            "拼主获得2张抽奖券,拼客获得1张抽奖券"
+          end  
         end
         expose :activity_tags do |m, o|
           m.try(:product).try(:activity_tags)
@@ -234,6 +237,9 @@ module V1
         end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
+        end
+        expose :activity_lottery_tips do |m, o|
+          "拼主获得2张抽奖券,拼客获得1张抽奖券"
         end
       end
     end
