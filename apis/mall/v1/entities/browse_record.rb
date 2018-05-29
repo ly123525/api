@@ -19,6 +19,15 @@ module V1
         end
         expose :price do |m, o|
           m.style.price.to_s
+        end
+        expose :activity_tags do |m, o|
+          m.style.try(:product).try(:activity_tags)
+        end
+        expose :activity_image do |m, o|
+          m.style.try(:product).try(:activity_image)
+        end
+        expose :activity_category do |m, o|
+          m.style.try(:product).try(:activity_category)
         end          
       end  
     end  
