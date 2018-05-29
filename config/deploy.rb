@@ -10,7 +10,7 @@ set :git_keep_meta, true
 
 set :keep_releases, 5
 
-set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/database.yml config/newrelic.yml}
 set :linked_dirs, %w{bin log tmp}
 
 set :use_sudo, false
