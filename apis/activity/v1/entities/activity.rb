@@ -67,8 +67,8 @@ module V1
           {
             url: "#{ENV['H5_HOST']}/#/expedite_openaward",
             image: "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/logo_3x.png",
-            title: '奔驰开回家做人生赢家',
-            summary: '成功发起5人拼单即可获取奔驰轿车抽奖劵'
+            title: '终极抽奖日',
+            summary: '从新定义疯狂，拼单即可参与抽奔驰E与smart'
           } 
         end
         expose :benzs, using: ::V1::Entities::Activity::ActivityTag do |m, o|
