@@ -290,8 +290,8 @@ module V1
           end  
         end          
         expose :tips do |m, o|
-          if o[:fight_group].try(:waiting?) && o[:inner_app]
-            "拼单人满后立即发货"
+          if o[:fight_group].try(:waiting?)
+            "拼单成功后,拼主获得两张抽奖券,拼客获得一张抽奖券"
           end
         end
         expose :styles do |m, o|
