@@ -295,7 +295,7 @@ module V1
           end
         end
         expose :styles do |m, o|
-          m.try(:order_items).try(:first).try(:product).try(:styles_for_choice, m.labels) if o[:fight_group].try(:waiting?) && !o[:inner_app]
+          m.try(:order_items).try(:first).try(:product).try(:styles_for_choice, m.try(:order_items).try(:first).try(:style).labels) if o[:fight_group].try(:waiting?) && !o[:inner_app]
         end
         expose :remaining_time do |m, o|
           if  o[:fight_group].try(:waiting?)
