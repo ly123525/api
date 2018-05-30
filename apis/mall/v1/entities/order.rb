@@ -290,12 +290,12 @@ module V1
           end  
         end          
         expose :tips do |m, o|
-          if o[:fight_group].try(:waiting?) && o[:inner_app]
-            "拼单人满后立即发货"
+          if o[:fight_group].try(:waiting?)
+            "拼单成功后,拼主获得两张抽奖券,拼客获得一张抽奖券"
           end
         end
         expose :styles do |m, o|
-          m.try(:order_items).try(:first).try(:product).try(:styles_for_choice, m.labels) if o[:fight_group].try(:waiting?) && !o[:inner_app]
+          m.try(:order_items).try(:first).try(:product).try(:styles_for_choice, m.try(:order_items).try(:first).try(:style).labels) if o[:fight_group].try(:waiting?) && !o[:inner_app]
         end
         expose :remaining_time do |m, o|
           if  o[:fight_group].try(:waiting?)
@@ -317,7 +317,7 @@ module V1
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (o[:fight_group].style.style_cover.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{o[:fight_group].uuid}",
-              description: ''
+              summary: ''
             }
           end
         end
