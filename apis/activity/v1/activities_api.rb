@@ -71,7 +71,22 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end                        
-          end             
+          end
+          desc "进入活动详情页统计"
+          params do 
+            optional :target, type: String, values: ['banner', 'section'], default: 'banner', desc: '进入的来源'
+            requires :target_uuid, type: String, desc: '来源 UUID'
+            optional :user_uuid, type: String, desc: '用户 UUID'
+          end
+          post :statistical do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              activity = ::Activity.where(status: false).first
+                             
+            rescue Exception => ex
+              server_error(ex)
+            end               
+          end                 
         end  
       end    
     end  
