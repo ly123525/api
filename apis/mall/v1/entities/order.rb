@@ -297,6 +297,9 @@ module V1
         expose :styles do |m, o|
           m.try(:order_items).try(:first).try(:product).try(:styles_for_choice, m.try(:order_items).try(:first).try(:style).labels) if o[:fight_group].try(:waiting?) && !o[:inner_app]
         end
+        expose :product_uuid do |m, o|
+          m.try(:order_items).try(:first).try(:product).try(:uuid) if o[:fight_group].try(:waiting?) && !o[:inner_app]
+        end  
         expose :remaining_time do |m, o|
           if  o[:fight_group].try(:waiting?)
             (o[:fight_group].expired_at.localtime-Time.now).to_i > 0 ? ((o[:fight_group].expired_at.localtime-Time.now).to_i * 1000) : 0
