@@ -41,6 +41,7 @@ module V1
           params do 
             requires :user_uuid, type: String, desc: '用户 UIID'
             requires :token, type: String, desc: '用户访问令牌'
+            optional :for_app, type: Boolean, default: true, desc: '时候在APP内, 默认为true, 在APP内' 
           end
           post :focus_on do
             begin
@@ -48,7 +49,7 @@ module V1
               activity = ::Activity.where(status: false).first
               app_error('已经开奖了,不能再关注了', 'No more attention') unless activity.present?
               app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
-              focus_on = activity.focus_ons.create! user: @session_user
+              focus_on = activity.focus_ons.create! user: @session_user, inner_app: params[:for_app]
               lottery =::Lotteries::Smart.create!(user: @session_user)  #不应该是smart类,应该灵活些，下次活动还要改
               lottery.send_to_message_fight_group_complete
               ::ActivityItem.create!(activity: activity, target: focus_on, result: lottery )
@@ -71,7 +72,38 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end                        
-          end             
+          end
+          desc "进入活动详情页统计"
+          params do 
+            optional :target, type: String, values: ['banner', 'web_view'], default: 'banner', desc: '进入的来源'
+            requires :target_id, type: String, desc: '来源 ID'
+            optional :user_uuid, type: String, desc: '用户 UUID'
+          end
+          post :statistical do
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              ::ActivityItem.generate_by_target! params[:target], params[:target_id]
+              true                 
+            rescue Exception => ex
+              server_error(ex)
+            end               
+          end
+          desc "分享统计"
+          params do
+            optional :user_uuid, type: String, desc: '用户 UUID'
+          end
+          post :share_statistic do 
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              activity = ::Activity.where(status: false).first
+              ::ShareStatistic.create!(item: activity, user: user) if activity.present?
+              true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end            
+          end                     
         end  
       end    
     end  
