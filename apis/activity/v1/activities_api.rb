@@ -87,7 +87,23 @@ module V1
             rescue Exception => ex
               server_error(ex)
             end               
-          end                 
+          end
+          desc "分享统计"
+          params do
+            optional :user_uuid, type: String, desc: '用户 UUID'
+          end
+          post :share_statistic do 
+            begin
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
+              activity = ::Activity.where(status: false).first
+              ::ShareStatistic.create!(item: activity, user: user) if activity.present?
+              true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end            
+          end                     
         end  
       end    
     end  
