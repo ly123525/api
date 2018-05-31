@@ -336,6 +336,16 @@ module V1
         end
         expose :order_list do |m, o|
           "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}" unless o[:fight_group]
+        end
+        expose :down_load_scheme do |m, o|
+          unless o[:inner_app]
+            case o[:os]
+              when 'Android'
+                "http://a.app.qq.com/o/simple.jsp?pkgname=com.lst.go"
+              when 'IOS'
+                'https://itunes.apple.com/cn/app/id1369799402?mt=8' 
+            end     
+          end  
         end      
       end
     end
