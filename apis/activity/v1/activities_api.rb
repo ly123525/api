@@ -20,7 +20,6 @@ module V1
           desc "活动详情页"
           params do
             optional :user_uuid, type: String, desc: '用户UUID'
-            optional :for_app, type: Boolean, default: true, desc: '时候在APP内, 默认为true, 在APP内'
           end
           get  do
             begin
@@ -31,7 +30,7 @@ module V1
               benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
               activities = ::Activity.where(status: true).order(id: :desc).limit(3)
-              inner_app = params[:for_app]
+              inner_app = inner_app? request
               present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app, activities: activities 
             rescue Exception => ex
               server_error(ex)
@@ -41,7 +40,6 @@ module V1
           params do 
             requires :user_uuid, type: String, desc: '用户 UIID'
             requires :token, type: String, desc: '用户访问令牌'
-            optional :for_app, type: Boolean, default: true, desc: '时候在APP内, 默认为true, 在APP内' 
           end
           post :focus_on do
             begin
@@ -49,7 +47,8 @@ module V1
               activity = ::Activity.where(status: false).first
               app_error('已经开奖了,不能再关注了', 'No more attention') unless activity.present?
               app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
-              focus_on = activity.focus_ons.create! user: @session_user, inner_app: params[:for_app]
+              inner_app = inner_app? request
+              focus_on = activity.focus_ons.create! user: @session_user, inner_app: inner_app
               lottery =::Lotteries::Smart.create!(user: @session_user)  #不应该是smart类,应该灵活些，下次活动还要改
               lottery.send_to_message_fight_group_complete
               ::ActivityItem.create!(activity: activity, target: focus_on, result: lottery )
