@@ -170,9 +170,9 @@ module V1
         expose :groups, using: ::V1::Entities::Mall::FightGroups do |m, o|
           m.product.fight_groups.where.not(user: o[:user]).waiting.not_expired.sorted
         end
-        expose :all_groups_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0
-        end
+        # expose :all_groups_scheme do |m, o|
+        #    "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/messages/bill?product_uuid=#{m.product.uuid}") unless m.product.fight_groups.where.not(user: o[:user]).waiting.size <= 0
+        # end
         expose :comments_count do |m, o|
           m.product.comments.count
         end
