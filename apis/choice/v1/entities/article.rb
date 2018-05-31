@@ -42,7 +42,8 @@ module V1
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
-            summary: m.summary
+            summary: m.summary,
+            article_uuid: m.uuid
           }
         end
       end
@@ -87,7 +88,8 @@ module V1
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
-            summary: m.summary
+            summary: m.summary,
+            article_uuid: m.uuid
           }
         end
         expose :scheme do |m, o|
