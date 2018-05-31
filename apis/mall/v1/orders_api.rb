@@ -11,12 +11,14 @@ module V1
             requires :buy_method, type: String, default: 'fight_group', desc: '购买方式', values: ['fight_group', 'buy_now']
             requires :style_uuid, type: String, desc: '商品款式 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
+            optional :for_app, type: Boolean, default: true, desc: '时候在APP内, 默认为true, 在APP内' 
           end
           get :to_be_confirmed do
             begin
               authenticate_user
               style = ::Mall::Style.find_uuid(params[:style_uuid])
-              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method]
+              inner_app = params[:for_app]
+              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
