@@ -51,6 +51,7 @@ module V1
       end  
       
       class ActivityDetails < Grape::Entity
+        expose :uuid
         expose :explain_scheme do |m, o|
           "#{ENV['H5_HOST']}/#/activity/explain"
         end 
