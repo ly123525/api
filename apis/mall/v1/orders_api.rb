@@ -175,6 +175,7 @@ module V1
               order,fight_group = @session_user.order_fight_group(params[:uuid], params[:fight_group_uuid])
               order.refrensh_status
               logger.info "=====================拼单状态===================#{fight_group.status}"
+              logger.info "=====================订单状态===================#{order.status}"
               logger.info "=====================头像===================#{fight_group.user_avatars(false).count}"
               inner_app = inner_app? request
               present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group, inner_app: inner_app, user: @session_user
