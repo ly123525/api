@@ -161,19 +161,17 @@ module V1
             #               server_error(ex)
             #             end
           end          
-          desc "支付成功后的展示页,以及微信分享页"
+          desc "支付成功后的展示页,单独购买"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             optional :uuid, type: String, desc: '订单 UUID'
-            optional :fight_group_uuid, type: String, desc: '拼单 UUID, 订单UUID为空时不能为空' 
           end
           get :pay_result do
             begin
               authenticate_user
-              order,fight_group = @session_user.order_fight_group(params[:uuid], params[:fight_group_uuid])
-              inner_app = inner_app? request
-              present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group, inner_app: inner_app, user: @session_user
+              order = ::Mall::Order.find_uuid params[:uuid]
+              present order, with: ::V1::Entities::Mall::OrderPayResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

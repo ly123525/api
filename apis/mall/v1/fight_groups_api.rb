@@ -3,23 +3,24 @@ module V1
     class FightGroupsAPI < Grape::API
       namespace :mall do
         resources :fight_groups do
-          desc "拼单成功"
+          desc "支付成功后,拼单状态展示页"
           params do
-            requires :user_uuid, type: String, desc: '用户 UUID'
-            requires :token, type: String, desc: '用户访问令牌' 
-            requires :uuid, type: String, desc: '拼单 UUID'
-          end      
-          get do
+            optional :user_uuid, type: String, desc: '用户 UUID'
+            requires :uuid, type: String, desc: '拼单 UUID' 
+          end
+          get  do
             begin
-              authenticate_user
+              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               fight_group = ::Mall::FightGroup.find_uuid(params[:uuid])
-              present fight_group, with: ::V1::Entities::Mall::FightGroup, user: @session_user
+              fight_group = fight_group.refrensh_status
+              inner_app = inner_app? request
+              present fight_group, with: ::V1::Entities::Mall::FightGroup, user: user, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
               server_error(ex)
-            end
-          end  
+            end            
+          end      
         end  
       end  
     end  
