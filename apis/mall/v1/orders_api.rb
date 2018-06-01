@@ -171,7 +171,7 @@ module V1
           end
           get :pay_result do
             begin
-              logger.info "==================================#{request.headers['User-Agent']}"
+              logger.info "=================分享页=================#{request.headers['User-Agent']}"
               authenticate_user
               order,fight_group = @session_user.order_fight_group(params[:uuid], params[:fight_group_uuid])
               inner_app = inner_app? request
