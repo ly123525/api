@@ -36,14 +36,19 @@ module V1
         expose :collection_or_not do |m, o|
           o[:user_ids].include?(o[:user_id])
         end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
-            summary: m.summary,
-            article_uuid: m.uuid
+            summary: m.summary
           }
         end
       end
@@ -82,14 +87,19 @@ module V1
           o[:article_ids].include?(m.id)
         end
         expose :shop, using: ::V1::Entities::Mall::SimpleShopForChoice
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}",
             # image: (m.pictures.sorted.last.image.style_url('480w') rescue nil),
             image: "#{ENV['IMAGE_DOMAIN']}/app/product_bg_square.png?x-oss-process=style/300w",
             title: m.title,
-            summary: m.summary,
-            article_uuid: m.uuid
+            summary: m.summary
           }
         end
         expose :scheme do |m, o|

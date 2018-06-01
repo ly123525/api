@@ -63,6 +63,12 @@ module V1
         expose :user_headers do |m, o|
           m.try(:fight_group).try(:user_avatars, true)
         end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do |m, o|
           {
             title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',

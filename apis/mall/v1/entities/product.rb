@@ -197,6 +197,12 @@ module V1
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
         end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do
           expose :url do |m, o|
             "#{ENV['H5_HOST']}/#/mall/products?style_uuid=#{m.uuid}"
@@ -209,19 +215,7 @@ module V1
           end
           expose :summary do |m, o|
             ""
-          end
-          expose :activity_tags do |m, o|
-            m.try(:product).try(:activity_tags)
-          end
-          expose :activity_image do |m, o|
-            m.try(:product).try(:activity_image)
-          end          
-          expose :activity_category do |m, o|
-            m.try(:product).try(:activity_category)
-          end
-          expose :activity_lottery_tips do |m, o|
-            "拼主获得2张抽奖券,拼客获得1张抽奖券"
-          end  
+          end     
         end
         expose :activity_tags do |m, o|
           m.try(:product).try(:activity_tags)
