@@ -59,6 +59,12 @@ module V1
         expose :activity_category do |m, o|
           m.try(:product).try(:activity_category)
         end
+        expose :activity_width do |m, o|
+          252
+        end
+        expose :activity_length do |m, o|
+          42
+        end    
       end
 
       class ProductsByStyles < SimpleProductByStyle
