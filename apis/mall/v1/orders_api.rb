@@ -166,8 +166,7 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             optional :uuid, type: String, desc: '订单 UUID'
-            optional :fight_group_uuid, type: String, desc: '拼单 UUID, 订单UUID为空时不能为空'
-            optional :os, type: String, values: ['IOS', 'Android'], desc: '微信内需要的机型'  
+            optional :fight_group_uuid, type: String, desc: '拼单 UUID, 订单UUID为空时不能为空' 
           end
           get :pay_result do
             begin
@@ -175,7 +174,7 @@ module V1
               authenticate_user
               order,fight_group = @session_user.order_fight_group(params[:uuid], params[:fight_group_uuid])
               inner_app = inner_app? request
-              present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group, inner_app: inner_app, user: @session_user, os: params[:os]
+              present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group, inner_app: inner_app, user: @session_user
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
