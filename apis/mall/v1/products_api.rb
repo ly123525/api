@@ -47,7 +47,8 @@ module V1
               product = ::Mall::Product.with_deleted.find_uuid(params[:uuid])
               style = product.get_style_by_labels(params[:labels].split('####'))
               styles_for_choice = product.styles_for_choice(params[:labels].split('####'))
-              present product, with: ::V1::Entities::Mall::ProductForChoice, style: style, styles_for_choice: styles_for_choice
+              inner_app = inner_app? request
+              present product, with: ::V1::Entities::Mall::ProductForChoice, style: style, styles_for_choice: styles_for_choice, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

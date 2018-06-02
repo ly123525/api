@@ -70,6 +70,9 @@ module V1
       class ProductsForChoice < Grape::Entity
         expose :category_bar
         expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles
+        expose :to_be_confirmed_scheme do |m, o|
+          "#{ENV['H5_HOST']}/#/mall/orders/confirmation" unless o[:inner_app]
+        end  
       end
 
       class ProductForOrder < SimpleProductByStyle
