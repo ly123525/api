@@ -72,7 +72,10 @@ module V1
         end
         expose :to_be_confirmed_scheme do |m, o|
           "#{ENV['H5_HOST']}/#/mall/orders/confirmation" if !o[:inner_app] && !m.order_paid_fight_group?(o[:user]) && m.waiting?
-        end        
+        end
+        expose :order_scheme do |m, o|
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.order_by_user(o[:user]).uuid}" if m.completed? && o[:inner_app] && !m.product.benz_tags? && !m.product.smart_tags? && m.order_paid_fight_group?(o[:user])
+        end       
       end
       
       class FightGroupForOrder < Grape::Entity
