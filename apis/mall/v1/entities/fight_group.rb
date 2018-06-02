@@ -68,7 +68,7 @@ module V1
            m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
         end
         expose :lottery_list do |m, o|
-          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed?
+          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed? && m.product.benz_tags? && m.product.smart_tags? && m.order_paid_fight_group?(o[:user])
         end
         expose :to_be_confirmed_scheme do |m, o|
           "#{ENV['H5_HOST']}/#/mall/orders/confirmation" if !o[:inner_app] && !m.order_paid_fight_group?(o[:user]) && m.waiting?
