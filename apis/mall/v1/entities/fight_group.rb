@@ -69,6 +69,9 @@ module V1
         end
         expose :lottery_list do |m, o|
           "#{ENV['H5_HOST']}/#/raffletickets" if m.completed?
+        end
+        expose :to_be_confirmed_scheme do |m, o|
+          "#{ENV['H5_HOST']}/#/mall/orders/confirmation" if !o[:inner_app] && !m.order_paid_fight_group?(o[:user]) && m.waiting?
         end        
       end
       
