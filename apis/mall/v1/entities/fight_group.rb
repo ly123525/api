@@ -55,7 +55,7 @@ module V1
           m.fight_group_completed_lottery_tips(o[:user]) if m.completed?
         end     
         expose :inviting_friends_info do |m, o|
-          if m.waiting? && o[:inner_app]
+          if m.waiting? && m.order_paid_fight_group?(o[:user])
             {
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (m.style.style_cover.image.style_url('300w') rescue nil),
