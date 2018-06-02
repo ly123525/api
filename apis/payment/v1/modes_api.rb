@@ -51,6 +51,7 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
+              fight_group = order.fight_group
               payment = ::Payment.create_by_order(order, ::Payment.wx_trade_type_to_pay_method(params[:trade_type]))
               pay_params = {
                 # body:             '商品：我要卖机油'[0..63],
@@ -71,7 +72,7 @@ module V1
               r = WxPay::Service.send("generate_#{params[:trade_type].downcase}_pay_req", app_params, ::WxPay.config(params[:trade_type]))
               package = r.delete(:package)
               r[:package_value] = package
-              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?uuid=#{params[:order_uuid]}")
+              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?uuid=#{params[:order_uuid]}&fight_group_uuid=#{fight_group.try(:uuid)}")
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -112,6 +113,7 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
+              fight_group = order.fight_group
               payment = ::Payment.create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
               res = Alipay::INIT_CLIENT.sdk_execute(
               method: 'alipay.trade.app.pay',
@@ -124,7 +126,7 @@ module V1
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: "2m")
-              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?uuid=#{params[:order_uuid]}")}
+              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?uuid=#{params[:order_uuid]}&fight_group_uuid=#{fight_group.try(:uuid)}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
