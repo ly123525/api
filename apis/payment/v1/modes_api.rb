@@ -72,7 +72,8 @@ module V1
               r = WxPay::Service.send("generate_#{params[:trade_type].downcase}_pay_req", app_params, ::WxPay.config(params[:trade_type]))
               package = r.delete(:package)
               r[:package_value] = package
-              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?uuid=#{params[:order_uuid]}&fight_group_uuid=#{fight_group.try(:uuid)}")
+              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}") if fight_group.present?
+              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}") unless fight_group.present?
               r
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
@@ -126,7 +127,9 @@ module V1
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: "2m")
-              {res: res, result_scheme: "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?uuid=#{params[:order_uuid]}&fight_group_uuid=#{fight_group.try(:uuid)}")}
+              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}") if fight_group.present?
+              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}") unless fight_group.present?
+              {res: res, result_scheme: result_scheme }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

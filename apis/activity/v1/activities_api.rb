@@ -53,7 +53,7 @@ module V1
               lottery =::Lotteries::Smart.create!(user: @session_user)   #不应该是smart类,应该灵活些，下次活动还要改
               lottery.send_to_message_fight_group_complete
               ::ActivityItem.create!(activity: activity, target: focus_on, result: lottery )
-              {lottery_uuid: lottery.uuid }
+              {lottery_scheme:  "#{ENV[H5_HOST]}/#/openaward?lottery_uuid=#{lottery.uuid}"}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error              
             rescue Exception => ex
