@@ -47,10 +47,11 @@ module V1
               activity = ::Activity.where(status: false).first
               app_error('已经开奖了,不能再关注了', 'No more attention') unless activity.present?
               app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
+              app_error('活动已经关闭,等待开奖', "No more attention") unless activity.start_at <= Time.now && Time.now <= activity.end_at
               inner_app = inner_app? request
               focus_on = activity.focus_ons.create! user: @session_user, inner_app: inner_app
-              lottery =::Lotteries::Smart.create!(user: @session_user) unless activity.start_at <= Time.now && Time.now <= activity.end_at  #不应该是smart类,应该灵活些，下次活动还要改
-              lottery.send_to_message_fight_group_complete unless activity.start_at <= Time.now && Time.now <= activity.end_at
+              lottery =::Lotteries::Smart.create!(user: @session_user)   #不应该是smart类,应该灵活些，下次活动还要改
+              lottery.send_to_message_fight_group_complete
               ::ActivityItem.create!(activity: activity, target: focus_on, result: lottery )
               {lottery_uuid: lottery.uuid }
             rescue ActiveRecord::RecordNotFound
