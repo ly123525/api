@@ -165,7 +165,7 @@ module V1
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            optional :uuid, type: String, desc: '订单 UUID'
+            requires :uuid, type: String, desc: '订单 UUID'
           end
           get :pay_result do
             begin
