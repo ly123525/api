@@ -14,8 +14,6 @@ module V1
               fight_group = ::Mall::FightGroup.find_uuid(params[:uuid])
               fight_group = fight_group.refrensh_status
               inner_app = inner_app? request
-              logger.info "=========================inner_app=======#{inner_app}"
-              logger.info "==========================fight_group========#{fight_group.status}"
               present fight_group, with: ::V1::Entities::Mall::FightGroup, user: user, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
