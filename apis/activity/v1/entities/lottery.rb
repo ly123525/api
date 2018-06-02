@@ -69,10 +69,10 @@ module V1
       
       class Lotteries_list < Grape::Entity
         expose :waiting_lottery_count do |m, o|
-          o[:waiting_count]
+          m
         end  
         expose :lotteries, using: ::V1::Entities::Activity::Lotteries do |m, o|
-          m
+          o[:lotteries]
         end  
       end  
     end

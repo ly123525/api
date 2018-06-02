@@ -15,7 +15,7 @@ module V1
               authenticate_user
               lotteries = @session_user.lotteries_list(params[:status]).page(params[:page]).per(10)
               waiting_count = @session_user.lotteries_list(false).count
-              present lotteries, with: ::V1::Entities::Activity::Lotteries_list, waiting_count: waiting_count
+              present waiting_count, with: ::V1::Entities::Activity::Lotteries_list, lotteries: lotteries
             rescue Exception => ex
               server_error(ex)                          
             end
