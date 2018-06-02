@@ -7,14 +7,15 @@ module V1
           params do 
             requires :user_uuid, type: String, desc: '用户 UIID'
             requires :token, type: String, desc: '用户访问令牌'
-            optional :status, type: Integer, desc: "按状态查询，默认为待开奖，{ '待开奖': 0, '已开奖': 1}"
+            optional :status, type: Boolean, default: false, desc: "按状态查询，默认为待开奖，{ '待开奖': false, '已开奖': true}"
             optional :page, type: Integer, default: 1, desc: '分页页面'
           end  
           get do
             begin
               authenticate_user
               lotteries = @session_user.lotteries_list(params[:status]).page(params[:page]).per(10)
-              present lotteries, with: ::V1::Entities::Activity::Lotteries
+              waiting_count = @session_user.lotteries_list(false).count
+              present lotteries, with: ::V1::Entities::Activity::Lotteries_list, waiting_count: waiting_count
             rescue Exception => ex
               server_error(ex)                          
             end
