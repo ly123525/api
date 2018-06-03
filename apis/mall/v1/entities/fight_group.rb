@@ -16,7 +16,7 @@ module V1
           (m.expired_at.localtime-Time.now).to_i
         end
         expose :head_images do |m, o|
-          m.user_avatars
+          m.user_avatars true
         end  
       end 
         
@@ -40,7 +40,7 @@ module V1
         end  
         # expose :participants, using: ::V1::Entities::User::SimpleUser
         expose :user_images do |m, o| 
-          m.user_avatars
+          m.user_avatars true
         end
         expose :fight_group_scheme do |m, o|
           if m.waiting? && !m.orders.paid.pluck(&:user_id).include?(o[:user].id)
@@ -61,7 +61,7 @@ module V1
           "等待分享，还差#{m.try(:fight_group).try(:residual_quantity)}人" if m.fight_group.present? && m.fight_group.waiting?             
         end
         expose :user_headers do |m, o|
-          m.try(:fight_group).try(:user_avatars)
+          m.try(:fight_group).try(:user_avatars, true)
         end
         expose :share do |m, o|
           {
