@@ -9,7 +9,7 @@ CarrierWave.configure do |config|
   config.aliyun_bucket = ENV['ALI_OSS_BUCKET']
   config.aliyun_internal = false
   config.aliyun_area = ENV['ALI_OSS_REGION']
-  # config.aliyun_host = "https://foo.bar.com"
+  config.aliyun_host = ENV['IMAGE_DOMAIN']
 end
 
 
