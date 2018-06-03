@@ -16,7 +16,8 @@ module V1
             begin
               authenticate_user
               style = ::Mall::Style.find_uuid(params[:style_uuid])
-              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method]
+              inner_app = inner_app? request
+              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -160,20 +161,17 @@ module V1
             #               server_error(ex)
             #             end
           end          
-          desc "支付成功后的展示页,以及微信分享页"
+          desc "支付成功后的展示页,单独购买"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
-            optional :uuid, type: String, desc: '订单 UUID'
-            optional :fight_group_uuid, type: String, desc: '拼单 UUID, 订单UUID为空时不能为空'
-            optional :for_app, type: Boolean, default: true, desc: '默认为true, 表示在app内'
+            requires :uuid, type: String, desc: '订单 UUID'
           end
           get :pay_result do
             begin
               authenticate_user
-              order,fight_group = @session_user.order_fight_group(params[:uuid], params[:fight_group_uuid])
-              inner_app = params[:for_app]
-              present order, with: ::V1::Entities::Mall::OrderPayResult, fight_group: fight_group, inner_app: inner_app, user: @session_user
+              order = ::Mall::Order.find_uuid params[:uuid]
+              present order, with: ::V1::Entities::Mall::OrderPayResult
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

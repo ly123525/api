@@ -44,6 +44,7 @@ module API
     mount ::V1::Topic::TopicsAPI
     mount ::V1::Activity::ActivitiesAPI
     mount ::V1::Activity::LotteriesAPI
+    mount ::V1::Statistic::StatisticsAPI
     
     if ENV['SERVER_ENV']!='production'
       namespace :doc do

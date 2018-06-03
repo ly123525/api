@@ -40,7 +40,7 @@ module V1
             end     
           end  
         end     
-      end  
+      end 
       
       class Lotteries < Grape::Entity
         expose :name do |m, o|
@@ -64,7 +64,16 @@ module V1
         expose :number
         expose :nper do |m, o|
           m.activity_item.activity.name
-        end     
+        end                     
+      end   
+      
+      class Lotteries_list < Grape::Entity
+        expose :waiting_lottery_count do |m, o|
+          m
+        end  
+        expose :lotteries, using: ::V1::Entities::Activity::Lotteries do |m, o|
+          o[:lotteries]
+        end  
       end  
     end
   end

@@ -22,31 +22,60 @@ module V1
         
       
       class FightGroup < Grape::Entity
-        expose :status_image do |m, o|
-          if m.completed?
-            "#{ENV['IMAGE_DOMAIN']}/app/chenggong3.png?x-oss-process=style/160w"
-          end  
-        end  
-        expose :status do |m, o|
-          if m.waiting?
-            "还差#{m.residual_quantity}人，赶紧邀请好友拼单吧！"
-          elsif m.completed?
-            "拼单成功，商家正在努力发货，请耐心等待..."  
-          end  
-        end  
-        with_options(format_with: :timestamp) {expose :updated_at}
-        expose :product,  using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
-          m.style
-        end  
-        # expose :participants, using: ::V1::Entities::User::SimpleUser
-        expose :user_images do |m, o| 
-          m.user_avatars true
+        expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
+          m.order_items_by_user(o[:user])
         end
-        expose :fight_group_scheme do |m, o|
-          if m.waiting? && !m.orders.paid.pluck(&:user_id).include?(o[:user].id)
-            {button_name: '立即拼单', button_url: "#{ENV['H5_HOST']}/#/mall/products?uuid=#{m.product.uuid}&fight_group_uuid=#{m.uuid}"}    
+        expose :style_uuid do |m, o|
+          m.style.uuid if m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
+        end  
+        expose :title do |m, o|          
+          "拼单成功, 商家正在努力发货, 请耐心等待..." if m.completed?
+        end          
+        expose :tips do |m, o|
+          "拼单成功后,拼主获得两张抽奖券,拼客获得一张抽奖券" if m.waiting?
+        end
+        expose :styles do |m, o|
+          m.product.styles_for_choice(m.style.labels) if m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
+        end
+        expose :product_uuid do |m, o|
+          m.product.uuid if m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
+        end  
+        expose :remaining_time do |m, o|
+          if  m.waiting?
+            (m.expired_at.localtime-Time.now).to_i > 0 ? ((m.expired_at.localtime-Time.now).to_i * 1000) : 0
           end
-        end      
+        end
+        expose :residual_quantity do |m, o|          
+          m.residual_quantity if m.waiting?
+        end
+        expose :user_images do |m, o|
+          m.user_avatars(false)
+        end
+        expose :lottery_tips do |m, o|          
+          m.fight_group_completed_lottery_tips(o[:user]) if m.completed?
+        end     
+        expose :share do |m, o|
+          if m.waiting? && m.order_paid_fight_group?(o[:user])
+            {
+              title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
+              image: (m.style.style_cover.image.style_url('300w') rescue nil),
+              url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.uuid}",
+              summary: ''
+            }
+          end
+        end
+        expose :participate_fight_group do |m, o|
+           m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
+        end
+        expose :lottery_list do |m, o|
+          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed? && m.product.benz_tags? && m.product.smart_tags? && m.order_paid_fight_group?(o[:user])
+        end
+        expose :to_be_confirmed_scheme do |m, o|
+          "#{ENV['H5_HOST']}/#/mall/orders/confirmation" if !o[:inner_app] && !m.order_paid_fight_group?(o[:user]) && m.waiting?
+        end
+        expose :order_scheme do |m, o|
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.order_by_user(o[:user]).uuid}" if m.completed? && o[:inner_app] && !m.product.benz_tags? && !m.product.smart_tags? && m.order_paid_fight_group?(o[:user])
+        end       
       end
       
       class FightGroupForOrder < Grape::Entity
@@ -63,6 +92,12 @@ module V1
         expose :user_headers do |m, o|
           m.try(:fight_group).try(:user_avatars, true)
         end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do |m, o|
           {
             title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',

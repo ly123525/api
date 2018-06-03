@@ -3,11 +3,8 @@ module V1
     module Activity
       class Activity < Grape::Entity
         expose :current_foucs_on_count do |m, o|
-          o[:focus_count]
-        end
-        expose :target_focus_on_count do |m, o|
-          m.focus_target_count
-        end    
+          o[:focus_count] + m.focus_target_count
+        end   
         expose :scheme do |m, o|
           "#{ENV['H5_HOST']}/#/expedite_openaward"
         end  
@@ -55,20 +52,23 @@ module V1
           "#{ENV['H5_HOST']}/#/activity/explain"
         end 
         expose :current_foucs_on_count do |m, o|
-          o[:focus_count]
-        end
-        expose :target_focus_on_count do |m, o|
-          m.focus_target_count
-        end         
+          o[:focus_count]+m.focus_target_count
+        end        
         expose :focus_on_or_not do |m, o|
           o[:user].try(:focus_ons).try(:where,item: m).present?
         end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end    
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/expedite_openaward",
             image: "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/logo_3x.png",
-            title: '奔驰开回家做人生赢家',
-            summary: '成功发起5人拼单即可获取奔驰轿车抽奖劵'
+            title: '终极抽奖日',
+            summary: '从新定义疯狂，拼单即可参与抽奔驰E与smart'
           } 
         end
         expose :benzs, using: ::V1::Entities::Activity::ActivityTag do |m, o|

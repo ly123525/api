@@ -36,6 +36,12 @@ module V1
         expose :collection_or_not do |m, o|
           o[:user_ids].include?(o[:user_id])
         end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}",
@@ -81,6 +87,12 @@ module V1
           o[:article_ids].include?(m.id)
         end
         expose :shop, using: ::V1::Entities::Mall::SimpleShopForChoice
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end 
         expose :share do |m, o|
           {
             url: "#{ENV['H5_HOST']}/#/choice/article?uuid=#{m.uuid}",
