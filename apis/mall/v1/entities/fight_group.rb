@@ -54,7 +54,7 @@ module V1
         expose :lottery_tips do |m, o|          
           m.fight_group_completed_lottery_tips(o[:user]) if m.completed?
         end     
-        expose :inviting_friends_info do |m, o|
+        expose :share do |m, o|
           if m.waiting? && m.order_paid_fight_group?(o[:user])
             {
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
