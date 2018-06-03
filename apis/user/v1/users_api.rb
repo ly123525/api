@@ -33,9 +33,11 @@ module V1
           patch :head_image do
             begin
               authenticate_user
-              picture = ::Picture.find_or_create_by(imageable: @session_user)
-              picture.update!(image: params[:image])
-              nil
+              ActiveRecord::Base.transaction do
+                picture = ::Picture.find_or_create_by!(imageable: @session_user)
+                picture.update!(image: params[:image])
+              end
+              true
             rescue Exception => ex
               server_error(ex)
             end
@@ -124,6 +126,7 @@ module V1
               server_error(ex)
             end              
           end
+          
           desc "用户信息"
           params do
             requires :user_uuid, type: String, desc: '用户UUID'
@@ -132,11 +135,8 @@ module V1
           get :user_info do
             begin
               authenticate_user
-
               user=@session_user
               present user, with: ::V1::Entities::User::UserInfo
-
-
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
