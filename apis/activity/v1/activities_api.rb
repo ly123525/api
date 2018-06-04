@@ -10,9 +10,9 @@ module V1
           get :progress_bar do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where(status: false).first
-              focus_count = activity.focus_ons.count
-              present activity, with: ::V1::Entities::Activity::Activity, focus_count: focus_count
+              activity = ::Activity.order(id: :desc).first
+              follows_count = activity.follows.count
+              present activity, with: ::V1::Entities::Activity::Activity, follows_count: follows_count
             rescue Exception => ex
               server_error(ex)
             end            
@@ -20,18 +20,18 @@ module V1
           desc "活动详情页"
           params do
             optional :user_uuid, type: String, desc: '用户UUID'
+            requires :uuid, type: String, desc: '活动 UUID'
           end
           get  do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where(status: false).first
-              app_error('活动已经结束', 'The activity is over') unless activity.present?
-              focus_count = activity.focus_ons.count rescue 1000000
+              activity = ::Activity.find_uuid params[:uuid]
+              follows_count = activity.follows.count
               benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
               smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
               activities = ::Activity.where(status: true).order(id: :desc).limit(3)
               inner_app = inner_app? request
-              present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app, activities: activities 
+              present activity, with: ::V1::Entities::Activity::ActivityDetails, follows_count: follows_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app, activities: activities 
             rescue Exception => ex
               server_error(ex)
             end   

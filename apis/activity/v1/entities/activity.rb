@@ -2,8 +2,8 @@ module V1
   module Entities
     module Activity
       class Activity < Grape::Entity
-        expose :current_foucs_on_count do |m, o|
-          o[:focus_count] + m.focus_target_count
+        expose :current_follows_count do |m, o|
+          o[:follows_count] + m.fake_follow_count
         end   
         expose :scheme do |m, o|
           "#{ENV['H5_HOST']}/#/expedite_openaward"
@@ -51,11 +51,11 @@ module V1
         expose :explain_scheme do |m, o|
           "#{ENV['H5_HOST']}/#/activity/explain"
         end 
-        expose :current_foucs_on_count do |m, o|
-          o[:focus_count]+m.focus_target_count
+        expose :current_follows_count do |m, o|
+          o[:follows_count]+m.fake_follow_count
         end        
-        expose :focus_on_or_not do |m, o|
-          o[:user].try(:focus_ons).try(:where,item: m).present?
+        expose :follow_or_not do |m, o|
+          o[:user].try(:follows).try(:where,item: m).present?
         end
         expose :resource_uuid do |m, o|
           m.uuid
