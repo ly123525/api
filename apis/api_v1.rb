@@ -46,6 +46,8 @@ module API
     mount ::V1::Activity::LotteriesAPI
     mount ::V1::Statistic::StatisticsAPI
     
+    mount ::V1::Wechat::JSAPI
+    
     if ENV['SERVER_ENV']!='production'
       namespace :doc do
         formatter :json, ::API::Base::DOCFormatter
