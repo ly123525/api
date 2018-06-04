@@ -12,7 +12,7 @@ module V1
           m.style_name
         end
         expose :price do |m, o|
-          "¥ " + m.style.price.to_s
+          "¥ " + format('%.2f',m.style.price.to_s)
         end
         expose :quantity_str do |m, o|
           "x#{m.quantity}"
@@ -35,6 +35,7 @@ module V1
         expose :image do |m, o|
           m.style_cover.image.style_url('480w') rescue nil
         end
+        expose :uuid
         expose :title do |m, o|
           m.full_name
         end
@@ -42,10 +43,10 @@ module V1
           m.name
         end
         expose :original_price do |m, o|
-          "¥ " + m.original_price.to_s
+          "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + m.price.to_s
+          "¥ " + format('%.2f',m.price.to_s)
         end
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
@@ -98,10 +99,10 @@ module V1
           "商品编号：#{o[:style].sku}" rescue nil
         end
         expose :original_price do |m, o|
-          "¥ " + o[:style].original_price.to_s rescue nil
+          "¥ " + format('%.2f',o[:style].original_price.to_s) rescue nil
         end
         expose :price do |m, o|
-          "¥ " + o[:style].price.to_s rescue nil
+          "¥ " + format('%.2f',o[:style].price.to_s) rescue nil
         end
         expose :style_name do |m, o|
           o[:style].name rescue nil
@@ -128,10 +129,10 @@ module V1
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
         end
         expose :original_price do |m, o|
-          "¥ " + m.original_price.to_s
+          "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + m.price.to_s
+          "¥ " + format('%.2f',m.price.to_s)
         end
         expose :service_note do |m,o|
           m.product.service_note
@@ -214,7 +215,7 @@ module V1
             m.product.name + " " + m.name
           end
           expose :summary do |m, o|
-            ""
+            m.product.summary_content
           end     
         end
         expose :activity_tags do |m, o|
@@ -227,13 +228,13 @@ module V1
           m.try(:product).try(:activity_category)
         end
         expose :activity_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.product.benz_tags? || m.product.smart_tags?
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward?uuid=6980f4f6-76ac-4312-b56f-214e474d007f") if m.product.benz_tags? || m.product.smart_tags?
         end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
         end
         expose :activity_lottery_tips do |m, o|
-          "拼主获得2张抽奖券,拼客获得1张抽奖券"
+          "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券"
         end
       end
     end

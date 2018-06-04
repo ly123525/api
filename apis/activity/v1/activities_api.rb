@@ -10,9 +10,9 @@ module V1
           get :progress_bar do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where(status: false).first
-              focus_count = activity.focus_ons.count
-              present activity, with: ::V1::Entities::Activity::Activity, focus_count: focus_count
+              activity = ::Activity.order(id: :desc).first
+              current_follows_count = activity.follows.count + activity.fake_follow_count
+              present activity, with: ::V1::Entities::Activity::Activity, current_follows_count: current_follows_count
             rescue Exception => ex
               server_error(ex)
             end            
@@ -20,18 +20,16 @@ module V1
           desc "活动详情页"
           params do
             optional :user_uuid, type: String, desc: '用户UUID'
+            requires :uuid, type: String, desc: '活动 UUID'
           end
           get  do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where(status: false).first
-              app_error('活动已经结束', 'The activity is over') unless activity.present?
-              focus_count = activity.focus_ons.count rescue 1000000
-              benzs = ::Topic::Topic.where(activity_tags: 'benz').limit(3)
-              smarts = ::Topic::Topic.where(activity_tags: 'smart').limit(3)
-              activities = ::Activity.where(status: true).order(id: :desc).limit(3)
+              activity = ::Activity.find_uuid params[:uuid]
+              app_error('活动已经结束', "The activity has come to an end") unless activity.start_at < Time.now && Time.now < activity.end_at
+              lottery_templates = ::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
               inner_app = inner_app? request
-              present activity, with: ::V1::Entities::Activity::ActivityDetails, focus_count: focus_count, user: user, benzs: benzs, smarts: smarts, inner_app: inner_app, activities: activities 
+              present activity, with: ::V1::Entities::Activity::ActivityDetails, user: user, inner_app: inner_app, lottery_templates: lottery_templates 
             rescue Exception => ex
               server_error(ex)
             end   
@@ -40,19 +38,18 @@ module V1
           params do 
             requires :user_uuid, type: String, desc: '用户 UIID'
             requires :token, type: String, desc: '用户访问令牌'
+            requires :uuid, type: String, desc: '活动 UUID'
           end
-          post :focus_on do
+          post :follow do
             begin
               authenticate_user
-              activity = ::Activity.where(status: false).first
-              app_error('已经开奖了,不能再关注了', 'No more attention') unless activity.present?
-              app_error('您已经关注过了', "You are looked at it") if @session_user.focus_ons.where(item: activity).present?
-              app_error('活动已经关闭,等待开奖', "No more attention") unless activity.start_at <= Time.now && Time.now <= activity.end_at
+              activity = ::Activity.find_uuid params[:uuid]
+              lottery_template = activity.lottery_templates.where(followed: true).first
+              app_error('您已经关注过了', "You are looked at it") if @session_user.followed?(activity)
+              app_error('活动已经结束', "The activity has come to an end") unless lottery_template.start_at < Time.now && Time.now < lottery_template.end_at
               inner_app = inner_app? request
-              focus_on = activity.focus_ons.create! user: @session_user, inner_app: inner_app
-              lottery =::Lotteries::Smart.create!(user: @session_user)   #不应该是smart类,应该灵活些，下次活动还要改
-              lottery.send_to_message_fight_group_complete
-              ::ActivityItem.create!(activity: activity, target: focus_on, result: lottery )
+              follow = activity.follows.create! user: @session_user, inner_app: inner_app
+              lottery = follow.generate_lottery! activity, @session_user, lottery_template
               lottery_scheme = "#{ENV['H5_HOST']}/#/obtain_ticket?lottery_uuid=#{lottery.uuid}" if inner_app
               lottery_scheme = "#{ENV['H5_HOST']}/#/openaward?lottery_uuid=#{lottery.uuid}" if !inner_app
               {lottery_scheme:  lottery_scheme}
@@ -69,8 +66,8 @@ module V1
           get :history do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activities = ::Activity.where(status: true).order(id: :desc)
-              present activities, with: ::V1::Entities::Activity::LotteryResultHistory                
+              lottery_templates = ::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
+              present lottery_templates, with: ::V1::Entities::Activity::LotteryResultHistory                
             rescue Exception => ex
               server_error(ex)
             end                        
@@ -79,32 +76,18 @@ module V1
           params do 
             optional :target, type: String, values: ['banner', 'web_view'], default: 'banner', desc: '进入的来源'
             requires :target_id, type: String, desc: '来源 ID'
+            requires :uuid, type: String, desc: '活动 UUID' 
             optional :user_uuid, type: String, desc: '用户 UUID'
           end
           post :statistical do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              ::ActivityItem.generate_by_target! params[:target], params[:target_id]
+              activity = ::Activity.find_uuid params[:uuid]
+              ::ActivityItem.generate_by_target! activity, params[:target], params[:target_id]
               true                 
             rescue Exception => ex
               server_error(ex)
             end               
-          end
-          desc "分享统计"
-          params do
-            optional :user_uuid, type: String, desc: '用户 UUID'
-          end
-          post :share_statistic do 
-            begin
-              user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where(status: false).first
-              ::ShareStatistic.create!(item: activity, user: user) if activity.present?
-              true
-            rescue ActiveRecord::RecordNotFound
-              app_uuid_error
-            rescue Exception => ex
-              server_error(ex)
-            end            
           end                     
         end  
       end    

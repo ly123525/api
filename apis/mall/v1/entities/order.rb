@@ -139,7 +139,7 @@ module V1
           m.order_items
         end
         expose :total_fee do |m, o|
-          m.total_fee.to_s
+          format('%.2f',m.total_fee.to_s)
         end
         expose :other_infos do |m, o|
           if m.created? || m.closed?
@@ -181,6 +181,12 @@ module V1
             (m.delivered? || m.paid?) && !m.servicing?
           end
         end
+        expose :resource_uuid do |m, o|
+          m.try(:fight_group).try(:uuid)
+        end
+        expose :resource_type do |m, o|
+          m.try(:fight_group).try(:class).try(:to_s)
+        end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.style.style_cover.image.style_url('300w') rescue nil
@@ -188,7 +194,7 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
-              summary: ""
+              summary: m.order_items.first.product.summary_content
             }
           end
         end
@@ -259,6 +265,12 @@ module V1
             m.delivered? && !m.servicing?
           end
         end
+        expose :resource_uuid do |m, o|
+          m.try(:fight_group).try(:uuid)
+        end
+        expose :resource_type do |m, o|
+          m.try(:fight_group).try(:class).try(:to_s)
+        end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting? && m.paid?
             image = m.order_items.first.style.style_cover.image.style_url('300w') rescue nil
@@ -266,7 +278,7 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
-              summary: ""
+              summary: m.order_items.first.product.summary_content
             }
           end
         end

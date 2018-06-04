@@ -53,14 +53,20 @@ module V1
         end
         expose :lottery_tips do |m, o|          
           m.fight_group_completed_lottery_tips(o[:user]) if m.completed?
-        end     
-        expose :inviting_friends_info do |m, o|
+        end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end         
+        expose :share do |m, o|
           if m.waiting? && m.order_paid_fight_group?(o[:user])
             {
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (m.style.style_cover.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.uuid}",
-              summary: ''
+              summary: m.product.summary_content
             }
           end
         end
@@ -103,7 +109,7 @@ module V1
             title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
             image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
             url: "#{ENV['H5_HOST']}/#/mall/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
-            summary: ''
+            summary: m.order_items.first.product.summary_content
           }
         end       
       end    
