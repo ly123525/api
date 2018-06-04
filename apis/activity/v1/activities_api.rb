@@ -29,7 +29,6 @@ module V1
               app_error('活动已经结束', "The activity has come to an end") unless activity.start_at < Time.now && Time.now < activity.end_at
               lottery_templates = ::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
               inner_app = inner_app? request
-              binding.pry
               present activity, with: ::V1::Entities::Activity::ActivityDetails, user: user, inner_app: inner_app, lottery_templates: lottery_templates 
             rescue Exception => ex
               server_error(ex)
