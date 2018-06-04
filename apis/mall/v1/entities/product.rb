@@ -234,7 +234,7 @@ module V1
           m.product.mini_purchase_quantity
         end
         expose :activity_lottery_tips do |m, o|
-          "拼主获得2张抽奖券,拼客获得1张抽奖券"
+          "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券"
         end
       end
     end
