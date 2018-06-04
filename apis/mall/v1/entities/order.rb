@@ -181,6 +181,12 @@ module V1
             (m.delivered? || m.paid?) && !m.servicing?
           end
         end
+        expose :resource_uuid do |m, o|
+          m.try(:fight_group).try(:uuid)
+        end
+        expose :resource_type do |m, o|
+          m.try(:fight_group).try(:class).try(:to_s)
+        end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.style.style_cover.image.style_url('300w') rescue nil
@@ -258,6 +264,12 @@ module V1
           else
             m.delivered? && !m.servicing?
           end
+        end
+        expose :resource_uuid do |m, o|
+          m.try(:fight_group).try(:uuid)
+        end
+        expose :resource_type do |m, o|
+          m.try(:fight_group).try(:class).try(:to_s)
         end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting? && m.paid?
