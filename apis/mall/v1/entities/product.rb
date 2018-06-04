@@ -35,6 +35,7 @@ module V1
         expose :image do |m, o|
           m.style_cover.image.style_url('480w') rescue nil
         end
+        expose :uuid
         expose :title do |m, o|
           m.full_name
         end
