@@ -215,7 +215,7 @@ module V1
             m.product.name + " " + m.name
           end
           expose :summary do |m, o|
-            ""
+            m.product.summary_content
           end     
         end
         expose :activity_tags do |m, o|

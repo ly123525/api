@@ -194,7 +194,7 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
-              summary: ""
+              summary: m.order_items.first.product.summary_content
             }
           end
         end
@@ -278,7 +278,7 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
-              summary: ""
+              summary: m.order_items.first.product.summary_content
             }
           end
         end
