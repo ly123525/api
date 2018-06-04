@@ -139,7 +139,7 @@ module V1
           m.order_items
         end
         expose :total_fee do |m, o|
-          m.total_fee.to_s
+          format('%.2f',m.total_fee.to_s)
         end
         expose :other_infos do |m, o|
           if m.created? || m.closed?

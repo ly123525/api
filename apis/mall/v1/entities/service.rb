@@ -35,7 +35,7 @@ module V1
           end      
         end
         expose :refund_fee do |m, o|
-          m.refund_fee.to_s
+          format('%.2f',m.refund_fee.to_s)
         end  
         expose :refund_cause   
       end
@@ -123,7 +123,7 @@ module V1
           m.service_target_type == 'Mall::Order' ? m.service_target.try(:order_items).try(:first) : m.service_target
         end
         expose :total_fee do |m, o|
-          "￥ "+m.refund_fee.to_s
+          "￥ "+format('%.2f',m.refund_fee.to_s)
         end
         expose :cancel_apply_scheme do |m, o|
           m.created? || m.applied?
@@ -169,7 +169,7 @@ module V1
           ['买错了', '不想买了', '其他']
         end
         expose :refund_fee do |m, o|
-          "￥ #{m.total_fee}"
+          "￥ #{format('%.2f',m.total_fee)}"
         end   
         expose :mobile    
       end
