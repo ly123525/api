@@ -12,7 +12,7 @@ module V1
           m.style_name
         end
         expose :price do |m, o|
-          "¥ " + m.style.price.to_s
+          "¥ " + format('%.2f',m.style.price.to_s)
         end
         expose :quantity_str do |m, o|
           "x#{m.quantity}"
@@ -42,10 +42,10 @@ module V1
           m.name
         end
         expose :original_price do |m, o|
-          "¥ " + m.original_price.to_s
+          "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + m.price.to_s
+          "¥ " + format('%.2f',m.price.to_s)
         end
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
@@ -98,10 +98,10 @@ module V1
           "商品编号：#{o[:style].sku}" rescue nil
         end
         expose :original_price do |m, o|
-          "¥ " + o[:style].original_price.to_s rescue nil
+          "¥ " + format('%.2f',o[:style].original_price.to_s) rescue nil
         end
         expose :price do |m, o|
-          "¥ " + o[:style].price.to_s rescue nil
+          "¥ " + format('%.2f',o[:style].price.to_s) rescue nil
         end
         expose :style_name do |m, o|
           o[:style].name rescue nil
@@ -128,10 +128,10 @@ module V1
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
         end
         expose :original_price do |m, o|
-          "¥ " + m.original_price.to_s
+          "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + m.price.to_s
+          "¥ " + format('%.2f',m.price.to_s)
         end
         expose :service_note do |m,o|
           m.product.service_note
