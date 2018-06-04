@@ -53,7 +53,13 @@ module V1
         end
         expose :lottery_tips do |m, o|          
           m.fight_group_completed_lottery_tips(o[:user]) if m.completed?
-        end     
+        end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end         
         expose :share do |m, o|
           if m.waiting? && m.order_paid_fight_group?(o[:user])
             {
