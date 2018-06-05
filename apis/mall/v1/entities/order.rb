@@ -299,7 +299,7 @@ module V1
           "下单成功, 商家正在努力发货"  
         end          
         expose :order_scheme do |m, o|
-          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}"
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}" if o[:inner_app]
         end      
       end
     end
