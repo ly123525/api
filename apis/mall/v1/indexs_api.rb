@@ -13,7 +13,8 @@ module V1
               app_version_code=app_version_code(request).to_i
               mall_index = ::Mall::Indices::Index.current_mall_index app_version_code
               styles = ::Mall::Style.on_sale_by_product.sorted.limit(20)
-              present mall_index, with: ::V1::Entities::Mall::MallIndex, styles: styles
+              inner_app = inner_app? request
+              present mall_index, with: ::V1::Entities::Mall::MallIndex, styles: styles, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -27,7 +28,8 @@ module V1
           get :page do
             begin
               styles = ::Mall::Style.recommended.includes(:product).where('mall_products.on_sale is true').references(:product).sorted.page(params[:page]).per(20)
-              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle
+              inner_app = inner_app? request
+              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

@@ -13,7 +13,8 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid])rescue nil
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               ::Mall::BrowseRecord.generate_browse_record user, style
-              present style, with: ::V1::Entities::Mall::ProductByStyle, user: user
+              inner_app = inner_app? request
+              present style, with: ::V1::Entities::Mall::ProductByStyle, user: user, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -67,7 +68,8 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               user.mall_searches.find_or_create_by(content: params[:keywords]) rescue nil
               styles = ::Mall::Style.recommended.joins(:product).where('mall_products.on_sale is true').search_by_keywords(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
-              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle
+              inner_app = inner_app? request
+              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
             end
