@@ -52,7 +52,7 @@ module V1
         end    
         expose :share do |m, o|
           {
-            url: "#{ENV['H5_HOST']}/#/expedite_openaward?uuid=6980f4f6-76ac-4312-b56f-214e474d007f",
+            url: "#{ENV['H5_HOST']}/#/expedite_openaward",
             image: "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/logo_3x.png",
             title: '终极抽奖日',
             summary: '从新定义疯狂，拼单即可参与抽奔驰E与smart'
