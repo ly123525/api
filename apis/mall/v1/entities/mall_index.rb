@@ -4,7 +4,7 @@ module V1
       class Recommend < Grape::Entity
         expose :title_bar do |m, o|
           {
-            image: "https://go-beijing.oss-cn-beijing.aliyuncs.com/app/product_recommed.png?x-oss-process=style/400w",
+            image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png?x-oss-process=style/400w",
             scheme: nil
           }
         end
@@ -18,7 +18,7 @@ module V1
           "#{ENV['H5_HOST']}/#/activity/popup"
         end
         expose :pop_up_image do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/index_pop.png?x-oss-process=style/240w"
+          "#{ENV['IMAGE_DOMAIN']}/app/index_pop.png?x-oss-process=style/400w"
         end
         expose :pop_up_scheme do |m, o|
           "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")

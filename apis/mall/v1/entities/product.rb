@@ -12,7 +12,7 @@ module V1
           m.style_name
         end
         expose :price do |m, o|
-          "¥ " + m.style.price.to_s
+          "¥ " + format('%.2f',m.style.price.to_s)
         end
         expose :quantity_str do |m, o|
           "x#{m.quantity}"
@@ -35,6 +35,7 @@ module V1
         expose :image do |m, o|
           m.style_cover.image.style_url('480w') rescue nil
         end
+        expose :uuid
         expose :title do |m, o|
           m.full_name
         end
@@ -42,13 +43,17 @@ module V1
           m.name
         end
         expose :original_price do |m, o|
-          "¥ " + m.original_price.to_s
+          "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + m.price.to_s
+          "¥ " + format('%.2f',m.price.to_s)
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
+          if o[:inner_app]
+            "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
+          else
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
+          end  
         end
         expose :activity_tags do |m, o|
           m.try(:product).try(:activity_tags)
@@ -98,10 +103,10 @@ module V1
           "商品编号：#{o[:style].sku}" rescue nil
         end
         expose :original_price do |m, o|
-          "¥ " + o[:style].original_price.to_s rescue nil
+          "¥ " + format('%.2f',o[:style].original_price.to_s) rescue nil
         end
         expose :price do |m, o|
-          "¥ " + o[:style].price.to_s rescue nil
+          "¥ " + format('%.2f',o[:style].price.to_s) rescue nil
         end
         expose :style_name do |m, o|
           o[:style].name rescue nil
@@ -128,10 +133,10 @@ module V1
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
         end
         expose :original_price do |m, o|
-          "¥ " + m.original_price.to_s
+          "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + m.price.to_s
+          "¥ " + format('%.2f',m.price.to_s)
         end
         expose :service_note do |m,o|
           m.product.service_note
@@ -192,7 +197,7 @@ module V1
           m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
-          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png?x-oss-process=style/400w", scheme: ''}, products_by_styles: ::Mall::Style.recommended.joins(:product).where('mall_products.on_sale is true').sorted.limit(4)}
+          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png?x-oss-process=style/400w", scheme: ''}, products_by_styles: ::Mall::Style.on_sale_by_product.sorted.limit(4)}
         end
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
@@ -205,7 +210,7 @@ module V1
         end 
         expose :share do
           expose :url do |m, o|
-            "#{ENV['H5_HOST']}/#/mall/products?style_uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
           end
           expose :image do |m, o|
             m.style_cover.image.style_url('120w')
@@ -214,7 +219,7 @@ module V1
             m.product.name + " " + m.name
           end
           expose :summary do |m, o|
-            ""
+            m.product.summary_content
           end     
         end
         expose :activity_tags do |m, o|
@@ -233,7 +238,7 @@ module V1
           m.product.mini_purchase_quantity
         end
         expose :activity_lottery_tips do |m, o|
-          "拼主获得2张抽奖券,拼客获得1张抽奖券"
+          "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券"
         end
       end
     end

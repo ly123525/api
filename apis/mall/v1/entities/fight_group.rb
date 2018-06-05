@@ -53,14 +53,20 @@ module V1
         end
         expose :lottery_tips do |m, o|          
           m.fight_group_completed_lottery_tips(o[:user]) if m.completed?
-        end     
+        end
+        expose :resource_uuid do |m, o|
+          m.uuid
+        end
+        expose :resource_type do |m, o|
+          m.class.to_s
+        end         
         expose :share do |m, o|
           if m.waiting? && m.order_paid_fight_group?(o[:user])
             {
               title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
               image: (m.style.style_cover.image.style_url('300w') rescue nil),
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.uuid}",
-              summary: ''
+              summary: m.product.summary_content
             }
           end
         end
@@ -68,7 +74,7 @@ module V1
            m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
         end
         expose :lottery_list do |m, o|
-          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed? && m.product.benz_tags? && m.product.smart_tags? && m.order_paid_fight_group?(o[:user])
+          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed? && (m.product.benz_tags? || m.product.smart_tags?) && m.order_paid_fight_group?(o[:user])
         end
         expose :to_be_confirmed_scheme do |m, o|
           "#{ENV['H5_HOST']}/#/mall/orders/confirmation" if !o[:inner_app] && !m.order_paid_fight_group?(o[:user]) && m.waiting?
@@ -103,7 +109,7 @@ module V1
             title: '我在全民拼app买了一件好货，快来加入我的拼单，先到先得',
             image: (m.order_items.first.style.style_cover.image.style_url('300w') rescue nil),
             url: "#{ENV['H5_HOST']}/#/mall/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
-            summary: ''
+            summary: m.order_items.first.product.summary_content
           }
         end       
       end    

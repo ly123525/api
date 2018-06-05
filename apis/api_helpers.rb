@@ -18,7 +18,7 @@ module APIHelpers
   
   # 用户授权
   def authenticate_user
-    app_error(nil, "Failed to find the user", 401) if params[:user_uuid].blank? or params[:token].blank?
+    app_error("您尚未登录,请登录!", "Failed to find the user", 401) if params[:user_uuid].blank? or params[:token].blank?
     user_and_token = ::Account::User.authenticate(params[:user_uuid], params[:token])
     app_error("授权失效，请重新登录!", "Failed to find the user", 401) if user_and_token.blank?
     @session_user = user_and_token[0]

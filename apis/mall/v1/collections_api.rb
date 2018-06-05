@@ -31,7 +31,8 @@ module V1
           get do
             begin
               authenticate_user
-              present @session_user.mall_styles, with: ::V1::Entities::Mall::ProductsByStyles
+              inner_app = inner_app? request
+              present @session_user.mall_styles, with: ::V1::Entities::Mall::ProductsByStyles, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
             end

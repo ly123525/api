@@ -33,7 +33,6 @@ module V1
       end
       class Express < Grape::Entity
         expose :express_number
-        expose :express_company
         expose :express_info do |m, o|
           if m.delivered?
             "点击查看物流信息"
@@ -139,7 +138,7 @@ module V1
           m.order_items
         end
         expose :total_fee do |m, o|
-          m.total_fee.to_s
+          format('%.2f',m.total_fee.to_s)
         end
         expose :other_infos do |m, o|
           if m.created? || m.closed?
@@ -181,6 +180,12 @@ module V1
             (m.delivered? || m.paid?) && !m.servicing?
           end
         end
+        expose :resource_uuid do |m, o|
+          m.try(:fight_group).try(:uuid)
+        end
+        expose :resource_type do |m, o|
+          m.try(:fight_group).try(:class).try(:to_s)
+        end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.style.style_cover.image.style_url('300w') rescue nil
@@ -188,7 +193,7 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
-              summary: ""
+              summary: m.order_items.first.product.summary_content
             }
           end
         end
@@ -200,6 +205,9 @@ module V1
 
       class Orders < Grape::Entity
         expose :uuid
+        expose :scheme do |m, o|
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}"
+        end  
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :status do |m, o|
           if m.closed?
@@ -259,6 +267,12 @@ module V1
             m.delivered? && !m.servicing?
           end
         end
+        expose :resource_uuid do |m, o|
+          m.try(:fight_group).try(:uuid)
+        end
+        expose :resource_type do |m, o|
+          m.try(:fight_group).try(:class).try(:to_s)
+        end
         expose :inviting_friends_info do |m, o|
           if m.fight_group.present? && m.fight_group.waiting? && m.paid?
             image = m.order_items.first.style.style_cover.image.style_url('300w') rescue nil
@@ -266,7 +280,7 @@ module V1
               url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
-              summary: ""
+              summary: m.order_items.first.product.summary_content
             }
           end
         end
@@ -287,7 +301,7 @@ module V1
           "下单成功, 商家正在努力发货"  
         end          
         expose :order_scheme do |m, o|
-          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}"
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}" if o[:inner_app]
         end      
       end
     end
