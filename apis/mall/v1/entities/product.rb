@@ -52,7 +52,7 @@ module V1
           if o[:inner_app]
             "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
           else
-            "#{ENV['H5_HOST']}/mall/details?style_uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
           end  
         end
         expose :activity_tags do |m, o|

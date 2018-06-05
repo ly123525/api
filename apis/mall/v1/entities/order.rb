@@ -33,7 +33,6 @@ module V1
       end
       class Express < Grape::Entity
         expose :express_number
-        expose :express_company
         expose :express_info do |m, o|
           if m.delivered?
             "点击查看物流信息"
