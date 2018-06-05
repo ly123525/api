@@ -69,7 +69,7 @@ module V1
               ret = WxPay::Service.invoke_unifiedorder pay_params, ::WxPay.config(params[:trade_type])
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
-              r = WxPay::Service.send("generate_#{params[:trade_type].downcase}_pay_req", app_params, ::WxPay.config(params[:trade_type]))
+              r = WxPay::Service.send("generate_#{params[:trade_type].gsub('API', '').downcase}_pay_req", app_params, ::WxPay.config(params[:trade_type]))
               package = r.delete(:package)
               r[:package_value] = package
               r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}") if fight_group.present?
