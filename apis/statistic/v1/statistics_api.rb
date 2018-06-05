@@ -13,7 +13,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               resource = params[:resource_type].constantize.find_uuid params[:resource_uuid]
-              ::ShareStatistic.find_or_create_by(item: resource, user: user)
+              ::ShareStatistic.create(item: resource, user: user)
               true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
