@@ -50,9 +50,7 @@ module V1
               inner_app = inner_app? request
               follow = activity.follows.create! user: @session_user, inner_app: inner_app
               lottery = follow.generate_lottery! activity, @session_user, lottery_template
-              lottery_scheme = "#{ENV['H5_HOST']}/#/obtain_ticket?lottery_uuid=#{lottery.uuid}" if inner_app
-              lottery_scheme = "#{ENV['H5_HOST']}/#/openaward?lottery_uuid=#{lottery.uuid}" if !inner_app
-              {lottery_scheme:  lottery_scheme}
+              {lottery_uuid:  lottery.uuid}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error              
             rescue Exception => ex
