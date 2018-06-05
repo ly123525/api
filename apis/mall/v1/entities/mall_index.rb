@@ -21,7 +21,7 @@ module V1
           "#{ENV['IMAGE_DOMAIN']}/app/index_pop.png?x-oss-process=style/400w"
         end
         expose :pop_up_scheme do |m, o|
-          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward?uuid=6980f4f6-76ac-4312-b56f-214e474d007f")
+          "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
         end      
         expose :search_key do |m, o|
           "搜索结果"

@@ -206,7 +206,7 @@ module V1
         end 
         expose :share do
           expose :url do |m, o|
-            "#{ENV['H5_HOST']}/#/mall/products?style_uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
           end
           expose :image do |m, o|
             m.style_cover.image.style_url('120w')
@@ -228,7 +228,7 @@ module V1
           m.try(:product).try(:activity_category)
         end
         expose :activity_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward?uuid=6980f4f6-76ac-4312-b56f-214e474d007f") if m.product.benz_tags? || m.product.smart_tags?
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.product.benz_tags? || m.product.smart_tags?
         end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity

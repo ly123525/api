@@ -20,9 +20,7 @@ module V1
             "未中奖"  
           end  
         end
-        expose :number do |m, o|
-          m.number.join('')
-        end 
+        expose :number 
         expose :nper do |m, o|
           m.lottery_template.activity.sub_name
         end
@@ -50,9 +48,7 @@ module V1
             "未中奖"  
           end  
         end
-        expose :number do |m, o|
-          m.number.join('')
-        end  
+        expose :number 
         expose :nper do |m, o|
           m.lottery_template.activity.sub_name
         end                     

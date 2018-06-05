@@ -206,6 +206,9 @@ module V1
 
       class Orders < Grape::Entity
         expose :uuid
+        expose :scheme do |m, o|
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}"
+        end  
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :status do |m, o|
           if m.closed?
