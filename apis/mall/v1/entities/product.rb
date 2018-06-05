@@ -197,7 +197,7 @@ module V1
           m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
-          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png?x-oss-process=style/400w", scheme: ''}, products_by_styles: ::Mall::Style.recommended.joins(:product).where('mall_products.on_sale is true').sorted.limit(4)}
+          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png?x-oss-process=style/400w", scheme: ''}, products_by_styles: ::Mall::Style.on_sale_by_product.sorted.limit(4)}
         end
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
