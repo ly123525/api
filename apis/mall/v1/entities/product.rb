@@ -206,7 +206,7 @@ module V1
         end 
         expose :share do
           expose :url do |m, o|
-            "#{ENV['H5_HOST']}/#/mall/products?style_uuid=#{m.uuid}"
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
           end
           expose :image do |m, o|
             m.style_cover.image.style_url('120w')
