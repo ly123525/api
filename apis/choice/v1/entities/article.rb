@@ -5,7 +5,11 @@ module V1
         expose :uuid
         expose :title
         expose :details do |m, o|
-          m.details.gsub('lvsent://gogo.cn/mall/products', "#{ENV['H5_HOST']}/#/mall/details") unless o[:inner_app]
+           if o[:inner_app]
+             m.details
+           else
+             m.details.gsub('lvsent://gogo.cn/mall/products', "#{ENV['H5_HOST']}/#/mall/details")    
+           end   
         end  
         expose :comments, using: ::V1::Entities::Choice::Comments do |m, o|
           m.comments.limit(2)
