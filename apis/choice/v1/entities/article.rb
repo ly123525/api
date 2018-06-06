@@ -4,7 +4,9 @@ module V1
       class Article < Grape::Entity
         expose :uuid
         expose :title
-        expose :details
+        expose :details do |m, o|
+          m.details.gsub('lvsent://gogo.cn/mall/products', "#{ENV['H5_HOST']}/#/mall/details") if o[:inner_app]
+        end  
         expose :comments, using: ::V1::Entities::Choice::Comments do |m, o|
           m.comments.limit(2)
         end
