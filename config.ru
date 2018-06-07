@@ -36,6 +36,8 @@ require_all 'lib', 'apis', 'middleware'
 namespace = "api:base:auth"
 $redis = Cache.new(ENV['REDIS'], namespace)
 
+$number_redis = Redis.new(url: ENV['REDIS'])
+
 if ENV['SERVER_ENV']=='development'
   # 静态文件
   use Rack::Static, :urls => ["/docs/"], :root => "public"
