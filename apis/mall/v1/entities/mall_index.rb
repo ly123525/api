@@ -18,7 +18,7 @@ module V1
           "#{ENV['H5_HOST']}/#/activity/popup"
         end
         expose :pop_up_image do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/index_pop.png?x-oss-process=style/400w"
+          "#{ENV['IMAGE_DOMAIN']}/app/index_popwin.png?x-oss-process=style/400w"
         end
         expose :pop_up_scheme do |m, o|
           "lvsent://gogo.cn/web?url="+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
