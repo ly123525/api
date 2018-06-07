@@ -27,7 +27,7 @@ module V1
           end
           get :page do
             begin
-              styles = ::Mall::Style.recommended.includes(:product).where('mall_products.on_sale is true').references(:product).sorted.page(params[:page]).per(20)
+              styles = ::Mall::Style.on_sale_by_product.sorted.page(params[:page]).per(20)
               inner_app = inner_app? request
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
