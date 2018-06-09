@@ -42,7 +42,7 @@ module V1
         end  
         expose :remaining_time do |m, o|
           if  m.waiting?
-            (m.expired_at.localtime-Time.now).to_i > 0 ? ((m.expired_at.localtime-Time.now).to_i * 1000) : 0
+            (m.expired_at.localtime-Time.now).to_i > 0 ? (m.expired_at.localtime-Time.now).to_i : 0
           end
         end
         expose :residual_quantity do |m, o|          
