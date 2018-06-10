@@ -13,7 +13,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               topic = ::Topic::Topic.find_uuid(params[:uuid])
-              styles = ::Mall::Style.on_sale(topic.styles).page(params[:page]).per(10)
+              styles = ::Mall::Style.on_sale(topic.styles).sorted.page(params[:page]).per(10)
               inner_app = inner_app? request
               present topic, with: ::V1::Entities::Topic::Topic, styles: styles, inner_app: inner_app
             rescue Exception => ex
