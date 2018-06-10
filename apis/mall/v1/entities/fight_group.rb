@@ -15,6 +15,9 @@ module V1
         expose :remaining_time do |m, o|
           (m.expired_at.localtime-Time.now).to_i
         end
+        expose :expired_time do |m, o|
+          m.expired_at.to_i
+        end  
         expose :head_images do |m, o|
           m.user_avatars true
         end  
@@ -42,7 +45,7 @@ module V1
         end  
         expose :remaining_time do |m, o|
           if  m.waiting?
-            (m.expired_at.localtime-Time.now).to_i > 0 ? ((m.expired_at.localtime-Time.now).to_i * 1000) : 0
+            (m.expired_at.localtime-Time.now).to_i > 0 ? (m.expired_at.localtime-Time.now).to_i : 0
           end
         end
         expose :residual_quantity do |m, o|          
