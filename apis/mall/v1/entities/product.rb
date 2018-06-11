@@ -21,13 +21,13 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
         end
         expose :activity_tags do |m, o|
-          m.try(:product).try(:activity_tags)
+          m.try(:style).try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          m.try(:product).try(:activity_image)
+          m.try(:style).try(:activity_image)
         end
         expose :activity_category do |m, o|
-          m.try(:product).try(:activity_category)
+          m.try(:style).try(:activity_category)
         end
       end
 
@@ -56,13 +56,13 @@ module V1
           end  
         end
         expose :activity_tags do |m, o|
-          m.try(:product).try(:activity_tags)
+          m.try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          m.try(:product).try(:activity_image)
+          m.try(:activity_image)
         end
         expose :activity_category do |m, o|
-          m.try(:product).try(:activity_category)
+          m.try(:activity_category)
         end    
       end
 
@@ -223,22 +223,22 @@ module V1
           end     
         end
         expose :activity_tags do |m, o|
-          m.try(:product).try(:activity_tags)
+          m.try(:activity_tags)
         end
         expose :activity_image do |m, o|
-          m.try(:product).try(:activity_image)
+          m.try(:activity_image)
         end
         expose :activity_category do |m, o|
-          m.try(:product).try(:activity_category)
+          m.try(:activity_category)
         end
         expose :activity_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.product.benz_tags? || m.product.smart_tags?
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.benz_tags? || m.smart_tags?
         end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
         end
         expose :activity_lottery_tips do |m, o|
-          "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.product.benz_tags? || m.product.smart_tags?
+          "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.benz_tags? || m.smart_tags?
         end
       end
     end

@@ -77,13 +77,13 @@ module V1
            m.waiting? && !o[:inner_app] && !m.order_paid_fight_group?(o[:user])
         end
         expose :lottery_list do |m, o|
-          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed? && (m.product.benz_tags? || m.product.smart_tags?) && m.order_paid_fight_group?(o[:user])
+          "#{ENV['H5_HOST']}/#/raffletickets" if m.completed? && (m.benz_tags? || m.smart_tags?) && m.order_paid_fight_group?(o[:user])
         end
         expose :to_be_confirmed_scheme do |m, o|
           "#{ENV['H5_HOST']}/#/mall/orders/confirmation" if !o[:inner_app] && !m.order_paid_fight_group?(o[:user]) && m.waiting?
         end
         expose :order_scheme do |m, o|
-          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.order_by_user(o[:user]).uuid}" if m.completed? && o[:inner_app] && !m.product.benz_tags? && !m.product.smart_tags? && m.order_paid_fight_group?(o[:user])
+          "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.order_by_user(o[:user]).uuid}" if m.completed? && o[:inner_app] && !m.benz_tags? && !m.smart_tags? && m.order_paid_fight_group?(o[:user])
         end       
       end
       
