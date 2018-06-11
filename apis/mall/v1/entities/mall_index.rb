@@ -4,7 +4,7 @@ module V1
       class Recommend < Grape::Entity
         expose :title_bar do |m, o|
           {
-            image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png?x-oss-process=style/400w",
+            image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png",
             scheme: nil
           }
         end
