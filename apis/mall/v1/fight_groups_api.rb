@@ -12,9 +12,9 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               fight_group = ::Mall::FightGroup.find_uuid(params[:uuid])
+              fight_group.orders.first.auto_fight_group
               fight_group = fight_group.refrensh_status
               inner_app = inner_app? request
-              fight_group.orders.first.auto_fight_group
               present fight_group, with: ::V1::Entities::Mall::FightGroup, user: user, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
