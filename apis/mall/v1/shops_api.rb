@@ -13,7 +13,7 @@ module V1
           get do
             begin
               shop = ::Mall::Shop.find_uuid(params[:uuid])
-              styles = ::Mall::Style.on_sale(shop.styles).recommended.order_by(params[:sort_rule]).page(params[:page]).per(20)
+              styles = shop.styles.on_sale_by_product.order_by(params[:sort_rule]).page(params[:page]).per(20)
               inner_app = inner_app? request
               present shop, with: ::V1::Entities::Mall::HomePageOfShop, styles: styles, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
