@@ -23,9 +23,9 @@ module V1
                   quantity_str: "x#{item.quantity}",
                   total_fee: @session_user.is_developer? ? "￥ 0.1"  : order.actual_payment,
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}",
-                  activity_tags: item.try(:product).try(:activity_tags),
-                  activity_image: item.try(:product).try(:activity_image),
-                  activity_category: item.try(:product).try(:activity_category)
+                  activity_tags: item.try(:style).try(:activity_tags),
+                  activity_image: item.try(:style).try(:activity_image),
+                  activity_category: item.try(:style).try(:activity_category)
                 },
                 modes:[
                   {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment/modes/wechat?order_uuid=#{params[:order_uuid]}"},
