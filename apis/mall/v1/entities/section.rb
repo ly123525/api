@@ -3,7 +3,7 @@ module V1
     module Mall
       class Sections < Grape::Entity
         expose :title_bar, unless: lambda {|m, o | m.type == "Mall::Indices::Sections::WebView"} do |m, o|
-          {image: m.picture.try(:image).url, scheme: nil}
+          {image: m.picture.try(:image).try(:url), scheme: nil}
         end
         expose :style do |m, o|
           m.type.underscore.split('/').last
