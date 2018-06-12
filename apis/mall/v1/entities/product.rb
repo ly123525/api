@@ -18,7 +18,11 @@ module V1
           "x#{m.quantity}"
         end
         expose :scheme do |m, o|
-          "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
+          if o[:inner_app]
+            "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
+          else
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
+          end    
         end
         expose :activity_tags do |m, o|
           m.try(:style).try(:activity_tags)
