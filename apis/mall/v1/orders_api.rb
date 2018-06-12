@@ -38,7 +38,6 @@ module V1
           post do
             begin
               authenticate_user
-              logger.info "=====================#{params.to_json}"
               app_error("您已经参与过此次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid]
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
@@ -66,7 +65,8 @@ module V1
               orders = ::Mall::Order.list_orders(params[:category], @session_user).sorted.page(params[:page]).per(10)
               ::Mall::Order.refrensh_status(orders)
               ::Mall::Order.auto_fight_group_list(orders)
-              present ({orders: orders}), with: ::V1::Entities::Mall::OrderList
+              inner_app = inner_app? request
+              present ({orders: orders}), with: ::V1::Entities::Mall::OrderList, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
             end
@@ -84,7 +84,8 @@ module V1
               order = @session_user.orders.find_uuid(params[:uuid])
               order.refrensh_status
               order.auto_fight_group
-              present order, with: ::V1::Entities::Mall::Order
+              inner_app = inner_app? request
+              present order, with: ::V1::Entities::Mall::Order, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
             end

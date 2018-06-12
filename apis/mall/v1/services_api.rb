@@ -217,7 +217,8 @@ module V1
             begin
               authenticate_user
               services = @session_user.mall_services.reorder(updated_at: :desc).page(params[:page]).per(10)
-              present services, with: ::V1::Entities::Service::Services
+              inner_app = inner_app? request
+              present services, with: ::V1::Entities::Service::Services, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
