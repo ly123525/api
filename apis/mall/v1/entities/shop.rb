@@ -6,8 +6,12 @@ module V1
         expose :logo do |m, o|
           m.picture.image.style_url('120w') rescue nil
         end
-        expose :scheme do |m, o| 
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/shop/index?uuid=#{m.uuid}")
+        expose :scheme do |m, o|
+          if o[:inner_app]
+            "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/mall/shop/index?uuid=#{m.uuid}")
+          else
+            "#{ENV['H5_HOST']}/#/mall/shop/index?uuid=#{m.uuid}"
+          end
         end
         expose :im_chat_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
