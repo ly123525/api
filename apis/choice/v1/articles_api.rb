@@ -13,7 +13,8 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               article_ids = user.good_lauds.pluck(:article_id) rescue []
               articles = ::Choice::Article.visible.sorted.page(params[:page]).per(10)
-              present articles, with: ::V1::Entities::Choice::Articles, article_ids: article_ids
+              inner_app = inner_app? request
+              present articles, with: ::V1::Entities::Choice::Articles, article_ids: article_ids, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
             end
