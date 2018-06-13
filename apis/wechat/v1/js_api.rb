@@ -8,8 +8,6 @@ module V1
             requires :url, type: String, desc: '微信授权的url'
           end
           get 'sign_package' do
-            logger.info "================JSAPI:url================#{params[:url]}"
-            logger.info "================JSAPI'url'================#{params['url']}"
             $wx_mp_auth.get_jssign_package(URI.decode(params[:url]))
           end
         end
