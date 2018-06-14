@@ -190,7 +190,7 @@ module V1
           if m.fight_group.present? && m.fight_group.waiting?
             image = m.order_items.first.style.style_cover.image.style_url('300w') rescue nil
             {
-              url: "#{ENV['H5_HOST']}/#/fightgroup?uuid=#{m.fight_group.try(:uuid)}",
+              url: "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{m.fight_group.try(:uuid)}",
               image: image,
               title: "我在全民拼app买了一件好货，快来加入我的拼单，先到先得",
               summary: m.order_items.first.product.summary_content
