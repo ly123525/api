@@ -12,7 +12,7 @@ module V1
           m.style_name
         end
         expose :price do |m, o|
-          m.order.fight_group.present? ? ("¥ " + format('%.2f',m.style.original_price.to_s)) : ("¥ " + format('%.2f',m.style.price.to_s))
+          "¥ " + format('%.2f',m.style.price.to_s)
         end
         expose :original_price do |m, o|
           "¥ " + format('%.2f',m.style.original_price.to_s)
