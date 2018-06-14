@@ -173,6 +173,7 @@ module V1
             begin
               authenticate_user
               order = ::Mall::Order.find_uuid params[:uuid]
+              order.refrensh_status
               inner_app = inner_app? request
               present order, with: ::V1::Entities::Mall::OrderPayResult, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
