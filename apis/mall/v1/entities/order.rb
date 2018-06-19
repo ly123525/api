@@ -41,7 +41,7 @@ module V1
           end
         end
         expose :express_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("https://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("https://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}&callbackurl=lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}")
         end
         expose :express_at do |m, o|
           if m.delivered?
