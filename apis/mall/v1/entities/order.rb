@@ -41,7 +41,7 @@ module V1
           end
         end
         expose :express_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("https://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}")
         end
         expose :express_at do |m, o|
           if m.delivered?
@@ -242,7 +242,7 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.try(:order_items).try(:first).try(:style).try(:uuid)}" if m.received? or m.evaluated? or m.closed? or (m.paid? && m.try(:fight_group).try(:completed?) && m.fight_group.present?) or (m.paid? && !m.fight_group.present?) or m.servicing?
         end
         expose :look_logistics_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("http://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}") if (m.delivered? && !m.servicing?)
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("https://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}") if (m.delivered? && !m.servicing?)
         end
         expose :to_evaluate_scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated? and !m.received_servicing?
