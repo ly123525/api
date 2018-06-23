@@ -136,6 +136,7 @@ module V1
               order.destroy!
               @session_user.user_messages.where("scheme like ?", "%#{order.uuid}%").each do |message|
                 message.message_read_records.delete_all if message.message_read_records.present?
+                message.destroy
               end  
               true
             rescue ActiveRecord::RecordNotFound
