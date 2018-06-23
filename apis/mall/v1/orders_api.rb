@@ -134,6 +134,9 @@ module V1
               return true if order.deleted?
               app_error("该订单暂时不可删除", "Please choose the receiving address") unless order.removeable?
               order.destroy!
+              @session_user.user_messages.where("scheme like ?", "%#{order.uuid}%").each do |message|
+                message.message_read_records.delete_all if message.message_read_records.present?
+              end  
               true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
