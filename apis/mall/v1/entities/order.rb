@@ -261,9 +261,6 @@ module V1
             m.paid? && !m.servicing?
           end
         end
-        expose :express, using: ::V1::Entities::Mall::Express do |m, o|
-          m unless (m.created? || m.paid? || m.closed? || m.refunded?)
-        end
         expose :confirmable do |m, o|
           if m.fight_group.present?
             m.delivered? && !m.servicing? && m.fight_group.completed?
