@@ -33,6 +33,7 @@ module V1
       end
       class Express < Grape::Entity
         expose :express_number
+        expose :express_company_number
         expose :express_info do |m, o|
           if m.delivered?
             "点击查看物流信息"
@@ -41,7 +42,7 @@ module V1
           end
         end
         expose :express_scheme do |m, o|
-           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("https://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}")
+           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/logisticsinfo?com=#{m.express_company_number}&nu=#{m.express_number}")
         end
         expose :express_at do |m, o|
           if m.delivered?
@@ -242,7 +243,7 @@ module V1
           "lvsent://gogo.cn/mall/products?style_uuid=#{m.try(:order_items).try(:first).try(:style).try(:uuid)}" if m.received? or m.evaluated? or m.closed? or (m.paid? && m.try(:fight_group).try(:completed?) && m.fight_group.present?) or (m.paid? && !m.fight_group.present?) or m.servicing?
         end
         expose :look_logistics_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("https://m.kuaidi100.com/index_all.html?type=#{m.express_company_number}&postid=#{m.express_number}") if (m.delivered? && !m.servicing?)
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/logisticsinfo?com=#{m.express_company_number}&nu=#{m.express_number}") if (m.delivered? && !m.servicing?)
         end
         expose :to_evaluate_scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/evaluate_order?order_item_uuid=#{m.order_items.first.uuid}" if m.received? and !m.evaluated? and !m.received_servicing?
@@ -259,6 +260,9 @@ module V1
           else
             m.paid? && !m.servicing?
           end
+        end
+        expose :express, using: ::V1::Entities::Mall::Express do |m, o|
+          m unless (m.created? || m.paid? || m.closed? || m.refunded?)
         end
         expose :confirmable do |m, o|
           if m.fight_group.present?
