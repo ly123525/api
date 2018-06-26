@@ -27,6 +27,7 @@ module API
     mount ::V1::Payment::ModesAPI
 
     mount ::V1::Mall::ProductsAPI
+    mount ::V1::Mall::ProductCategoriesAPI
     mount ::V1::Mall::OrdersAPI
     mount ::V1::Mall::CollectionsAPI
     mount ::V1::Mall::SearchesAPI
