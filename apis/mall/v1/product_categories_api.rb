@@ -30,6 +30,19 @@ module V1
             end
           end
         end
+        desc "商品分类"
+        params do
+          # requires :admin_uuid, type: String, desc: '商户管理员 UUID'
+        end
+        get do
+          begin
+            categories = ::Mall::ProductCategory.data_array
+          rescue ActiveRecord::RecordNotFound
+            app_uuid_error
+          rescue Exception => ex
+            server_error(ex)
+          end
+        end
       end
     end
   end
