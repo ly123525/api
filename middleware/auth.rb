@@ -2,7 +2,7 @@ module API
   class Auth < Grape::Middleware::Base
 
     def before
-      return if ENV['SERVER_ENV']=='staging'
+      return if ENV['SERVER_ENV']=='development'
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
       return if env['PATH_INFO'].include?('/v1/doc/swagger_doc')
       if env['CONTENT_TYPE'] && env['CONTENT_TYPE'].include?(Grape::ContentTypes::CONTENT_TYPES[:json])

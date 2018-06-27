@@ -38,6 +38,7 @@ module V1
           get do
             begin
               categories = ::Mall::ProductCategory.data_array
+              {categories: categories, search_key: "搜索结果"}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
