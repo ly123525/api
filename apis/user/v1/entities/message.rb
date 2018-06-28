@@ -20,10 +20,10 @@ module V1
         expose :status do |m, o|
           ::MessageReadRecord.read? m, o[:user]
         end
-        expose :time do |m, o|
-          m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
-        end
-        with_options(format_with: :zh_timestamp) {expose :created_at}          
+        # expose :time do |m, o|
+        #   m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
+        # end
+        with_options(format_with: :zh_timestamp) {expose :created_at, as: :time}          
       end
       
       class Messages < Grape::Entity
