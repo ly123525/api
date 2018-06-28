@@ -22,7 +22,8 @@ module V1
         end
         expose :time do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
-        end          
+        end
+        with_options(format_with: :zh_timestamp) {expose :created_at}          
       end
       
       class Messages < Grape::Entity
