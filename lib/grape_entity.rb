@@ -11,7 +11,7 @@ module Grape
     end
     
     format_with :zh_timestamp do | datetime |
-      case datetime.beginning_of_day
+      case datetime.localtime.beginning_of_day
       when Time.now.beginning_of_day
         case datetime.localtime.strftime("%P")
         when "am"
