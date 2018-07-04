@@ -41,7 +41,7 @@ module V1
               service=nil
               order.with_lock do
                 app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
-                app_error("有未处理完的售后单,请勿重新申请", "Has One! Can't Apply!")  if order.services.where(:status=>["created","applied","refunded"]).count > 0
+                app_error("有未处理完的售后单,请勿重新申请", "Has One! Can't Apply!")  if order.has_servicing?
                 refund_fee = order.total_fee
                 service = ::Mall::Service.type_of_service!(  order, params[:type_of],
                                                              params[:refund_cause], params[:mobile],
@@ -56,34 +56,34 @@ module V1
               server_error(ex)
             end  
           end
-          desc "子订单服务单生成"
-          params do
-            requires :user_uuid, type: String, desc: '用户 UUID'
-            requires :token, type: String, desc: '用户访问令牌'
-            requires :order_item_uuid, type: String, desc: '子订单UUID'
-            requires :type_of, type: String, values: ['RefundService','ReturnAllService']
-            requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
-            requires :description, type: String, desc: '退款说明'
-            optional :mobile,  type: String, desc: '联系电话'
-            optional :images, type: Array[File], desc: '上传凭证'  
-          end
-          post :item_order do
-            begin
-              authenticate_user
-              order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
-              refund_fee = order_item.total_price
-              service = ::Mall::Service.type_of_service!(  order_item, params[:type_of], 
-                                                params[:refund_cause], params[:mobile],
-                                                params[:description], refund_fee, 
-                                                @session_user)
-              service.create_picture!(params[:images])                                                                   
-              nil
-            rescue ActiveRecord::RecordNotFound
-              app_uuid_error
-            rescue Exception => ex
-              server_error(ex)
-            end
-          end
+          # desc "子订单服务单生成"
+          # params do
+          #   requires :user_uuid, type: String, desc: '用户 UUID'
+          #   requires :token, type: String, desc: '用户访问令牌'
+          #   requires :order_item_uuid, type: String, desc: '子订单UUID'
+          #   requires :type_of, type: String, values: ['RefundService','ReturnAllService']
+          #   requires :refund_cause, type: String, values: ['买错了', '不想买了', '其他'], desc: '退款原因'
+          #   requires :description, type: String, desc: '退款说明'
+          #   optional :mobile,  type: String, desc: '联系电话'
+          #   optional :images, type: Array[File], desc: '上传凭证'
+          # end
+          # post :item_order do
+          #   begin
+          #     authenticate_user
+          #     order_item = ::Mall::OrderItem.find_uuid(params[:order_item_uuid])
+          #     refund_fee = order_item.total_price
+          #     service = ::Mall::Service.type_of_service!(  order_item, params[:type_of],
+          #                                       params[:refund_cause], params[:mobile],
+          #                                       params[:description], refund_fee,
+          #                                       @session_user)
+          #     service.create_picture!(params[:images])
+          #     nil
+          #   rescue ActiveRecord::RecordNotFound
+          #     app_uuid_error
+          #   rescue Exception => ex
+          #     server_error(ex)
+          #   end
+          # end
           desc "售后详情,选择快递"
           params do 
             requires :user_uuid, type: String, desc: '用户 UUID'
@@ -114,6 +114,7 @@ module V1
               authenticate_user
               service = @session_user.mall_services.find_uuid(params[:uuid])
               service.update!(express: params[:express], express_number: params[:express_number])
+              service.user_delivery!
               true
             rescue ActiveRecord::RecordNotFound
               app_uuid_error

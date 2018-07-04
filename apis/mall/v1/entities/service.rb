@@ -6,12 +6,12 @@ module V1
           case m.status
             when "created"
               "#{m.service_name}等待卖家确认"
-            when "applied" 
-              if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
-                "#{m.service_name} 卖家已确认,请填写快递信息" 
-              else
-                "#{m.service_name} 等待卖家退款" 
-              end
+            when "waiting_delivery" 
+              "#{m.service_name} 卖家已确认,请填写快递信息"
+            when 'user_delivered'
+               "#{m.service_name} 买家已邮寄,等待卖家确认" 
+            when 'agree_refunded'
+              "#{m.service_name} 等待卖家退款"      
             when "refunded"
               "#{m.service_name} 已退款"
             when "closed"
@@ -101,19 +101,19 @@ module V1
           case m.status
             when "created"
               "#{m.service_name}等待卖家确认"
-            when "applied" 
-              if m.class.to_s == 'Mall::Services::ReturnAllService' && !m.express_number.present? && !m.express.present?
-                "#{m.service_name} 卖家已确认,请填写快递信息" 
-              else
-                "#{m.service_name} 等待卖家退款" 
-              end
+            when "waiting_delivery" 
+              "#{m.service_name} 卖家已确认,请填写快递信息"
+            when 'user_delivered'
+               "#{m.service_name} 买家已邮寄,等待卖家确认" 
+            when 'agree_refunded'
+              "#{m.service_name} 等待卖家退款"      
             when "refunded"
               "#{m.service_name} 已退款"
             when "closed"
               "#{m.service_name} 申请已取消"
             when "rejected"
-              "#{m.service_name} 已驳回"               
-          end       
+              "#{m.service_name} 已驳回"  
+          end 
         end
         expose :uuid  
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
@@ -126,14 +126,14 @@ module V1
           "￥ "+format('%.2f',m.refund_fee.to_s)
         end
         expose :cancel_apply_scheme do |m, o|
-          m.created? || m.applied?
+          m.created? || m.waiting_delivery？
         end
         expose :express_scheme do |m, o|
-         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.express.present?
+         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.waiting_delivery？
         end
         expose :detail_scheme do |m, o|
           if m.refunded? && m.closed?
-            if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.express.present?
+            if m.waiting_delivery？
               "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}")
             else  
               "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}")
@@ -141,7 +141,7 @@ module V1
           end  
         end
         expose :detail_url do |m, o|
-          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied? && !m.express_number.present? && !m.express.present?
+          if m.waiting_delivery？
             "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}")
           else  
             "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}")
@@ -176,7 +176,7 @@ module V1
       
       class CreateServiceResult < Grape::Entity
         expose :detail_scheme do |m, o|
-          if m.class.to_s == "Mall::Services::ReturnAllService" && m.applied?
+          if m.waiting_delivery？
             "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
           else  
             "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
