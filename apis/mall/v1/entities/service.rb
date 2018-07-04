@@ -126,14 +126,14 @@ module V1
           "￥ "+format('%.2f',m.refund_fee.to_s)
         end
         expose :cancel_apply_scheme do |m, o|
-          m.created? || m.waiting_delivery？
+          m.created? || m.waiting_delivery?
         end
         expose :express_scheme do |m, o|
-         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.waiting_delivery？
+         "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}" if m.waiting_delivery?
         end
         expose :detail_scheme do |m, o|
           if m.refunded? && m.closed?
-            if m.waiting_delivery？
+            if m.waiting_delivery?
               "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}")
             else  
               "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}")
@@ -141,7 +141,7 @@ module V1
           end  
         end
         expose :detail_url do |m, o|
-          if m.waiting_delivery？
+          if m.waiting_delivery?
             "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}")
           else  
             "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}")
@@ -176,7 +176,7 @@ module V1
       
       class CreateServiceResult < Grape::Entity
         expose :detail_scheme do |m, o|
-          if m.waiting_delivery？
+          if m.waiting_delivery?
             "#{ENV['H5_HOST']}/#/services/need_delivery?uuid=#{m.uuid}"
           else  
             "#{ENV['H5_HOST']}/#/service?uuid=#{m.uuid}"
