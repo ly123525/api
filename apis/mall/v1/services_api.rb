@@ -13,7 +13,7 @@ module V1
             begin
               authenticate_user
               order = @session_user.orders.find_uuid(params[:order_uuid])
-              app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?
+              app_error("订单未支付,无法申请售后", "No Pay! Can't Apply!")  if order.created?      
               present order, with: ::V1::Entities::Service::ServiceOfOrder
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
