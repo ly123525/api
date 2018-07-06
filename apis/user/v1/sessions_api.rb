@@ -14,6 +14,7 @@ module V1
               user = ::Account::User.find_or_create_by!(phone: params[:phone])
               app_error("验证码每小时内最多5条，请稍后再试", "Captcha out of gauge") if user.login_captchas.over_hourly_limited?
               app_error("验证码已超出今日上限", "Captcha out of gauge") if user.login_captchas.over_limited?
+              app_error('此手机号的验证码已超出今日上限', "The phone number's verification code is beyond the limit of today") if ::Account::Captcha.over_one_phone_limited?(user.phone)
               app_error("获取验证码过于频繁，请稍后再试", "Please try again later") if user.login_captchas.frequent?
               captcha = ::Account::Captchas::LoginCaptcha.generate!(user.phone)
               user.send_sms('SMS_131030131', code: captcha.code)
