@@ -55,6 +55,8 @@ gem 'umeng', '~> 0.2.1'
 #支付宝
 gem 'alipay', '~> 0.15.0'
 gem 'acts_as_list', '~> 0.9.10'
+# 登录密码加密
+gem 'bcrypt', '~> 3.1', '>= 3.1.12'
 # 性能监控
 group :prodction, :staging do
   gem 'newrelic_rpm'
