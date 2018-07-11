@@ -249,6 +249,15 @@ module V1
           "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.benz_tags? || m.smart_tags?
         end
       end
+      
+      class ProductByStyleForProductCategory < Grape::Entity
+        expose :search_key do |m, o|
+          m.name
+        end
+        expose :styles, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
+          o[:styles]
+        end    
+      end  
     end
   end
 end
