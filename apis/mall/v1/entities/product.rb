@@ -25,7 +25,7 @@ module V1
             "lvsent://gogo.cn/mall/products?style_uuid=#{m.style.uuid}"
           else
             "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.style.uuid}"
-          end    
+          end
         end
         expose :activity_tags do |m, o|
           m.try(:style).try(:activity_tags)
@@ -60,7 +60,7 @@ module V1
             "lvsent://gogo.cn/mall/products?style_uuid=#{m.uuid}"
           else
             "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
-          end  
+          end
         end
         expose :activity_tags do |m, o|
           m.try(:activity_tags)
@@ -70,7 +70,13 @@ module V1
         end
         expose :activity_category do |m, o|
           m.try(:activity_category)
-        end    
+        end
+        expose :work_score do |m, o|
+          true
+        end
+        expose :interesting_currency do |m, o|
+          true
+        end
       end
 
       class ProductsByStyles < SimpleProductByStyle
@@ -81,7 +87,7 @@ module V1
 
       class ProductsForChoice < Grape::Entity
         expose :category_bar
-        expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles  
+        expose :products_by_styles, as: :products, using: ::V1::Entities::Mall::ProductsByStyles
       end
 
       class ProductForOrder < SimpleProductByStyle
@@ -215,7 +221,7 @@ module V1
         end
         expose :resource_type do |m, o|
           m.class.to_s
-        end 
+        end
         expose :share do
           expose :url do |m, o|
             "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
@@ -228,7 +234,7 @@ module V1
           end
           expose :summary do |m, o|
             m.product.summary_content
-          end     
+          end
         end
         expose :activity_tags do |m, o|
           m.try(:activity_tags)
@@ -249,15 +255,6 @@ module V1
           "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.benz_tags? || m.smart_tags?
         end
       end
-      
-      class ProductByStyleForProductCategory < Grape::Entity
-        expose :search_key do |m, o|
-          m.name
-        end
-        expose :styles, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
-          o[:styles]
-        end    
-      end  
     end
   end
 end
