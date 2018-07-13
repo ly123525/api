@@ -71,6 +71,12 @@ module V1
         expose :activity_category do |m, o|
           m.try(:activity_category)
         end
+        expose :work_score do |m, o|
+          true
+        end
+        expose :interesting_currency do |m, o|
+          true
+        end
       end
 
       class ProductsByStyles < SimpleProductByStyle
@@ -248,7 +254,7 @@ module V1
         expose :activity_lottery_tips do |m, o|
           "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.benz_tags? || m.smart_tags?
         end
-      end 
+      end
     end
   end
 end

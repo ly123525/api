@@ -2,7 +2,7 @@ module API
   class Auth < Grape::Middleware::Base
 
     def before
-      return if ENV['SERVER_ENV']=='development'
+      return if ENV['SERVER_ENV']=='staging'
       return if env['PATH_INFO'].include?('v1/wx_token_verfity.txt')
       return if env['PATH_INFO'].include?('/v1/doc/swagger_doc')
       if env['CONTENT_TYPE'] && env['CONTENT_TYPE'].include?(Grape::ContentTypes::CONTENT_TYPES[:json])
@@ -33,10 +33,10 @@ module API
 
     def verify?(params)
       return false unless (Time.now-12.hour..Time.now+12.hour).include?( Time.at(params['timestamp'].to_i) )
-      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']     
+      return false if $redis.exists?(params['signature']) && $redis.read(params['signature']) == params['nonce']
       sign = params.delete('signature')
       generate(params) == sign
     end
-    
+
   end
 end
