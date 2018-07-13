@@ -10,7 +10,7 @@ module V1
             'lvsent://gogo.cn/web?url=' + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/account/addresses?from=order")
           else
             "#{ENV['H5_HOST']}/#/account/addresses"
-          end  
+          end
         end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
           o[:style].product.shop
@@ -21,14 +21,8 @@ module V1
         expose :settlement do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
         end
-        expose :activity_tags do |m, o|
-          o[:style].try(:activity_tags)
-        end
         expose :activity_image do |m, o|
           o[:style].try(:activity_image)
-        end
-        expose :activity_category do |m, o|
-          o[:style].try(:activity_category)
         end
       end
       class Express < Grape::Entity
@@ -209,7 +203,7 @@ module V1
         expose :uuid
         expose :scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}"
-        end  
+        end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop
         expose :status do |m, o|
           if m.closed?
@@ -295,17 +289,17 @@ module V1
       class OrderList < Grape::Entity
         expose :orders, using: ::V1::Entities::Mall::Orders
       end
-      
+
       class OrderPayResult < Grape::Entity
         expose :products, as: :order_items, using: ::V1::Entities::Mall::ProductByOrderItem do |m, o|
           m.order_items
         end
         expose :title do |m, o|
-          "下单成功, 商家正在努力发货"  
-        end          
+          "下单成功, 商家正在努力发货"
+        end
         expose :order_scheme do |m, o|
           "lvsent://gogo.cn/mall/orders/detail?uuid=#{m.uuid}" if o[:inner_app]
-        end      
+        end
       end
     end
   end

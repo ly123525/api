@@ -27,14 +27,8 @@ module V1
             "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.style.uuid}"
           end
         end
-        expose :activity_tags do |m, o|
-          m.try(:style).try(:activity_tags)
-        end
         expose :activity_image do |m, o|
           m.try(:style).try(:activity_image)
-        end
-        expose :activity_category do |m, o|
-          m.try(:style).try(:activity_category)
         end
       end
 
@@ -62,20 +56,17 @@ module V1
             "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
           end
         end
-        expose :activity_tags do |m, o|
-          m.try(:activity_tags)
-        end
         expose :activity_image do |m, o|
           m.try(:activity_image)
-        end
-        expose :activity_category do |m, o|
-          m.try(:activity_category)
         end
         expose :work_score do |m, o|
           true
         end
         expose :interesting_currency do |m, o|
           true
+        end
+        expose :activity_tags do |m, o|
+          m.activity_tags?
         end
       end
 
@@ -236,11 +227,8 @@ module V1
             m.product.summary_content
           end
         end
-        expose :activity_tags do |m, o|
-          m.try(:activity_tags)
-        end
         expose :activity_image do |m, o|
-          m.try(:activity_image)
+          m.try(:benz_or_smart_image)
         end
         expose :activity_category do |m, o|
           m.try(:activity_category)
@@ -251,8 +239,11 @@ module V1
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
         end
-        expose :activity_lottery_tips do |m, o|
-          "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.benz_tags? || m.smart_tags?
+        expose :master_lottery_quantity do |m, o|
+          2 if m.benz_tags? || m.smart_tags?
+        end
+        expose :guest_lottery_quantity do |m, o|
+          1 if m.benz_tags? || m.smart_tags?
         end
       end
     end

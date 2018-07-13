@@ -4,7 +4,7 @@ module V1
       class BrowseRecords < Grape::Entity
         expose :day do |m, o|
           m.created_at.strftime('%m月%d日')
-        end   
+        end
         expose :title do |m, o|
           m.style.product.name + " " + m.style.name
         end
@@ -20,16 +20,10 @@ module V1
         expose :price do |m, o|
           format('%2.f',m.style.price.to_s)
         end
-        expose :activity_tags do |m, o|
-          m.style.try(:activity_tags)
-        end
         expose :activity_image do |m, o|
           m.style.try(:activity_image)
-        end
-        expose :activity_category do |m, o|
-          m.style.try(:activity_category)
-        end          
-      end  
-    end  
-  end  
-end  
+        end         
+      end
+    end
+  end
+end
