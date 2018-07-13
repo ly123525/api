@@ -29,7 +29,7 @@ module V1
         expose :banners, using: ::V1::Entities::Mall::Banners do |m, o|
           m.banners
         end
-        expose :channels do
+        expose :channels do |m, o|
           # expose :background do |m, o|
           #   m.channel_background.style_url('400w') rescue nil
           # end
