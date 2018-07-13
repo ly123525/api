@@ -23,23 +23,21 @@ module V1
                   quantity_str: "x#{item.quantity}",
                   total_fee: @session_user.is_developer? ? "￥ 0.1"  : order.actual_payment,
                   scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}",
-                  activity_tags: item.try(:style).try(:activity_tags),
-                  activity_image: item.try(:style).try(:activity_image),
-                  activity_category: item.try(:style).try(:activity_category)
+                  activity_image: item.try(:style).try(:activity_image)
                 },
                 modes:[
                   {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment/modes/wechat?order_uuid=#{params[:order_uuid]}"},
                   {mode: 'alipay', scheme: "lvsent://gogo.cn/payment/modes/alipay?order_uuid=#{params[:order_uuid]}"},
                   {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment/modes/union?order_uuid=#{params[:order_uuid]}"}
                 ]
-              }      
+              }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
               server_error(ex)
-            end              
+            end
           end
-          
+
           desc "微信支付"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
@@ -65,7 +63,7 @@ module V1
                 time_expire:      (Time.now+2.minute).localtime.strftime("%Y%m%d%H%M%S")
               }
               pay_params[:openid] = @session_user.wx_open_id if params[:trade_type] == ::WxPay::TRADE_JSAPI
-   
+
               ret = WxPay::Service.invoke_unifiedorder pay_params, ::WxPay.config(params[:trade_type])
               app_error("支付请求创建失败", "wxpay ret was not success") unless ret.success?
               app_params = {prepayid: ret["prepay_id"], noncestr: pay_params[:nonce_str]}
@@ -84,10 +82,10 @@ module V1
               server_error(ex)
             end
           end
-          
+
           desc "微信支付异步回调通知"
-          params do 
-            
+          params do
+
           end
           post :wechat_pay_notify do
             begin
@@ -106,7 +104,7 @@ module V1
               server_error(ex)
             end
           end
-          
+
           desc "支付宝支付"
           params do
             requires :user_uuid, type: String, desc: '用户 UUID'
@@ -126,7 +124,7 @@ module V1
                 product_code: 'QUICK_MSECURITY_PAY',
                 total_amount: payment.total_fee.to_s,
                 subject: '全民拼'
-              }.to_json(ascii_only: true), 
+              }.to_json(ascii_only: true),
               timestamp: Time.now.localtime.strftime("%Y-%m-%d %H:%M:%S"),
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: "2m")
@@ -137,7 +135,7 @@ module V1
               app_uuid_error
             rescue Exception => ex
               server_error(ex)
-            end              
+            end
           end
           desc "支付宝回调"
           params do
