@@ -33,7 +33,7 @@ module V1
           end
           desc "商品分类"
           params do
-            
+
           end
           get do
             begin
@@ -45,7 +45,7 @@ module V1
               server_error(ex)
             end
           end
-          
+
           desc "商品分类下的商品列表"
           params do
             optional :user_uuid, type: String, desc: '用户 UUID'
@@ -59,14 +59,14 @@ module V1
               product_category = ::Mall::ProductCategory.find_uuid params[:uuid]
               styles = ::Mall::Style.recommended.includes(:product).where('mall_products.on_sale is true and mall_products.product_category_id = ?', product_category.id).references(:product).search_by_keywords(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
               inner_app = inner_app? request
-              present product_category, with: ::V1::Entities::Mall::ProductByStyleForProductCategory, inner_app: inner_app, styles: styles
+              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
               server_error(ex)
-            end                            
-          end    
-        end        
+            end
+          end
+        end
       end
     end
   end
