@@ -153,8 +153,9 @@ module V1
         end
         expose :promotion_infos do |m, o|
           [
-            # {label: "优惠", desc: '使用余额支付，每单减2元', scheme: nil},
-            # {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
+            {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
+            {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'},
+            {label: "双12狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
           ]
         end
         expose :sku do |m, o|
@@ -248,6 +249,15 @@ module V1
           "拼单成功后拼主获得2张抽奖券,拼客获得1张抽奖券" if m.benz_tags? || m.smart_tags?
         end
       end
+      
+      class ProductByStyleForProductCategory < Grape::Entity
+        expose :search_key do |m, o|
+          m.name
+        end
+        expose :styles, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
+          o[:styles]
+        end    
+      end  
     end
   end
 end

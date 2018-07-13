@@ -10,7 +10,7 @@ module V1
           m.user.picture.image.style_url('120w') rescue nil
         end
         expose :style do |m, o|
-          "规格：#{m.try(:order_item).try(:product_name)}"
+          "规格：#{m.try(:order_item).try(:style_name)}"
         end
         expose :content
         expose :created_at do |m, o|
