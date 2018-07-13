@@ -60,14 +60,14 @@ module V1
           m.try(:activity_image)
         end
         expose :work_score do |m, o|
-          if m.id = 2
+          if m.id == 2
             false
           else  
             true 
           end  
         end
         expose :interesting_currency do |m, o|
-          if m.id = 2
+          if m.id == 2
             false
           else  
             true 
