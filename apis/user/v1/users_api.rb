@@ -147,13 +147,14 @@ module V1
           desc "vip社员页"
           params do
             optional :user_uuid, type: String, desc: '用户 UUID'
+            optional :token, type: String, desc: '用户访问令牌'
           end
           get :commune_member do
             begin
-              user = ::Account::User.find_uuid params[:user_uuid] rescue nil
+              authenticate_user_for_weak
               styles = ::Mall::Style.on_sale_by_product.sorted.limit(10)
               inner_app = inner_app? request
-              present({user: user}, with: ::V1::Entities::User::VipMember, styles: styles, inner_app: inner_app)
+              present({user: @session_user}, with: ::V1::Entities::User::VipMember, styles: styles, inner_app: inner_app)
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
