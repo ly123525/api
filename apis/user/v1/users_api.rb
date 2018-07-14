@@ -12,13 +12,13 @@ module V1
           
           desc "个人中心"
           params do
-            requires :user_uuid, type: String, desc: '用户UUID'
-            requires :token, type: String, desc: '用户访问令牌'
+            optional :user_uuid, type: String, desc: '用户UUID'
+            optional :token, type: String, desc: '用户访问令牌'
           end
           get :personal_center do
             begin
-              authenticate_user
-              present @session_user, with: ::V1::Entities::User::PersonalCenter
+              authenticate_user_for_weak
+              present({user: @session_user}, with: ::V1::Entities::User::PersonalCenter)
             rescue Exception => ex
               server_error(ex)
             end
