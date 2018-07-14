@@ -23,6 +23,14 @@ module APIHelpers
     app_error("授权失效，请重新登录!", "Failed to find the user", 401) if user_and_token.blank?
     @session_user = user_and_token[0]
   end
+  
+  def authenticate_user_for_weak
+    return if params[:user_uuid].blank? or params[:token].blank?
+    user_and_token = ::Account::User.authenticate(params[:user_uuid], params[:token])
+    return if user_and_token.blank?
+    @session_user = user_and_token[0]
+  end
+    
   def client_info_record request, token
     logger.info "================#{request.headers['User-Agent']}"
     logger.info "================#{request.headers['System']}"
