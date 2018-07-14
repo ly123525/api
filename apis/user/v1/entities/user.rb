@@ -71,6 +71,45 @@ module V1
           token
         end
       end
+      class VipMember < Grape::Entity
+        expose :user_image do |m, o|
+          m[:user].picture.image.url rescue nil
+        end
+        expose :title_tips do |m, o|
+          "8.8元开通VIP社员" unless m[:user].present? && m[:user].is_vip
+        end
+        expose :is_vip do |m, o|
+          m[:user].present? && m[:user].is_vip
+        end
+        expose :become_vip_button do |m, o|
+          "lvsent://gogo.cn/vip/right" unless m[:user].present? && m[:user].is_vip
+        end
+        expose :tips do |m, o|
+          "VIP社员全额返现/5折优惠/更有机会将奔驰开回家" unless m[:user].present? && m[:user].is_vip
+        end
+        expose :acount_infos do |m, o|
+          ::Account::Account.account_infos m[:user] if m[:user].present? && m[:user].is_vip
+        end
+        expose :background do |m, o|
+          if m[:user].present? && m[:user].is_vip
+            "#{ENV['IMAGE_DOMAIN']}/app/vip_member_background.png"
+          else  
+            "#{ENV['IMAGE_DOMAIN']}/app/common_member_background.png"
+          end  
+        end
+        expose :section do |m, o|
+          [
+            {image: "#{ENV['IMAGE_DOMAIN']}/app/cashback.png", tips: '全额返', scheme:'lvsent://gogo.cn/vip/right'},
+            {image: "#{ENV['IMAGE_DOMAIN']}/app/work_score.png", tips: '工分', scheme:'lvsent://gogo.cn/vip/right'},
+            {image: "#{ENV['IMAGE_DOMAIN']}/app/discount.png", tips: '社员专享', scheme:'lvsent://gogo.cn/vip/right'},
+            {image: "#{ENV['IMAGE_DOMAIN']}/app/peer_mutual_assistance.png", tips: '互助惠', scheme:'lvsent://gogo.cn/vip/right'},
+            {image: "#{ENV['IMAGE_DOMAIN']}/app/customer_service.png", tips: '专属客服', scheme:'lvsent://gogo.cn/vip/right'}
+          ]
+         end   
+        expose :styles, using: ::V1::Entities::Mall::SimpleProductByStyle do |m, o|
+          o[:styles]
+        end                  
+      end  
     end
   end
 end
