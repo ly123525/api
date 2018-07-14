@@ -60,10 +60,18 @@ module V1
           m.try(:activity_image)
         end
         expose :work_score do |m, o|
-          true
+          if m.id == 2
+            false
+          else  
+            true 
+          end  
         end
         expose :interesting_currency do |m, o|
-          true
+          if m.id == 2
+            false
+          else  
+            true 
+          end  
         end
         expose :activity_tags do |m, o|
           m.activity_tags?
