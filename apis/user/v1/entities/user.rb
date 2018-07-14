@@ -82,7 +82,7 @@ module V1
           m[:user].present? && m[:user].is_vip
         end
         expose :become_vip_button do |m, o|
-          "lvsent://gogo.cn/vip/right" unless m[:user].present? && m[:user].is_vip
+          {scheme: "lvsent://gogo.cn/vip/right", tips: '开通VIP社员' } unless m[:user].present? && m[:user].is_vip
         end
         expose :tips do |m, o|
           "VIP社员全额返现/5折优惠/更有机会将奔驰开回家" unless m[:user].present? && m[:user].is_vip
