@@ -73,7 +73,7 @@ module V1
       end
       class VipMember < Grape::Entity
         expose :user_image do |m, o|
-          m[:user].picture.image.url rescue nil
+          m[:user].picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
         end
         expose :title_tips do |m, o|
           "8.8元开通VIP社员" unless m[:user].present? && m[:user].is_vip
