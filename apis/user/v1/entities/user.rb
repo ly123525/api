@@ -128,7 +128,7 @@ module V1
         expose :tips do |m, o|
           "VIP社员全额返现/5折优惠/更有机会将奔驰开回家" unless m[:user].present? && m[:user].is_vip
         end
-        expose :acount_infos do |m, o|
+        expose :account_infos do |m, o|
           ::Account::Account.account_infos m[:user] if m[:user].present? && m[:user].is_vip
         end
         expose :background do |m, o|
