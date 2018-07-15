@@ -8,27 +8,17 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_uuid, type: String, desc: '订单 UUID'
+            optional :order_type, type: String, default: ::Payment::ORDER_TYPE_PRODUCT, values: [::Payment::ORDER_TYPE_PRODUCT, ::Payment::ORDER_TYPE_VIP], desc: '订单类型'
           end
           get do
             authenticate_user
             begin
-              order = @session_user.orders.find_uuid(params[:order_uuid])
-              item = order.order_items.first
               {
-                settlement:{
-                  title: item.product_name,
-                  style_name: item.style_name,
-                  image: (item.picture.image.style_url('160w') rescue nil),
-                  price: order.fight_group.present? ? ("¥ " + format('%.2f',item.style.price.to_s)):("¥ " + format('%.2f',item.style.original_price.to_s)),
-                  quantity_str: "x#{item.quantity}",
-                  total_fee: @session_user.is_developer? ? "￥ 0.1"  : order.actual_payment,
-                  scheme: "lvsent://gogo.cn/mall/products?style_uuid=#{item.style.uuid}",
-                  activity_image: item.try(:style).try(:activity_image)
-                },
+                settlement: ::Payment.settlement(@session_user, params[:order_uuid], params[:order_type]),
                 modes:[
-                  {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment/modes/wechat?order_uuid=#{params[:order_uuid]}"},
-                  {mode: 'alipay', scheme: "lvsent://gogo.cn/payment/modes/alipay?order_uuid=#{params[:order_uuid]}"},
-                  {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment/modes/union?order_uuid=#{params[:order_uuid]}"}
+                  {mode: 'wechat_pay', scheme: "lvsent://gogo.cn/payment/modes/wechat?order_uuid=#{params[:order_uuid]}&order_type=#{params[:order_type]}"},
+                  {mode: 'alipay', scheme: "lvsent://gogo.cn/payment/modes/alipay?order_uuid=#{params[:order_uuid]}&order_type=#{params[:order_type]}"},
+                  {mode: 'union_pay', scheme: "lvsent://gogo.cn/payment/modes/union?order_uuid=#{params[:order_uuid]}&order_type=#{params[:order_type]}"}
                 ]
               }
             rescue ActiveRecord::RecordNotFound
@@ -44,15 +34,17 @@ module V1
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_uuid, type: String, desc: '订单 UUID'
             requires :trade_type, type: String , default: ::WxPay::TRADE_APP, values: [::WxPay::TRADE_APP, ::WxPay::TRADE_JSAPI], desc: '交易类型'
+            optional :order_type, type: String, default: ::Payment::ORDER_TYPE_PRODUCT, values: [::Payment::ORDER_TYPE_PRODUCT, ::Payment::ORDER_TYPE_VIP], desc: '订单类型'
           end
           post 'wechat_pay' do
             begin
               authenticate_user
-              order = @session_user.orders.find_uuid(params[:order_uuid])
-              fight_group = order.fight_group
+              order = @session_user.orders.find_uuid(params[:order_uuid]) if params[:order_type] == ::Payment::ORDER_TYPE_PRODUCT
+              fight_group = order.fight_group if params[:order_type] == ::Payment::ORDER_TYPE_PRODUCT
+              order = @session_user.vip_orders.find_uuid(params[:order_uuid]) if params[:order_type] == ::Payment::ORDER_TYPE_VIP
+              fight_group = nil if params[:order_type] == ::Payment::ORDER_TYPE_VIP
               payment = ::Payment.create_by_order(order, ::Payment.wx_trade_type_to_pay_method(params[:trade_type]))
               pay_params = {
-                # body:             '商品：我要卖机油'[0..63],
                 body: payment.trade_no,
                 out_trade_no:     payment.trade_no,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
@@ -71,6 +63,7 @@ module V1
               package = r.delete(:package)
               r[:package_value] = package
               inner_app = inner_app? request
+              r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/vip/buying/success?uuid=#{order.uuid}") if params[:order_type] == ::Payment::ORDER_TYPE_VIP
               r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}") if fight_group.present? && inner_app
               r[:result_scheme] = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}") if !fight_group.present? && inner_app
               r[:result_scheme] = "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}" if fight_group.present? && !inner_app
@@ -110,12 +103,15 @@ module V1
             requires :user_uuid, type: String, desc: '用户 UUID'
             requires :token, type: String, desc: '用户访问令牌'
             requires :order_uuid, type: String, desc: '订单 UUID'
+            optional :order_type, type: String, default: ::Payment::ORDER_TYPE_PRODUCT, values: [::Payment::ORDER_TYPE_PRODUCT, ::Payment::ORDER_TYPE_VIP], desc: '订单类型'
           end
           post :alipay do
             begin
               authenticate_user
-              order = @session_user.orders.find_uuid(params[:order_uuid])
-              fight_group = order.fight_group
+              order = @session_user.orders.find_uuid(params[:order_uuid]) if params[:order_type] == ::Payment::ORDER_TYPE_PRODUCT
+              fight_group = order.fight_group if params[:order_type] == ::Payment::ORDER_TYPE_PRODUCT
+              order = @session_user.vip_orders.find_uuid(params[:order_uuid]) if params[:order_type] == ::Payment::ORDER_TYPE_VIP
+              fight_group = nil if params[:order_type] == ::Payment::ORDER_TYPE_VIP
               payment = ::Payment.create_by_order(order, ::Payment::PAY_METHOD_ALIPAY)
               res = Alipay::INIT_CLIENT.sdk_execute(
               method: 'alipay.trade.app.pay',
@@ -129,7 +125,8 @@ module V1
               notify_url: Alipay::NOTIFY_URL,
               timeout_express: "2m")
               result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}") if fight_group.present?
-              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}") unless fight_group.present?
+              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}") if  !fight_group.present? && params[:order_type] == ::Payment::ORDER_TYPE_PRODUCT
+              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/vip/buying/success?uuid=#{order.uuid}") if params[:order_type] == ::Payment::ORDER_TYPE_VIP
               {res: res, result_scheme: result_scheme }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
