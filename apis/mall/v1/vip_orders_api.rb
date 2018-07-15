@@ -35,8 +35,8 @@ module V1
           post do
             begin
               authenticate_user
-              app_error('您已经是VIP', 'You are already VIP') if @session_user.vip_orders.last.paid?
-              vip_order = @session_user.vip_orders.create!(total_fee: 8.8, expired_at: ::Mall::VipOrder::EXPIRED_RANGE, number: Time.now.to_i)
+              app_error('您已经是VIP', 'You are already VIP') if @session_user.is_vip?
+              vip_order = @session_user.vip_orders.create!(total_fee: 8.8, expired_at: Time.now + ::Mall::VipOrder::EXPIRED_RANGE, number: Time.now.to_i)
               {order_uuid: vip_order.uuid, scheme: 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{vip_order.uuid}")}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
