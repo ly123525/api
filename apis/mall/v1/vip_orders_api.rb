@@ -10,7 +10,17 @@ module V1
           get do
             begin
               user = ::Account::User.find_uuid params[:user_uuid] rescue nil
-              []
+              {
+                button_tips: '支付8.8元, 成为VIP社员',
+                images:                 
+                [
+                  {image: "#{ENV['IMAGE_DOMAIN']}/app/vip_full_return.png", tips: '全额返'},
+                  {image: "#{ENV['IMAGE_DOMAIN']}/app/vip_work_score.png", tips: '工分'},
+                  {image: "#{ENV['IMAGE_DOMAIN']}/app/vip_vip.png", tips: '社员专享'},
+                  {image: "#{ENV['IMAGE_DOMAIN']}/app/vip_cooperation.png", tips: '互助惠'},
+                  {image: "#{ENV['IMAGE_DOMAIN']}/app/vip_service.png", tips: '专属客服'}
+                ]
+              }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
