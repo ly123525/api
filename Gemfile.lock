@@ -42,6 +42,8 @@ GEM
       gyoku
       httparty
     arel (6.0.4)
+    awesome_nested_set (3.1.4)
+      activerecord (>= 4.0.0, < 5.3)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -229,6 +231,7 @@ DEPENDENCIES
   acts_as_list (~> 0.9.10)
   alipay (~> 0.15.0)
   aliyun-cloud_sms
+  awesome_nested_set (>= 3.1.4)
   bcrypt (~> 3.1, >= 3.1.12)
   capistrano (= 3.4.0)
   capistrano-bundler (= 1.1.3)

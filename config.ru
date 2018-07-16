@@ -22,6 +22,7 @@ require "wx_pay"
 require './lib/wxpay'
 require "acts_as_list"
 require "alipay"
+require "awesome_nested_set"
 if  ENV['SERVER_ENV']=='production' || ENV['SERVER_ENV']=='staging'
   require 'newrelic_rpm'
 end
