@@ -12,13 +12,13 @@ module V1
           
           desc "个人中心"
           params do
-            requires :user_uuid, type: String, desc: '用户UUID'
-            requires :token, type: String, desc: '用户访问令牌'
+            optional :user_uuid, type: String, desc: '用户UUID'
+            optional :token, type: String, desc: '用户访问令牌'
           end
           get :personal_center do
             begin
-              authenticate_user
-              present @session_user, with: ::V1::Entities::User::PersonalCenter
+              authenticate_user_for_weak
+              present({user: @session_user}, with: ::V1::Entities::User::PersonalCenter)
             rescue Exception => ex
               server_error(ex)
             end
@@ -143,6 +143,42 @@ module V1
               server_error(ex)
             end
           end
+          
+          desc "vip社员页"
+          params do
+            optional :user_uuid, type: String, desc: '用户 UUID'
+            optional :token, type: String, desc: '用户访问令牌'
+          end
+          get :commune_member do
+            begin
+              authenticate_user_for_weak
+              styles = ::Mall::Style.on_sale_by_product.sorted.limit(10)
+              inner_app = inner_app? request
+              present({user: @session_user}, with: ::V1::Entities::User::VipMember, styles: styles, inner_app: inner_app)
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end
+          
+          desc "vip社员页的商品分页"
+          params do 
+            optional :user_uuid, type: String, desc: '用户 UUID'
+            optional :page, type: Integer, default: 2, desc: '分页页码'
+          end
+          get :page_styles do
+            begin
+              user = ::Account::User.find_uuid params[:user_uuid] rescue nil
+              styles = ::Mall::Style.on_sale_by_product.sorted.page(params[:page]).per(10)
+              inner_app = inner_app? request
+              present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
+            rescue ActiveRecord::RecordNotFound              
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end              
+          end         
         end
       end
     end
