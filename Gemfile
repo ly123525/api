@@ -57,6 +57,10 @@ gem 'alipay', '~> 0.15.0'
 gem 'acts_as_list', '~> 0.9.10'
 # 登录密码加密
 gem 'bcrypt', '~> 3.1', '>= 3.1.12'
+
+# 树形多级关联
+gem 'awesome_nested_set', '>= 3.1.4'
+
 # 性能监控
 group :prodction, :staging do
   gem 'newrelic_rpm'
