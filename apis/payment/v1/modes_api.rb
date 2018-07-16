@@ -45,7 +45,7 @@ module V1
               fight_group = nil if params[:order_type] == ::Payment::ORDER_TYPE_VIP
               payment = ::Payment.create_by_order(order, ::Payment.wx_trade_type_to_pay_method(params[:trade_type]))
               pay_params = {
-                body: payment.trade_no,
+                body: "全民拼-订单编号#{order.number}",
                 out_trade_no:     payment.trade_no,
                 total_fee:        (payment.total_fee*100).to_i.to_s,
                 spbill_create_ip: request.ip,
