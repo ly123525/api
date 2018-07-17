@@ -12,6 +12,7 @@ module V1
             begin
               user = ::Account::User.find_uuid(params[:user_uuid])rescue nil
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
+              app_error("该商品已下架", "Product not on sale") unless style.product.on_sale
               ::Mall::BrowseRecord.generate_browse_record user, style
               inner_app = inner_app? request
               present style, with: ::V1::Entities::Mall::ProductByStyle, user: user, inner_app: inner_app

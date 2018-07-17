@@ -42,6 +42,7 @@ module V1
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
+              app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") unless style.product.on_sale
               app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
               order = ::Mall::Order.generate!(params[:buy_method], params[:fight_group_uuid], @session_user, style, params[:quantity], params[:remark])
               {order_uuid: order.uuid, scheme: 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}")}
