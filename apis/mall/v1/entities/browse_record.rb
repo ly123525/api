@@ -18,7 +18,7 @@ module V1
           format('%.2f',m.style.original_price.to_s)
         end
         expose :price do |m, o|
-          format('%2.f',m.style.price.to_s)
+          format('%.2f',m.style.price.to_s)
         end
         expose :activity_image do |m, o|
           m.style.try(:activity_image)

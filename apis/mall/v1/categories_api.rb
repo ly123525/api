@@ -4,8 +4,6 @@ module V1
       namespace :mall do
         resources :categories do
           desc "平台分类"
-          params do
-          end
           get do
             begin
               categories = ::Mall::ProductCategory.roots
