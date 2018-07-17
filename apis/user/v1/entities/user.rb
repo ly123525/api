@@ -28,7 +28,7 @@ module V1
           m[:user].nickname
         end  
         expose :image, if: lambda {|m, o| m[:user].present?} do |m, o|
-          m.picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
+          m[:user].picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
         end
         expose :member_tags, if: lambda {|m, o| m[:user].present?} do |m, o|
           if m[:user].is_vip
