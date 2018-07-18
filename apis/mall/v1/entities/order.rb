@@ -1,6 +1,11 @@
 module V1
   module Entities
     module Mall
+      class OtherPaymentMethod < Grape::Entity
+        expose :work_score_save_money do |m, o|
+          "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:payment_method], m[:user])[:work_score_save_money].to_s)
+        end
+      end  
       class OrderToBeConfirmed < Grape::Entity
         expose :address, using: ::V1::Entities::User::Address do |m, o|
           m.user_extra.try(:address)
@@ -18,12 +23,18 @@ module V1
         expose :product, using: ::V1::Entities::Mall::ProductForOrder do |m, o|
           o[:style]
         end
+        expose :other_payment_method_infos, using: ::V1::Entities::Mall::OtherPaymentMethod do |m, o|
+          {style: o[:style], user: m} if ::Operate::CommuneHandler.is_operate_style?(o[:style])
+        end  
         expose :settlement do |m, o|
-          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:infos]
         end
+        expose :payment_method_infos do |m, o|
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:payment_method_infos]
+        end 
         expose :activity_image do |m, o|
           o[:style].try(:activity_image)
-        end
+        end  
       end
       class Express < Grape::Entity
         expose :express_number
