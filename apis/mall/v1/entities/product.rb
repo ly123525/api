@@ -1,6 +1,23 @@
 module V1
   module Entities
     module Mall
+      class LotteryTagsForProduct < Grape::Entity
+        expose :activity_image do |m, o|
+          m.try(:benz_or_smart_image)
+        end
+        expose :activity_category do |m, o|
+          m.try(:activity_category)
+        end
+        expose :activity_scheme do |m, o|
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
+        end
+        expose :master_lottery_quantity do |m, o|
+          2 
+        end
+        expose :guest_lottery_quantity do |m, o|
+          1 
+        end
+      end  
       class VipTagsForProduct < Grape::Entity
         expose :vip_price do |m, o|
           "8.8元" unless  o[:user].try(:is_vip)
@@ -274,24 +291,12 @@ module V1
             m.product.summary_content
           end
         end
-        expose :activity_image do |m, o|
-          m.try(:benz_or_smart_image)
-        end
-        expose :activity_category do |m, o|
-          m.try(:activity_category)
-        end
-        expose :activity_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.benz_tags? || m.smart_tags?
-        end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
         end
-        expose :master_lottery_quantity do |m, o|
-          2 if m.benz_tags? || m.smart_tags?
-        end
-        expose :guest_lottery_quantity do |m, o|
-          1 if m.benz_tags? || m.smart_tags?
-        end
+        expose :activity_tags, using: ::V1::Entities::Mall::LotteryTagsForProduct do |m, o|
+          m if m.activity_tags?
+        end  
         expose :user_is_vip do |m, o|
           o[:user].present? && o[:user].is_vip
         end
@@ -299,7 +304,7 @@ module V1
           m if Operate::CommuneHandler.is_operate_style? m
         end
         expose :work_score_tags, using: ::V1::Entities::Mall::WorkScoreTagsForProduct do |m, o|
-          m
+          m if Operate::CommuneHandler.is_operate_style? m
         end    
       end
     end
