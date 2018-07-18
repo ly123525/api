@@ -11,6 +11,9 @@ module V1
         expose :activity_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
         end
+        expose :mini_purchase_quantity do |m, o|
+          m.product.mini_purchase_quantity
+        end
         expose :master_lottery_quantity do |m, o|
           2 
         end
@@ -29,7 +32,7 @@ module V1
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
         end
         expose :background do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_background.png?x-oss-process=style/160w"
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_background.png?x-oss-process=style/300w"
         end
         expose :tips_and_scheme do |m, o|
           if o[:user].try(:is_vip)
@@ -49,6 +52,12 @@ module V1
         end
         expose :deductible do |m, o|
           "￥" + format('%.2f',(m.price/2).ceil.to_s)
+        end
+        expose :tags do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
+        end
+        expose :background do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
         end
         expose :share do
           expose :url do |m, o|
