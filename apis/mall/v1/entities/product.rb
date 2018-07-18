@@ -1,6 +1,53 @@
 module V1
   module Entities
     module Mall
+      class VipTagsForProduct < Grape::Entity
+        expose :vip_price do |m, o|
+          "8.8元" unless  o[:user].try(:is_vip)
+        end
+        expose :balance do |m, o|
+          format('%.2f',m.price.to_s)
+        end
+        expose :tags do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
+        end
+        expose :background do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_background.png?x-oss-process=style/160w"
+        end
+        expose :tips_and_scheme do |m, o|
+          if o[:user].try(:is_vip)
+            {tips: 'VIP社员', scheme: "lvsent://gogo.cn/vip"}
+          else
+            {tips: '成为VIP社员', scheme: 'lvsent://gogo.cn/vip/right'} 
+          end  
+        end          
+      end
+      class WorkScoreTagsForProduct < Grape::Entity
+        expose :work_score do |m, o|
+          if o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil 
+            "#{(m.price/2).ceil}工分"
+          else
+            "工分不足, 立刻邀请好友赚工分"  
+          end   
+        end
+        expose :deductible do |m, o|
+          "￥" + format('%.2f',(m.price/2).ceil.to_s)
+        end
+        expose :share do
+          expose :url do |m, o|
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
+          end
+          expose :image do |m, o|
+            m.style_cover.image.style_url('120w')
+          end
+          expose :title do |m, o|
+            m.product.name + " " + m.name
+          end
+          expose :summary do |m, o|
+            m.product.summary_content
+          end
+        end    
+      end    
       class ProductByOrderItem < Grape::Entity
         expose :image do |m, o|
           m.picture.image.style_url('160w') rescue nil
@@ -60,18 +107,10 @@ module V1
           m.try(:activity_image)
         end
         expose :work_score do |m, o|
-          if m.id == 2
-            false
-          else  
-            true 
-          end  
+          Operate::CommuneHandler.is_operate_style? m
         end
         expose :interesting_currency do |m, o|
-          if m.id == 2
-            false
-          else  
-            true 
-          end  
+          Operate::CommuneHandler.is_operate_style? m
         end
         expose :activity_tags do |m, o|
           m.activity_tags?
@@ -253,6 +292,15 @@ module V1
         expose :guest_lottery_quantity do |m, o|
           1 if m.benz_tags? || m.smart_tags?
         end
+        expose :user_is_vip do |m, o|
+          o[:user].present? && o[:user].is_vip
+        end
+        expose :vip_tags, using: ::V1::Entities::Mall::VipTagsForProduct do |m, o|
+          m if Operate::CommuneHandler.is_operate_style? m
+        end
+        expose :work_score_tags, using: ::V1::Entities::Mall::WorkScoreTagsForProduct do |m, o|
+          m
+        end    
       end
     end
   end

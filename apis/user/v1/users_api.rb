@@ -152,7 +152,7 @@ module V1
           get :commune_member do
             begin
               authenticate_user_for_weak
-              styles = ::Mall::Style.on_sale_by_product.sorted.limit(10)
+              styles = ::Operate::CommuneHandler.operate_styles.sorted.limit(10)
               inner_app = inner_app? request
               present({user: @session_user}, with: ::V1::Entities::User::VipMember, styles: styles, inner_app: inner_app)
             rescue ActiveRecord::RecordNotFound
@@ -170,7 +170,7 @@ module V1
           get :page_styles do
             begin
               user = ::Account::User.find_uuid params[:user_uuid] rescue nil
-              styles = ::Mall::Style.on_sale_by_product.sorted.page(params[:page]).per(10)
+              styles = ::Operate::CommuneHandler.operate_styles.sorted.page(params[:page]).per(10)
               inner_app = inner_app? request
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound              
