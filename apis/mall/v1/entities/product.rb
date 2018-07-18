@@ -44,11 +44,7 @@ module V1
       end
       class WorkScoreTagsForProduct < Grape::Entity
         expose :work_score do |m, o|
-          if o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil 
-            "#{(m.price/2).ceil}工分"
-          else
-            "工分不足, 立刻邀请好友赚工分"  
-          end   
+          "#{(m.price/2).ceil}工分"  if o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil   
         end
         expose :deductible do |m, o|
           "￥" + format('%.2f',(m.price/2).ceil.to_s)
