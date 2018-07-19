@@ -209,7 +209,7 @@ module V1
           "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          if m.on_sale
+          if m.product.on_sale
             unless m.inventory_count.zero?
               "¥ " + format('%.2f',m.price.to_s)
             else
