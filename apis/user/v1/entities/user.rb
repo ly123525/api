@@ -81,8 +81,14 @@ module V1
             "成为VIP社员将享受全额返现的超级福利"
           end
           expose :background do |m, o|
-            "#{ENV['IMAGE_DOMAIN']}/app/vip_member_background.png"  
+            "#{ENV['IMAGE_DOMAIN']}/app/personal_center_vip_background.png"  
           end
+          expose :vip_image do |m, o|
+            "#{ENV['IMAGE_DOMAIN']}/app/personal_center_vip.png" 
+          end
+          expose :scheme do |m, o|
+            'lvsent://gogo.cn/vip'
+          end  
           expose :section do |m, o|
             [
               {image: "#{ENV['IMAGE_DOMAIN']}/app/cashback.png", tips: '全额返', scheme:'lvsent://gogo.cn/vip/right'},
