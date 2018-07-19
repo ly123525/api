@@ -17,6 +17,9 @@ module V1
             begin
               authenticate_user
               style = ::Mall::Style.find_uuid(params[:style_uuid])
+              app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
+              app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") unless style.product.on_sale
+              app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
               inner_app = inner_app? request
               present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app, payment_method: params[:payment_method]
             rescue ActiveRecord::RecordNotFound
