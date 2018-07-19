@@ -1,7 +1,7 @@
 module V1
   module Entities
     module Mall
-      class OtherPaymentMethod < Grape::Entity
+      class OtherDeductionMethod < Grape::Entity
         expose :work_score_save_money do |m, o|
           "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:payment_method], m[:user])[:work_score_save_money].to_s)
         end
@@ -23,15 +23,18 @@ module V1
         expose :product, using: ::V1::Entities::Mall::ProductForOrder do |m, o|
           o[:style]
         end
-        expose :other_payment_method_infos, using: ::V1::Entities::Mall::OtherPaymentMethod do |m, o|
+        expose :other_deduction_method_infos, using: ::V1::Entities::Mall::OtherDeductionMethod do |m, o|
           {style: o[:style], user: m} if ::Operate::CommuneHandler.is_operate_style?(o[:style])
         end  
         expose :settlement do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:infos]
         end
-        expose :payment_method_infos do |m, o|
+        expose :deduction_method_infos do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:payment_method_infos]
-        end 
+        end
+        expose :is_fee do |m, o|
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:total_price].zero?
+        end  
         expose :activity_image do |m, o|
           o[:style].try(:activity_image)
         end  
