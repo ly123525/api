@@ -169,18 +169,17 @@ module V1
             requires :reason, type: String, desc: '取消原因'
           end
           patch :cancel do
-            # begin
-            # authenticate_user
-            #               order = @session_user.orders.find_uuid(params[:uuid])
-            #               app_error("该订单无法取消", "Please choose the receiving address") unless order.created?
-            #               order.close!
-            #               order.update()
-            #               nil
-            # rescue ActiveRecord::RecordNotFound
-            #               app_uuid_error
-            #             rescue Exception => ex
-            #               server_error(ex)
-            #             end
+            begin
+            authenticate_user
+            order = @session_user.orders.find_uuid(params[:uuid])
+            app_error("该订单无法取消", "Please choose the receiving address") unless order.created?
+            order.close!
+            true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
           end          
           desc "支付成功后的展示页,单独购买"
           params do
