@@ -219,7 +219,9 @@ module V1
             "已下架"
           end
         end
-        expose :on_sale
+        expose :on_sale do |m,o|
+          m.product.on_sale
+        end
         expose :service_note do |m,o|
           m.product.service_note
         end
