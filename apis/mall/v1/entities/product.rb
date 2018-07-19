@@ -143,14 +143,24 @@ module V1
           "¥ " + format('%.2f',m.original_price.to_s)
         end
         expose :price do |m, o|
-          "¥ " + format('%.2f',m.price.to_s)
+          if m.on_sale?
+            unless m.inventory_count.zero?
+              "¥ " + format('%.2f',m.price.to_s)
+            else
+              "已售罄"
+            end
+          else
+            "已下架"
+          end
         end
+        expose :on_sale
         expose :service_note do |m,o|
           m.product.service_note
         end
         expose :sold_count do |m, o|
           "已拼#{m.product.sold_count+m.product.fake_sold_count}件 #{m.product.mini_purchase_quantity}件起拼"
         end
+        expose :on_sale
         expose :promotion_infos do |m, o|
           [
             # {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
