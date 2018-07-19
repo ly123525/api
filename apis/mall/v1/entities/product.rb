@@ -206,7 +206,15 @@ module V1
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
         end
         expose :original_price do |m, o|
-          "¥ " + format('%.2f',m.original_price.to_s)
+          if m.product.on_sale?
+            unless m.inventory_count.zero?
+              "¥ " + format('%.2f',m.original_price.to_s)
+            else
+              ""
+            end
+          else
+            ""
+          end
         end
         expose :price do |m, o|
           if m.product.on_sale?
