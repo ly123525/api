@@ -220,7 +220,7 @@ module V1
           end
         end
         expose :on_sale do |m,o|
-          m.product.on_sale
+          m.product.on_sale?
         end
         expose :service_note do |m,o|
           m.product.service_note
@@ -228,7 +228,6 @@ module V1
         expose :sold_count do |m, o|
           "已拼#{m.product.sold_count+m.product.fake_sold_count}件 #{m.product.mini_purchase_quantity}件起拼"
         end
-        expose :on_sale
         expose :promotion_infos do |m, o|
           [
             {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
