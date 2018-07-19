@@ -83,9 +83,6 @@ module V1
           expose :background do |m, o|
             "#{ENV['IMAGE_DOMAIN']}/app/personal_center_vip_background.png"  
           end
-          expose :vip_image do |m, o|
-            "#{ENV['IMAGE_DOMAIN']}/app/personal_center_vip.png" 
-          end
           expose :scheme do |m, o|
             'lvsent://gogo.cn/vip'
           end  
