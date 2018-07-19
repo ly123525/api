@@ -32,7 +32,7 @@ module V1
         expose :deduction_method_infos do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:payment_method_infos]
         end
-        expose :is_fee do |m, o|
+        expose :is_free do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:total_price].zero?
         end  
         expose :activity_image do |m, o|
