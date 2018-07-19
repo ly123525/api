@@ -1,6 +1,75 @@
 module V1
   module Entities
     module Mall
+      class LotteryTagsForProduct < Grape::Entity
+        expose :activity_image do |m, o|
+          m.try(:benz_or_smart_image)
+        end
+        expose :activity_category do |m, o|
+          m.try(:activity_category)
+        end
+        expose :activity_scheme do |m, o|
+          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
+        end
+        expose :mini_purchase_quantity do |m, o|
+          m.product.mini_purchase_quantity
+        end
+        expose :master_lottery_quantity do |m, o|
+          2 
+        end
+        expose :guest_lottery_quantity do |m, o|
+          1 
+        end
+      end  
+      class VipTagsForProduct < Grape::Entity
+        expose :vip_price do |m, o|
+          "8.8元" unless  o[:user].try(:is_vip)
+        end
+        expose :balance do |m, o|
+          format('%.2f',m.price.to_s)
+        end
+        expose :tags do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
+        end
+        expose :background do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_background.png?x-oss-process=style/300w"
+        end
+        expose :tips_and_scheme do |m, o|
+          if o[:user].try(:is_vip)
+            {tips: 'VIP社员', scheme: "lvsent://gogo.cn/vip"}
+          else
+            {tips: '成为VIP社员', scheme: 'lvsent://gogo.cn/vip/right'} 
+          end  
+        end          
+      end
+      class WorkScoreTagsForProduct < Grape::Entity
+        expose :work_score do |m, o|
+          "#{(m.price/2).ceil}工分"  if o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil   
+        end
+        expose :deductible do |m, o|
+          "￥" + format('%.2f',(m.price/2).ceil.to_s)
+        end
+        expose :tags do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
+        end
+        expose :background do |m, o|
+          "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
+        end
+        expose :share do
+          expose :url do |m, o|
+            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
+          end
+          expose :image do |m, o|
+            m.style_cover.image.style_url('120w')
+          end
+          expose :title do |m, o|
+            m.product.name + " " + m.name
+          end
+          expose :summary do |m, o|
+            m.product.summary_content
+          end
+        end    
+      end    
       class ProductByOrderItem < Grape::Entity
         expose :image do |m, o|
           m.picture.image.style_url('160w') rescue nil
@@ -60,18 +129,10 @@ module V1
           m.try(:activity_image)
         end
         expose :work_score do |m, o|
-          if m.id == 2
-            false
-          else  
-            true 
-          end  
+          Operate::CommuneHandler.is_operate_style? m
         end
         expose :interesting_currency do |m, o|
-          if m.id == 2
-            false
-          else  
-            true 
-          end  
+          Operate::CommuneHandler.is_operate_style? m
         end
         expose :activity_tags do |m, o|
           m.activity_tags?
@@ -145,10 +206,29 @@ module V1
           {content: m.product.slogan, scheme: nil} if m.product.slogan.present?
         end
         expose :original_price do |m, o|
-          "¥ " + format('%.2f',m.original_price.to_s)
+          if m.product.on_sale?
+            unless m.inventory_count.zero?
+              "¥ " + format('%.2f',m.original_price.to_s)
+            else
+              ""
+            end
+          else
+            ""
+          end
         end
         expose :price do |m, o|
-          "¥ " + format('%.2f',m.price.to_s)
+          if m.product.on_sale?
+            unless m.inventory_count.zero?
+              "¥ " + format('%.2f',m.price.to_s)
+            else
+              "已售罄"
+            end
+          else
+            "已下架"
+          end
+        end
+        expose :on_sale do |m,o|
+          m.product.on_sale?
         end
         expose :service_note do |m,o|
           m.product.service_note
@@ -210,7 +290,7 @@ module V1
           m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
-          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/product_recommed.png", scheme: ''}, products_by_styles: ::Mall::Style.on_sale_by_product.sorted.limit(4)}
+          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/hot_selling_today.jpg", scheme: ''}, products_by_styles: ::Mall::Style.on_sale_by_product.sorted.limit(4)}
         end
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
@@ -235,24 +315,21 @@ module V1
             m.product.summary_content
           end
         end
-        expose :activity_image do |m, o|
-          m.try(:benz_or_smart_image)
-        end
-        expose :activity_category do |m, o|
-          m.try(:activity_category)
-        end
-        expose :activity_scheme do |m, o|
-          "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward") if m.benz_tags? || m.smart_tags?
-        end
         expose :mini_purchase_quantity do |m, o|
           m.product.mini_purchase_quantity
         end
-        expose :master_lottery_quantity do |m, o|
-          2 if m.benz_tags? || m.smart_tags?
+        expose :activity_tags, using: ::V1::Entities::Mall::LotteryTagsForProduct do |m, o|
+          m if m.activity_tags?
+        end  
+        expose :user_is_vip do |m, o|
+          o[:user].present? && o[:user].is_vip
         end
-        expose :guest_lottery_quantity do |m, o|
-          1 if m.benz_tags? || m.smart_tags?
+        expose :vip_tags, using: ::V1::Entities::Mall::VipTagsForProduct do |m, o|
+          m if Operate::CommuneHandler.is_operate_style? m
         end
+        expose :work_score_tags, using: ::V1::Entities::Mall::WorkScoreTagsForProduct do |m, o|
+          m if Operate::CommuneHandler.is_operate_style? m
+        end    
       end
     end
   end

@@ -28,7 +28,7 @@ module V1
           m[:user].nickname
         end  
         expose :image, if: lambda {|m, o| m[:user].present?} do |m, o|
-          m.picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
+          m[:user].picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
         end
         expose :member_tags, if: lambda {|m, o| m[:user].present?} do |m, o|
           if m[:user].is_vip
@@ -81,8 +81,11 @@ module V1
             "成为VIP社员将享受全额返现的超级福利"
           end
           expose :background do |m, o|
-            "#{ENV['IMAGE_DOMAIN']}/app/vip_member_background.png"  
+            "#{ENV['IMAGE_DOMAIN']}/app/personal_center_vip_background.png"  
           end
+          expose :scheme do |m, o|
+            'lvsent://gogo.cn/vip'
+          end  
           expose :section do |m, o|
             [
               {image: "#{ENV['IMAGE_DOMAIN']}/app/cashback.png", tips: '全额返', scheme:'lvsent://gogo.cn/vip/right'},

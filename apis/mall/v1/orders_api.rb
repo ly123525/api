@@ -11,13 +11,17 @@ module V1
             requires :buy_method, type: String, default: 'fight_group', desc: '购买方式', values: ['fight_group', 'buy_now']
             requires :style_uuid, type: String, desc: '商品款式 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
+            optional :payment_method, type: String, default: 'cash', values: ['cash', 'balance', 'work_score'], desc: '支付方式'
           end
           get :to_be_confirmed do
             begin
               authenticate_user
               style = ::Mall::Style.find_uuid(params[:style_uuid])
+              app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
+              app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") unless style.product.on_sale
+              app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
               inner_app = inner_app? request
-              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app
+              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app, payment_method: params[:payment_method]
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -34,17 +38,28 @@ module V1
             optional :fight_group_uuid, type: String, desc: '团购分组的 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
             optional :remark, type: String, desc: '备注'
+            optional :deduction_method, type: String, values: ['balance', 'work_score'], desc: '抵扣方式, balance: 趣币, work_score: 工分'
+            optional :deduction_method_fee, type: BigDecimal, desc: '抵扣方式的金额'
           end
           post do
             begin
               authenticate_user
               app_error("您已经参与过此次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid]
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?
+              app_error("趣币不足","Lack of interest currency") if params[:deduction_method] == 'balance' && (@session_user.account.present? &&  @session_user.account.balance < params[:deduction_method_fee] || @session_user.account.blank?)
+              app_error("工分不足","Lack of work score") if params[:deduction_method] == 'work_score' && (@session_user.account.present? &&  @session_user.account.work_score < params[:deduction_method_fee] || @session_user.account.blank?)
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
+              app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") unless style.product.on_sale
               app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
-              order = ::Mall::Order.generate!(params[:buy_method], params[:fight_group_uuid], @session_user, style, params[:quantity], params[:remark])
-              {order_uuid: order.uuid, scheme: 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}")}
+              order = ::Mall::Order.generate!(params[:buy_method], params[:fight_group_uuid], @session_user, style, params[:quantity], params[:remark], params[:deduction_method], params[:deduction_method_fee])
+              inner_app = inner_app? request
+              scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{order.fight_group.uuid}")  if order.total_fee.zero? && params[:buy_method] == 'fight_group' && inner_app
+              scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}")  if order.total_fee.zero? && params[:buy_method] == 'buy_now' && inner_app
+              scheme = "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{order.fight_group.uuid}" if order.total_fee.zero? && params[:buy_method] == 'fight_group' && !inner_app
+              scheme = "#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}" if order.total_fee.zero? && params[:buy_method] == 'buy_now' && !inner_app
+              scheme = 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}") if order.total_fee > 0  
+              {order_uuid: order.uuid, scheme: scheme, total_fee: order.total_fee.to_f }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
@@ -154,18 +169,17 @@ module V1
             requires :reason, type: String, desc: '取消原因'
           end
           patch :cancel do
-            # begin
-            # authenticate_user
-            #               order = @session_user.orders.find_uuid(params[:uuid])
-            #               app_error("该订单无法取消", "Please choose the receiving address") unless order.created?
-            #               order.close!
-            #               order.update()
-            #               nil
-            # rescue ActiveRecord::RecordNotFound
-            #               app_uuid_error
-            #             rescue Exception => ex
-            #               server_error(ex)
-            #             end
+            begin
+            authenticate_user
+            order = @session_user.orders.find_uuid(params[:uuid])
+            app_error("该订单无法取消", "Please choose the receiving address") unless order.created?
+            order.close!
+            true
+            rescue ActiveRecord::RecordNotFound
+              app_uuid_error
+            rescue Exception => ex
+              server_error(ex)
+            end
           end          
           desc "支付成功后的展示页,单独购买"
           params do
