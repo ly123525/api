@@ -54,10 +54,10 @@ module V1
               app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
               order = ::Mall::Order.generate!(params[:buy_method], params[:fight_group_uuid], @session_user, style, params[:quantity], params[:remark], params[:deduction_method], params[:deduction_fee])
               inner_app = inner_app? request
-              scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{order.fight_group.uuid}")  if order.total_fee.zero? && params[:buy_method] == 'fight_group' && inner_app
-              scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}")  if order.total_fee.zero? && params[:buy_method] == 'buy_now' && inner_app
-              scheme = "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{order.fight_group.uuid}" if order.total_fee.zero? && params[:buy_method] == 'fight_group' && !inner_app
-              scheme = "#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}" if order.total_fee.zero? && params[:buy_method] == 'buy_now' && !inner_app
+              scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{order.fight_group.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}")  if order.total_fee.zero? && params[:buy_method] == 'fight_group' && inner_app
+              scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}")  if order.total_fee.zero? && params[:buy_method] == 'buy_now' && inner_app
+              scheme = "#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{order.fight_group.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}" if order.total_fee.zero? && params[:buy_method] == 'fight_group' && !inner_app
+              scheme = "#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}" if order.total_fee.zero? && params[:buy_method] == 'buy_now' && !inner_app
               scheme = 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}") if order.total_fee > 0  
               {order_uuid: order.uuid, scheme: scheme}
             rescue ActiveRecord::RecordNotFound
