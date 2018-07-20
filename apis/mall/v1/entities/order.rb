@@ -5,6 +5,12 @@ module V1
         expose :work_score_save_money do |m, o|
           "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:work_score_save_money].to_s)
         end
+        expose :qc_can_select do |m, o|
+          ::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:qc_can_select]
+        end
+        expose :work_score_can_select do |m, o|
+          ::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:work_score_can_select]
+        end  
       end  
       class OrderToBeConfirmed < Grape::Entity
         expose :address, using: ::V1::Entities::User::Address do |m, o|
