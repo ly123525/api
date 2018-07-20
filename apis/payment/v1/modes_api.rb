@@ -126,7 +126,7 @@ module V1
               timeout_express: "2m")
               result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/fightgroup?fight_group_uuid=#{fight_group.uuid}") if fight_group.present?
               result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}") if  !fight_group.present? && params[:order_type] == ::Payment::ORDER_TYPE_PRODUCT
-              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/vip/buying/success?uuid=#{order.uuid}") if params[:order_type] == ::Payment::ORDER_TYPE_VIP
+              result_scheme = "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/vip/buy_result?uuid=#{order.uuid}") if params[:order_type] == ::Payment::ORDER_TYPE_VIP
               {res: res, result_scheme: result_scheme }
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
