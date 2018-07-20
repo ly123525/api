@@ -11,7 +11,7 @@ module V1
             requires :buy_method, type: String, default: 'fight_group', desc: '购买方式', values: ['fight_group', 'buy_now']
             requires :style_uuid, type: String, desc: '商品款式 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
-            optional :payment_method, type: String, default: 'cash', values: ['cash', 'balance', 'work_score'], desc: '支付方式'
+            optional :deduction_method, type: String, default: 'cash', values: ['cash', 'qc', 'work_score'], desc: '支付方式'
           end
           get :to_be_confirmed do
             begin
@@ -21,7 +21,7 @@ module V1
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") unless style.product.on_sale
               app_error("该款商品库存不足", "Product style lack of stock") if style.inventory_count.zero?
               inner_app = inner_app? request
-              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app, payment_method: params[:payment_method]
+              present @session_user, with: ::V1::Entities::Mall::OrderToBeConfirmed, style: style, quantity: params[:quantity], buy_method: params[:buy_method], inner_app: inner_app, deduction_method: params[:deduction_method]
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex

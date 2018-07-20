@@ -3,7 +3,7 @@ module V1
     module Mall
       class OtherDeductionMethod < Grape::Entity
         expose :work_score_save_money do |m, o|
-          "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:payment_method], m[:user])[:work_score_save_money].to_s)
+          "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:work_score_save_money].to_s)
         end
       end  
       class OrderToBeConfirmed < Grape::Entity
@@ -27,13 +27,13 @@ module V1
           {style: o[:style], user: m} if ::Operate::CommuneHandler.is_operate_style?(o[:style])
         end  
         expose :settlement do |m, o|
-          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:infos]
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:infos]
         end
         expose :deduction_method_infos do |m, o|
-          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:payment_method_infos]
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:deduction_method_infos]
         end
         expose :is_free do |m, o|
-          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:payment_method], m)[:total_price].zero?
+          ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:total_price].zero?
         end  
         expose :activity_image do |m, o|
           o[:style].try(:activity_image)
