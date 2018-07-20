@@ -43,7 +43,6 @@ module V1
           end
           post do
             begin
-              logger.info "params=================#{params}"
               authenticate_user
               app_error("您已经参与过此次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid]
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?
@@ -59,6 +58,10 @@ module V1
               scheme = "#{ENV['H5_HOST']}/#/maverick/buying/success?uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}" if order.total_fee.zero? && params[:buy_method] == 'buy_now' && !inner_app
               scheme = 'lvsent://gogo.cn/web?url='+Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/cashier?order_uuid=#{order.uuid}&order_type=#{::Payment::ORDER_TYPE_PRODUCT}") if order.total_fee > 0  
               {order_uuid: order.uuid, scheme: scheme}
+            rescue ArgumentError
+              app_error('参数deduction_method错误', 'Parameter error of deduction_method')   
+            rescue BalanceInsufficientException
+              app_error('余额不足', 'not sufficient funds')  
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
