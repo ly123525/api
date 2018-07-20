@@ -46,8 +46,6 @@ module V1
               authenticate_user
               app_error("您已经参与过此次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid]
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?
-              app_error("趣币不足","Lack of interest currency") if params[:deduction_method] == 'balance' && (@session_user.account.present? &&  @session_user.account.balance < params[:deduction_fee] || @session_user.account.blank?)
-              app_error("工分不足","Lack of work score") if params[:deduction_method] == 'work_score' && (@session_user.account.present? &&  @session_user.account.work_score < params[:deduction_fee] || @session_user.account.blank?)
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") if style.deleted?
               app_error("该款商品已下架，请选购其它商品", "Product style off the shelf") unless style.product.on_sale
