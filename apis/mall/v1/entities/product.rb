@@ -321,7 +321,7 @@ module V1
           m if Operate::CommuneHandler.is_operate_style? m
         end
         expose :shop_im_chat_scheme do |m, o|
-          "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
+          "lvsent://gogo.cn/im/chats?im_user_name=#{m.product.shop.im_user_name}"
         end    
       end
     end
