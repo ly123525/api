@@ -38,7 +38,7 @@ module V1
             optional :fight_group_uuid, type: String, desc: '团购分组的 UUID'
             optional :quantity, type: Integer, default: 1, desc: '数量，默认1'
             optional :remark, type: String, desc: '备注'
-            optional :deduction_method, type: String, values: ['qc', 'work_score'], desc: '抵扣方式, qc: 趣币, work_score: 工分'
+            optional :deduction_method, type: String, values: ['cash','qc', 'work_score'], desc: '抵扣方式, qc: 趣币, work_score: 工分'
             optional :deduction_fee, type: BigDecimal, desc: '抵扣方式的金额'
           end
           post do
