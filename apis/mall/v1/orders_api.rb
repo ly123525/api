@@ -43,7 +43,6 @@ module V1
           end
           post do
             begin
-              logger.info "======================#{params}"
               authenticate_user
               app_error("您已经参与过此次拼单", "You have already participated this fight group") if @session_user.participate_fight_group? params[:fight_group_uuid]
               app_error("请选择收货地址", "Please choose the receiving address") if @session_user.user_extra.try(:address).blank?

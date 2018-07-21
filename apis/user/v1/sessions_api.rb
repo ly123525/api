@@ -38,7 +38,7 @@ module V1
               app_error("验证码错误", "Invalid captcha") unless user.valid_login_captcha?(params[:captcha])
               token = user.phone_login!
               client_info_record(request, token)
-              ::Operate::CommuneHandler.work_score user
+              ::Operate::CommuneHandler.work_score user, nil
               present user, with: ::V1::Entities::User::UserForLogin, token: token.token
             rescue Exception => ex
               server_error(ex)
@@ -49,6 +49,7 @@ module V1
           params do
             requires :code, type: String, desc: "access_token 票据"
             optional :type, type: String, values: ['jsapi' ,'app'], default: 'app', desc: "接口类型"
+            optional :inviter_user_uuid, type: String, desc: '分享者 UUID'
           end
           post :wechat_login do
             begin
@@ -59,7 +60,8 @@ module V1
               app_error("获取用户信息失败", 'WX user info access denied') unless user_info.ok?
               user_and_token = ::Account::User.wx_unionid_login!(user_info.result, params[:type])
               client_info_record(request, user_and_token[1])
-              ::Operate::CommuneHandler.work_score user_and_token[0]
+              inviter_user = ::Account::User.find_uuid params[:inviter_user_uuid] rescue nil
+              ::Operate::CommuneHandler.work_score user_and_token[0], inviter_user
               present user_and_token[0], with: ::V1::Entities::User::UserForLogin, token: user_and_token[1].token
             rescue Exception => ex
               server_error(ex)
