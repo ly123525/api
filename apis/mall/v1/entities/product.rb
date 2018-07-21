@@ -238,9 +238,9 @@ module V1
         end
         expose :promotion_infos do |m, o|
           [
-            {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
-            {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'},
-            {label: "双12狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
+            # {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
+            # {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'},
+            # {label: "双12狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
           ]
         end
         expose :sku do |m, o|
