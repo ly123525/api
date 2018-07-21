@@ -38,6 +38,7 @@ module V1
               app_error("验证码错误", "Invalid captcha") unless user.valid_login_captcha?(params[:captcha])
               token = user.phone_login!
               client_info_record(request, token)
+              ::Operate::CommuneHandler.work_score user
               present user, with: ::V1::Entities::User::UserForLogin, token: token.token
             rescue Exception => ex
               server_error(ex)
@@ -58,6 +59,7 @@ module V1
               app_error("获取用户信息失败", 'WX user info access denied') unless user_info.ok?
               user_and_token = ::Account::User.wx_unionid_login!(user_info.result, params[:type])
               client_info_record(request, user_and_token[1])
+              ::Operate::CommuneHandler.work_score user
               present user_and_token[0], with: ::V1::Entities::User::UserForLogin, token: user_and_token[1].token
             rescue Exception => ex
               server_error(ex)
