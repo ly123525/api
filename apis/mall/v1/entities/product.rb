@@ -290,7 +290,7 @@ module V1
         expose :share do
           expose :url do |m, o|
             if Operate::CommuneHandler.is_operate_style? m
-              "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}&inviter_user_uuid=#{o[:user].try(:uuid)}"
+              "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}&inviter_uuid=#{o[:user].try(:uuid)}"
             else  
               "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
             end
