@@ -6,7 +6,7 @@ module V1
           desc "平台分类"
           get do
             begin
-              categories = ::Mall::ProductCategory.roots
+              categories = ::Mall::ProductCategory.roots.order(lft: :asc)
               present categories, with: ::V1::Entities::Categories
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
