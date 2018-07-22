@@ -117,7 +117,7 @@ module V1
         expose :work_score
         expose :interesting_currency
         expose :activity_tags do |m, o|
-          m.activity_tags?
+          m.activity_tags
         end
       end
 
