@@ -47,7 +47,7 @@ module V1
           "#{(m.price/2).ceil}工分"  if o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil   
         end
         expose :deductible do |m, o|
-          "￥" + format('%.2f',(m.price/2).ceil.to_s)
+          o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].try(:account).try(:work_score).to_f.to_s))
         end
         expose :tags do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
