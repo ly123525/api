@@ -23,10 +23,31 @@ module V1
       end  
       class VipTagsForProduct < Grape::Entity
         expose :vip_price do |m, o|
-          "8.8元" unless  o[:user].try(:is_vip)
+          "8.80元" unless  o[:user].try(:is_vip)
         end
+        expose :vip_price_tips do |m, o|
+          "加入VIP社员" unless  o[:user].try(:is_vip)
+        end  
         expose :balance do |m, o|
-          format('%.2f',m.price.ceil.to_s)
+          if o[:user].try(:is_vip) && o[:user].account.present? && o[:user].account.qc > m.price.ceil
+          "#{m.price.ceil}趣币"
+          else
+          "￥" + format('%.2f',m.price.ceil.to_s)
+          end  
+        end
+        expose :balance_pre_tips do |m, o|
+          if o[:user].try(:is_vip)
+            if o[:user].account.present? && o[:user].account.qc > m.price.ceil
+              "可直接使用"
+            else
+              "趣币不足, 购买此商品可获取"
+            end  
+          else
+            "此商品可1:1全额返现"
+          end  
+        end
+        expose :balance_suf_tips do |m, o|
+          "购买" if o[:user].try(:is_vip) && o[:user].account.present? && o[:user].account.qc > m.price.ceil
         end
         expose :tags do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
@@ -40,7 +61,27 @@ module V1
           else
             {tips: '成为VIP社员', scheme: 'lvsent://gogo.cn/vip/right'} 
           end  
-        end          
+        end
+
+        # expose :vip_price do |m, o|
+        #   "8.8元" unless  o[:user].try(:is_vip)
+        # end
+        # expose :balance do |m, o|
+        #   format('%.2f',m.price.ceil.to_s)
+        # end
+        # expose :tags do |m, o|
+        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
+        # end
+        # expose :background do |m, o|
+        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_background.png?x-oss-process=style/300w"
+        # end
+        # expose :tips_and_scheme do |m, o|
+        #   if o[:user].try(:is_vip)
+        #     {tips: 'VIP社员', scheme: "lvsent://gogo.cn/vip"}
+        #   else
+        #     {tips: '成为VIP社员', scheme: 'lvsent://gogo.cn/vip/right'} 
+        #   end  
+        # end          
       end
       class WorkScoreTagsForProduct < Grape::Entity
         expose :work_score do |m, o|
@@ -48,22 +89,51 @@ module V1
             o[:user].try(:account).try(:work_score) >= (m.price/2).ceil ?  "#{(m.price/2).ceil.to_s}工分" : "#{o[:user].try(:account).try(:work_score).to_s}工分"
           end  
         end  
-
-
-        expose :work_score do |m, o|
-          if o[:user].try(:account).try(:work_score).to_f > 0
-            o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? "#{(m.price/2).ceil.to_s}工分" : "#{o[:user].try(:account).try(:work_score).to_s}工分"
-          end 
+        expose :work_score_pre_tips do |m, o|
+          if o[:user].account.present? && o[:user].account.work_score > 0
+            "您有"
+          else
+            "工分不足, 立刻邀请好友赚工分"
+          end  
         end
+        expose :work_score_suf_tips do |m, o|
+          "可用" if o[:user].account.present? && o[:user].account.work_score > 0
+        end  
         expose :deductible do |m, o|
-          o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].try(:account).try(:work_score).to_f.to_s))
+          if o[:user].account.present? && o[:user].account.work_score > 0
+            o[:user].account.work_score >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].account.work_score.to_s))
+          else
+            "￥" + format('%.2f',(m.price/2).ceil.to_s)  
+          end  
         end
+        expose :deductible_tips do |m, o|
+          if o[:user].account.present? && o[:user].account.work_score > 0
+            "可为您节约"
+          else
+            "此商品可抵扣"
+          end  
+        end  
         expose :tags do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
         end
         expose :background do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
-        end    
+        end
+
+        # expose :work_score do |m, o|
+        #   if o[:user].try(:account).try(:work_score).to_f > 0
+        #     o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? "#{(m.price/2).ceil.to_s}工分" : "#{o[:user].try(:account).try(:work_score).to_s}工分"
+        #   end 
+        # end
+        # expose :deductible do |m, o|
+        #   o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].try(:account).try(:work_score).to_f.to_s))
+        # end
+        # expose :tags do |m, o|
+        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
+        # end
+        # expose :background do |m, o|
+        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
+        # end    
       end    
       class ProductByOrderItem < Grape::Entity
         expose :image do |m, o|
