@@ -13,6 +13,11 @@ module V1
               app_version_code=app_version_code(request).to_i
               mall_index = ::Mall::Indices::Index.current_mall_index app_version_code
               styles = ::Mall::Style.on_sale_by_product.sorted.limit(20)
+              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
+              styles.each do |style|
+                style.work_score = operate_style_ids.include?(style.id)
+                style.interesting_currency = operate_style_ids.include?(style.id)
+              end
               inner_app = inner_app? request
               present mall_index, with: ::V1::Entities::Mall::MallIndex, styles: styles, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
