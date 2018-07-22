@@ -153,6 +153,8 @@ module V1
             begin
               authenticate_user_for_weak
               styles = ::Operate::CommuneHandler.operate_styles.recommended.sorted.limit(10)
+              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
+              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
               inner_app = inner_app? request
               present({user: @session_user}, with: ::V1::Entities::User::VipMember, styles: styles, inner_app: inner_app)
             rescue ActiveRecord::RecordNotFound
@@ -171,6 +173,8 @@ module V1
             begin
               user = ::Account::User.find_uuid params[:user_uuid] rescue nil
               styles = ::Operate::CommuneHandler.operate_styles.recommended.sorted.page(params[:page]).per(10)
+              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
+              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
               inner_app = inner_app? request
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound              

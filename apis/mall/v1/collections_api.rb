@@ -32,7 +32,10 @@ module V1
             begin
               authenticate_user
               inner_app = inner_app? request
-              present @session_user.mall_styles, with: ::V1::Entities::Mall::ProductsByStyles, inner_app: inner_app
+              styles = @session_user.mall_styles
+              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
+              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
+              present styles, with: ::V1::Entities::Mall::ProductsByStyles, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
             end
