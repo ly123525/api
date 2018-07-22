@@ -30,6 +30,8 @@ module V1
           get :page do
             begin
               styles = ::Mall::Style.on_sale_by_product.sorted.page(params[:page]).per(20)
+              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
+              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
               inner_app = inner_app? request
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
