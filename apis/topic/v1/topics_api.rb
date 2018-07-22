@@ -14,8 +14,7 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
               topic = ::Topic::Topic.find_uuid(params[:uuid])
               styles = ::Mall::Style.on_sale(topic.styles).sorted.page(params[:page]).per(10)
-              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
-              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
+              ::Operate::CommuneHandler.activity_style_for_tags styles
               inner_app = inner_app? request
               present topic, with: ::V1::Entities::Topic::Topic, styles: styles, inner_app: inner_app
             rescue Exception => ex

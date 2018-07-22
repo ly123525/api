@@ -13,8 +13,7 @@ module V1
               app_version_code=app_version_code(request).to_i
               mall_index = ::Mall::Indices::Index.current_mall_index app_version_code
               styles = ::Mall::Style.on_sale_by_product.sorted.limit(20)
-              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
-              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
+              ::Operate::CommuneHandler.activity_style_for_tags styles
               inner_app = inner_app? request
               present mall_index, with: ::V1::Entities::Mall::MallIndex, styles: styles, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
@@ -30,8 +29,7 @@ module V1
           get :page do
             begin
               styles = ::Mall::Style.on_sale_by_product.sorted.page(params[:page]).per(20)
-              operate_style_ids = Operate::CommuneHandler.operate_styles.ids
-              ::Mall::Style.activity_style_for_tags styles, operate_style_ids
+              ::Operate::CommuneHandler.activity_style_for_tags styles
               inner_app = inner_app? request
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound
