@@ -53,7 +53,6 @@ module V1
           end
           post :wechat_login do
             begin
-              logger.info "==========inviter_uuid=============#{params[:inviter_uuid]}"
               wx_auth = params[:type] == 'app' ? $wx_open_auth : $wx_mp_auth
               access_info = wx_auth.get_oauth_access_token(params[:code])
               app_error("获取用户授权失败", 'WX oauth2 access denied') unless access_info.ok?
