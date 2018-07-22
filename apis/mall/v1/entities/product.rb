@@ -272,7 +272,7 @@ module V1
           # m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
-          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/hot_selling_today.jpg", scheme: ''}, products_by_styles: ::Mall::Style.on_sale_by_product.sorted.limit(4)}
+          {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/hot_selling_today.jpg", scheme: ''}, products_by_styles: ::Mall::Style.recommended_styles}
         end
         expose :collected do |m , o|
           o[:user] && m.collections.where(user: o[:user]).count>0
