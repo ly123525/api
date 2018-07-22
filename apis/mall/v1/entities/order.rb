@@ -42,7 +42,7 @@ module V1
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:total_price].zero?
         end  
         expose :activity_image do |m, o|
-          o[:style].try(:activity_image)
+          ::Operate::LotteryHandler.activity_image(o[:style])
         end  
       end
       class Express < Grape::Entity

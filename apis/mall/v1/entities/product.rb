@@ -3,10 +3,10 @@ module V1
     module Mall
       class LotteryTagsForProduct < Grape::Entity
         expose :activity_image do |m, o|
-          m.try(:benz_or_smart_image)
+          ::Operate::LotteryHandler.benz_or_smart_image(m)
         end
         expose :activity_category do |m, o|
-          m.try(:activity_category)
+          ::Operate::LotteryHandler.activity_category(m)
         end
         expose :activity_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
@@ -85,7 +85,7 @@ module V1
           end
         end
         expose :activity_image do |m, o|
-          m.try(:style).try(:activity_image)
+          ::Operate::LotteryHandler.activity_image(m.try(:style))
         end
       end
 
@@ -114,13 +114,11 @@ module V1
           end
         end
         expose :activity_image do |m, o|
-          m.try(:activity_image)
+          ::Operate::LotteryHandler.activity_image(m)
         end
         expose :work_score
         expose :interesting_currency
-        expose :activity_tags do |m, o|
-          m.activity_tags?
-        end
+        expose :activity_tags
       end
 
       class ProductsByStyles < SimpleProductByStyle
@@ -307,7 +305,7 @@ module V1
           m.product.mini_purchase_quantity
         end
         expose :activity_tags, using: ::V1::Entities::Mall::LotteryTagsForProduct do |m, o|
-          m if m.activity_tags?
+          m if ::Operate::LotteryHandler.activity_tags?(m)
         end  
         expose :user_is_vip do |m, o|
           o[:user].present? && o[:user].is_vip

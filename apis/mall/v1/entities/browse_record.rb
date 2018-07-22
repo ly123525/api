@@ -21,7 +21,7 @@ module V1
           format('%.2f',m.style.price.to_s)
         end
         expose :activity_image do |m, o|
-          m.style.try(:activity_image)
+          ::Operate::LotteryHandler.activity_image(m.style)
         end         
       end
     end

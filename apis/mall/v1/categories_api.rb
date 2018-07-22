@@ -28,6 +28,7 @@ module V1
               product_category = ::Mall::ProductCategory.find_uuid params[:uuid]
               styles = ::Mall::Style.recommended.includes(:product).where('mall_products.on_sale is true and mall_products.product_category_id = ?', product_category.id).references(:product).search_by_keywords(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
               ::Operate::CommuneHandler.activity_style_for_tags styles
+              ::Operate::LotteryHandler.activity_style_for_tags styles
               inner_app = inner_app? request
               present styles, with: ::V1::Entities::Mall::SimpleProductByStyle, inner_app: inner_app
             rescue ActiveRecord::RecordNotFound

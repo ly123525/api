@@ -34,6 +34,7 @@ module V1
               inner_app = inner_app? request
               styles = @session_user.mall_styles
               ::Operate::CommuneHandler.activity_style_for_tags styles
+              ::Operate::LotteryHandler.activity_style_for_tags styles
               present styles, with: ::V1::Entities::Mall::ProductsByStyles, inner_app: inner_app
             rescue Exception => ex
               server_error(ex)
