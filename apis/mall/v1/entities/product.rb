@@ -85,29 +85,29 @@ module V1
       end
       class WorkScoreTagsForProduct < Grape::Entity
         expose :work_score do |m, o|
-          if o[:user].account.present? && o[:user].account.work_score > 0
+          if o[:user].try(:account).present? && o[:user].account.work_score > 0
             o[:user].try(:account).try(:work_score) >= (m.price/2).ceil ?  "#{(m.price/2).ceil.to_s}工分" : "#{o[:user].try(:account).try(:work_score).to_s}工分"
           end  
         end  
         expose :work_score_pre_tips do |m, o|
-          if o[:user].account.present? && o[:user].account.work_score > 0
+          if o[:user].try(:account).present? && o[:user].account.work_score > 0
             "您有"
           else
             "工分不足, 立刻邀请好友赚工分"
           end  
         end
         expose :work_score_suf_tips do |m, o|
-          "可用" if o[:user].account.present? && o[:user].account.work_score > 0
+          "可用" if o[:user].try(:account).present? && o[:user].account.work_score > 0
         end  
         expose :deductible do |m, o|
-          if o[:user].account.present? && o[:user].account.work_score > 0
+          if o[:user].try(:account).present? && o[:user].account.work_score > 0
             o[:user].account.work_score >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].account.work_score.to_s))
           else
             "￥" + format('%.2f',(m.price/2).ceil.to_s)  
           end  
         end
         expose :deductible_tips do |m, o|
-          if o[:user].account.present? && o[:user].account.work_score > 0
+          if o[:user].try(:account).present? && o[:user].account.work_score > 0
             "可为您节约"
           else
             "此商品可抵扣"
