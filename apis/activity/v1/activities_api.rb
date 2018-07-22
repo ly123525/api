@@ -10,7 +10,7 @@ module V1
           get :progress_bar do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
+              activity = ::Operate::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
               current_follows_count = activity.follows.count + activity.fake_follow_count
               present activity, with: ::V1::Entities::Activity::Activity, current_follows_count: current_follows_count
             rescue Exception => ex
@@ -24,10 +24,10 @@ module V1
           get  do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
+              activity = ::Operate::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
               app_error('活动已经结束', "The activity has come to an end") unless activity.present?
               app_error('活动已经结束', "The activity has come to an end") unless activity.start_at < Time.now && Time.now < activity.end_at
-              lottery_templates = ::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
+              lottery_templates = ::Operate::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
               inner_app = inner_app? request
               present activity, with: ::V1::Entities::Activity::ActivityDetails, user: user, inner_app: inner_app, lottery_templates: lottery_templates 
             rescue Exception => ex
@@ -42,7 +42,7 @@ module V1
           post :follow do
             begin
               authenticate_user
-              activity = ::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
+              activity = ::Operate::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
               app_error('活动已经结束', "The activity has come to an end") unless activity.present?
               lottery_template = activity.lottery_templates.where(followed: true).first
               app_error('您已经关注过了', "You are looked at it") if @session_user.followed?(activity)
@@ -64,7 +64,7 @@ module V1
           get :history do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              lottery_templates = ::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
+              lottery_templates = ::Operate::LotteryTemplate.where('end_at < ?', Time.now ).order(id: :desc)
               present lottery_templates, with: ::V1::Entities::Activity::LotteryResultHistory                
             rescue Exception => ex
               server_error(ex)
@@ -79,8 +79,8 @@ module V1
           post :statistical do
             begin
               user = ::Account::User.find_uuid(params[:user_uuid]) rescue nil
-              activity = ::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
-              ::ActivityItem.generate_by_target! activity, params[:target], params[:target_id]
+              activity = ::Operate::Activity.where("start_at <= ? and  end_at >= ?", Time.now, Time.now).first
+              ::Operate::ActivityItem.generate_by_target! activity, params[:target], params[:target_id]
               true                 
             rescue Exception => ex
               server_error(ex)

@@ -13,10 +13,10 @@ module V1
       class LotteryResult < Grape::Entity
         expose :number
         expose :user_name do |m, o|
-          ::Lottery.find_by_number(m.number).user.nickname
+          ::Operate::Lottery.find_by_number(m.number).user.nickname
         end
         expose :result_name do |m, o|
-          case ::Lottery.find_by_number(m.number).lottery_template.color
+          case ::Operate::Lottery.find_by_number(m.number).lottery_template.color
            when "black"
              "奔驰E"
            when "green"

@@ -47,27 +47,13 @@ module V1
           "#{(m.price/2).ceil}工分"  if o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil   
         end
         expose :deductible do |m, o|
-          "￥" + format('%.2f',(m.price/2).ceil.to_s)
+          o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].try(:account).try(:work_score).to_f.to_s))
         end
         expose :tags do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
         end
         expose :background do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
-        end
-        expose :share do
-          expose :url do |m, o|
-            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
-          end
-          expose :image do |m, o|
-            m.style_cover.image.style_url('120w')
-          end
-          expose :title do |m, o|
-            m.product.name + " " + m.name
-          end
-          expose :summary do |m, o|
-            m.product.summary_content
-          end
         end    
       end    
       class ProductByOrderItem < Grape::Entity
@@ -238,9 +224,9 @@ module V1
         end
         expose :promotion_infos do |m, o|
           [
-            {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
-            {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'},
-            {label: "双12狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
+            # {label: "优惠", desc: '使用余额支付，每单减2元', scheme: 'www.baidu.com'},
+            # {label: "双11狂欢节", desc: '全免费', scheme: 'www.baidu.com'},
+            # {label: "双12狂欢节", desc: '全免费', scheme: 'www.baidu.com'}
           ]
         end
         expose :sku do |m, o|
@@ -287,7 +273,7 @@ module V1
           m.product.styles_for_choice(m.labels)
         end
         expose :shop, using: ::V1::Entities::Mall::Shop do |m, o|
-          m.product.shop
+          # m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
           {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/hot_selling_today.jpg", scheme: ''}, products_by_styles: ::Mall::Style.on_sale_by_product.sorted.limit(4)}
@@ -303,7 +289,11 @@ module V1
         end
         expose :share do
           expose :url do |m, o|
-            "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
+            if Operate::CommuneHandler.is_operate_style? m
+              "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}&inviter_uuid=#{o[:user].try(:uuid)}"
+            else  
+              "#{ENV['H5_HOST']}/#/mall/details?style_uuid=#{m.uuid}"
+            end
           end
           expose :image do |m, o|
             m.style_cover.image.style_url('120w')
@@ -329,6 +319,9 @@ module V1
         end
         expose :work_score_tags, using: ::V1::Entities::Mall::WorkScoreTagsForProduct do |m, o|
           m if Operate::CommuneHandler.is_operate_style? m
+        end
+        expose :shop_im_chat_scheme do |m, o|
+          "lvsent://gogo.cn/im/chats?im_user_name=#{m.product.shop.im_user_name}"
         end    
       end
     end
