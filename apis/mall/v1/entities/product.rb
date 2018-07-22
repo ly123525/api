@@ -44,7 +44,9 @@ module V1
       end
       class WorkScoreTagsForProduct < Grape::Entity
         expose :work_score do |m, o|
-          "#{o[:user].try(:account).try(:work_score).to_s}工分"  if o[:user].try(:account).try(:work_score).to_f > 0  
+          if o[:user].try(:account).try(:work_score).to_f > 0
+            o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? "#{m.price/2).ceil.to_s}工分" : "#{o[:user].try(:account).try(:work_score).to_s}工分"
+          end 
         end
         expose :deductible do |m, o|
           o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].try(:account).try(:work_score).to_f.to_s))
