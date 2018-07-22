@@ -26,9 +26,7 @@ module V1
         expose :search_key do |m, o|
           "搜索结果"
         end
-        expose :banners, using: ::V1::Entities::Mall::Banners do |m, o|
-          m.banners
-        end
+        expose :banners, using: ::V1::Entities::Mall::Banners
         expose :channels do |m, o|
           # expose :background do |m, o|
           #   m.channel_background.style_url('400w') rescue nil
@@ -37,9 +35,7 @@ module V1
           #   m.channels
           # end
         end
-        expose :sections, using: ::V1::Entities::Mall::Sections do |m, o|
-          m.sections
-        end
+        expose :sections, using: ::V1::Entities::Mall::Sections
         expose :recommend, using: ::V1::Entities::Mall::Recommend do |m, o|
           {title_bar: nil, styles: o[:styles]}
         end

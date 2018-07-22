@@ -114,12 +114,8 @@ module V1
         expose :activity_image do |m, o|
           m.try(:activity_image)
         end
-        expose :work_score do |m, o|
-          Operate::CommuneHandler.is_operate_style? m
-        end
-        expose :interesting_currency do |m, o|
-          Operate::CommuneHandler.is_operate_style? m
-        end
+        expose :work_score
+        expose :interesting_currency
         expose :activity_tags do |m, o|
           m.activity_tags?
         end
