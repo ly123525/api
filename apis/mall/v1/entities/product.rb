@@ -26,7 +26,7 @@ module V1
           "8.8元" unless  o[:user].try(:is_vip)
         end
         expose :balance do |m, o|
-          format('%.2f',m.price.to_s)
+          format('%.2f',m.price.ceil.to_s)
         end
         expose :tags do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
