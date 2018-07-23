@@ -61,27 +61,7 @@ module V1
           else
             {tips: '成为VIP社员', scheme: 'lvsent://gogo.cn/vip/right'} 
           end  
-        end
-
-        # expose :vip_price do |m, o|
-        #   "8.8元" unless  o[:user].try(:is_vip)
-        # end
-        # expose :balance do |m, o|
-        #   format('%.2f',m.price.ceil.to_s)
-        # end
-        # expose :tags do |m, o|
-        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_tags.png?x-oss-process=style/160w"
-        # end
-        # expose :background do |m, o|
-        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_vip_background.png?x-oss-process=style/300w"
-        # end
-        # expose :tips_and_scheme do |m, o|
-        #   if o[:user].try(:is_vip)
-        #     {tips: 'VIP社员', scheme: "lvsent://gogo.cn/vip"}
-        #   else
-        #     {tips: '成为VIP社员', scheme: 'lvsent://gogo.cn/vip/right'} 
-        #   end  
-        # end          
+        end          
       end
       class WorkScoreTagsForProduct < Grape::Entity
         expose :work_score do |m, o|
@@ -118,22 +98,7 @@ module V1
         end
         expose :background do |m, o|
           "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
-        end
-
-        # expose :work_score do |m, o|
-        #   if o[:user].try(:account).try(:work_score).to_f > 0
-        #     o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? "#{(m.price/2).ceil.to_s}工分" : "#{o[:user].try(:account).try(:work_score).to_s}工分"
-        #   end 
-        # end
-        # expose :deductible do |m, o|
-        #   o[:user].try(:account).try(:work_score).to_f >= (m.price/2).ceil ? ("￥" + format('%.2f',(m.price/2).ceil.to_s)) : ("￥" + format('%.2f',o[:user].try(:account).try(:work_score).to_f.to_s))
-        # end
-        # expose :tags do |m, o|
-        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_tags.png?x-oss-process=style/160w"
-        # end
-        # expose :background do |m, o|
-        #   "#{ENV['IMAGE_DOMAIN']}/app/product_details_work_score_background.png?x-oss-process=style/300w"
-        # end    
+        end   
       end    
       class ProductByOrderItem < Grape::Entity
         expose :image do |m, o|
