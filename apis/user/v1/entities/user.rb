@@ -24,10 +24,10 @@ module V1
       end
       
       class PersonalCenter < Grape::Entity
-        expose :nickname, if: lambda {|m, o| m[:user].present?} do |m, o|
-          m[:user].nickname
+        expose :nickname do |m, o|
+          m[:user].try(:nickname)
         end  
-        expose :image, if: lambda {|m, o| m[:user].present?} do |m, o|
+        expose :image do |m, o|
           m[:user].picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
         end
         expose :member_tags, if: lambda {|m, o| m[:user].present?} do |m, o|
