@@ -37,7 +37,7 @@ module V1
                 picture = ::Picture.find_or_create_by!(imageable: @session_user)
                 picture.update!(image: params[:image])
               end
-              true
+              @session_user.picture.image.style_url('120w') rescue "#{ENV['IMAGE_DOMAIN']}/app/head.png?x-oss-process=style/160w"
             rescue Exception => ex
               server_error(ex)
             end
