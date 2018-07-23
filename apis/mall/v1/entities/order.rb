@@ -3,7 +3,7 @@ module V1
     module Mall
       class OtherDeductionMethod < Grape::Entity
         expose :work_score_save_money do |m, o|
-          "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:work_score_save_money].to_s)
+          "￥" + format('%.2f',(::Mall::Settlement.products_price(m[:style], o[:quantity], o[:buy_method])/2).ceil.to_s)
         end
         expose :qc_can_select do |m, o|
           ::Mall::Settlement.qc_can_select?(o[:style], o[:quantity], o[:buy_method], m[:user])
