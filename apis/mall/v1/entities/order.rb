@@ -6,12 +6,10 @@ module V1
           "￥" + format('%.2f',::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:work_score_save_money].to_s)
         end
         expose :qc_can_select do |m, o|
-          ::Mall::Settlement.deduction_method_can_select?(o[:style], o[:quantity], o[:buy_method], m[:user])[:qc_can_select]
-          # ::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:qc_can_select]
+          ::Mall::Settlement.qc_can_select?(o[:style], o[:quantity], o[:buy_method], m[:user])
         end
         expose :work_score_can_select do |m, o|
-          ::Mall::Settlement.deduction_method_can_select?(o[:style], o[:quantity], o[:buy_method], m[:user])[:work_score_can_select]
-          # ::Mall::Settlement.info(m[:style], o[:quantity], o[:buy_method], o[:deduction_method], m[:user])[:work_score_can_select]
+          ::Mall::Settlement.work_score_can_select?(o[:style], o[:quantity], o[:buy_method], m[:user])
         end  
       end  
       class OrderToBeConfirmed < Grape::Entity
