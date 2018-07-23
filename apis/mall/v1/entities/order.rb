@@ -24,13 +24,13 @@ module V1
           end
         end
         expose :shop, using: ::V1::Entities::Mall::SimpleShop do |m, o|
-          o[:style].product.shop
+          # o[:style].product.shop
         end
         expose :product, using: ::V1::Entities::Mall::ProductForOrder do |m, o|
           o[:style]
         end
         expose :other_deduction_method_infos, using: ::V1::Entities::Mall::OtherDeductionMethod do |m, o|
-          {style: o[:style], user: m} if ::Operate::CommuneHandler.is_operate_style?(o[:style])
+          {style: o[:style], user: m} if o[:is_commune_style]
         end  
         expose :settlement do |m, o|
           ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:infos]
