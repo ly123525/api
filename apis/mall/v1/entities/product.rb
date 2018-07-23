@@ -29,7 +29,7 @@ module V1
           "加入VIP社员" unless  o[:user].try(:is_vip)
         end  
         expose :balance do |m, o|
-          if o[:user].try(:is_vip) && o[:user].account.present? && o[:user].account.qc > m.price.ceil
+          if o[:user].try(:is_vip)
           "#{m.price.ceil}趣币"
           else
           "￥" + format('%.2f',m.price.ceil.to_s)
