@@ -35,18 +35,15 @@ module V1
         expose :settlement do |m, o|
           if o[:is_commune_style] && ::Account::Account::CURRENCY_TYPE.include?(o[:deduction_method])
             ::Mall::Settlement.send("#{o[:deduction_method]}_info",o[:style], o[:quantity], o[:buy_method], m)[:infos] if o[:is_commune_style]
-            # ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:infos]
           else
             ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method])
           end  
         end
         expose :deduction_method_infos do |m, o|
             ::Mall::Settlement.send("#{o[:deduction_method]}_info",o[:style], o[:quantity], o[:buy_method], m)[:deduction_method_infos] if o[:is_commune_style]  && ::Account::Account::CURRENCY_TYPE.include?(o[:deduction_method])
-          # ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:deduction_method_infos]
         end
         expose :is_free do |m, o|
           ::Mall::Settlement.send("#{o[:deduction_method]}_info",o[:style], o[:quantity], o[:buy_method], m)[:total_price].zero? if o[:is_commune_style]  && o[:deduction_method] == 'qc'
-          # ::Mall::Settlement.info(o[:style], o[:quantity], o[:buy_method], o[:deduction_method], m)[:total_price].zero?
         end  
         expose :activity_image do |m, o|
           ::Operate::LotteryHandler.activity_image(o[:style])
