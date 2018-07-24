@@ -25,8 +25,9 @@ module V1
           get :products do
             begin
               user = ::Account::User.find_uuid params[:user_uuid] rescue nil
-              product_category = ::Mall::ProductCategory.find_uuid params[:uuid]
-              styles = ::Mall::Style.recommended.includes(:product).where('mall_products.on_sale is true and mall_products.product_category_id = ?', product_category.id).references(:product).search_by_keywords(params[:keywords]).order_by(params[:sort_rule]).page(params[:page]).per(20)
+              category = ::Mall::ProductCategory.find_uuid params[:uuid]
+              product_ids = category.product_ids_by_search
+              styles = ::Mall::Style.recommended.where(product_id: product_ids).order_by(params[:sort_rule]).page(params[:page]).per(20)
               ::Operate::CommuneHandler.activity_style_for_tags styles
               ::Operate::LotteryHandler.activity_style_for_tags styles
               inner_app = inner_app? request
