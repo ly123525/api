@@ -2,12 +2,8 @@ module V1
   module Entities
     module Mall
       class LotteryTagsForProduct < Grape::Entity
-        expose :activity_image do |m, o|
-          ::Operate::LotteryHandler.benz_or_smart_image(m)
-        end
-        expose :activity_category do |m, o|
-          ::Operate::LotteryHandler.activity_category(m)
-        end
+        expose :activity_image
+        expose :activity_category 
         expose :activity_scheme do |m, o|
           "lvsent://gogo.cn/web?url=" + Base64.urlsafe_encode64("#{ENV['H5_HOST']}/#/expedite_openaward")
         end
