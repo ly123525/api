@@ -26,8 +26,9 @@ module V1
             begin
               user = ::Account::User.find_uuid params[:user_uuid] rescue nil
               category = ::Mall::ProductCategory.find_uuid params[:uuid]
-              category_ids = category.children.count > 0 ? category.children.ids : category.id
-              product_ids = ::Mall::Product.on_sale.where(product_category_id: category_ids ).ids.uniq
+              product_ids = category.product_ids_by_search
+              # category_ids = category.children.count > 0 ? category.children.ids : category.id
+              # product_ids = ::Mall::Product.on_sale.where(product_category_id: category_ids ).ids.uniq
               styles = ::Mall::Style.recommended.where(product_id: product_ids).order_by(params[:sort_rule]).page(params[:page]).per(20)
               ::Operate::CommuneHandler.activity_style_for_tags styles
               ::Operate::LotteryHandler.activity_style_for_tags styles
