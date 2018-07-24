@@ -347,16 +347,16 @@ module V1
           m.product.mini_purchase_quantity
         end
         expose :activity_tags, using: ::V1::Entities::Mall::LotteryTagsForProduct do |m, o|
-          m if ::Operate::LotteryHandler.activity_tags?(m)
+          m if o[:is_activity_tags]
         end  
         expose :user_is_vip do |m, o|
           o[:user].present? && o[:user].is_vip
         end
         expose :vip_tags, using: ::V1::Entities::Mall::VipTagsForProduct do |m, o|
-          m if Operate::CommuneHandler.is_operate_style? m
+          m if o[:is_operate_style]
         end
         expose :work_score_tags, using: ::V1::Entities::Mall::WorkScoreTagsForProduct do |m, o|
-          m if Operate::CommuneHandler.is_operate_style? m
+          m if o[:is_operate_style]
         end
         expose :shop_im_chat_scheme do |m, o|
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.product.shop.im_user_name}"
