@@ -311,7 +311,7 @@ module V1
           m.product.styles_for_choice(m.labels)
         end
         expose :shop, using: ::V1::Entities::Mall::Shop do |m, o|
-          # m.product.shop
+          m.product.shop
         end
         expose :products_for_choice, using: ::V1::Entities::Mall::ProductsForChoice do |m, o|
           {category_bar: {image: "#{ENV['IMAGE_DOMAIN']}/app/hot_selling_today.jpg", scheme: ''}, products_by_styles: ::Mall::Style.recommended_styles}
