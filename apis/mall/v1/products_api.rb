@@ -13,8 +13,10 @@ module V1
               user = ::Account::User.find_uuid(params[:user_uuid])rescue nil
               style = ::Mall::Style.with_deleted.find_uuid(params[:style_uuid])
               ::Mall::BrowseRecord.generate_browse_record user, style
+              is_operate_style = Operate::CommuneHandler.is_operate_style? style
+              is_activity_tags = ::Operate::LotteryHandler.activity_tags? style
               inner_app = inner_app? request
-              present style, with: ::V1::Entities::Mall::ProductByStyle, user: user, inner_app: inner_app
+              present style, with: ::V1::Entities::Mall::ProductByStyle, user: user, inner_app: inner_app, is_operate_style: is_operate_style, is_activity_tags: is_activity_tags
             rescue ActiveRecord::RecordNotFound
               app_uuid_error
             rescue Exception => ex
