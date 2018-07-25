@@ -27,7 +27,7 @@ module V1
               user = ::Account::User.find_uuid params[:user_uuid] rescue nil
               category = ::Mall::ProductCategory.find_uuid params[:uuid]
               product_ids = category.product_ids_by_search
-              styles = ::Mall::Style.recommended.where(product_id: product_ids).order_by(params[:sort_rule]).page(params[:page]).per(20)
+              styles = ::Mall::Style.recommended.includes(:product).where(product_id: product_ids).order_by(params[:sort_rule]).page(params[:page]).per(20)
               ::Operate::CommuneHandler.activity_style_for_tags styles
               ::Operate::LotteryHandler.activity_style_for_tags styles
               inner_app = inner_app? request
