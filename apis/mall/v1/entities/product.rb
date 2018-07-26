@@ -84,7 +84,7 @@ module V1
         end
         expose :deductible_tips do |m, o|
           if o[:user].try(:account).present? && o[:user].account.work_score > 0
-            "可为您节约"
+            "可为您抵扣"
           else
             "此商品可抵扣"
           end  
