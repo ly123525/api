@@ -48,8 +48,9 @@ module V1
               app_error('您已经关注过了', "You are looked at it") if @session_user.followed?(activity)
               app_error('活动已经结束', "The activity has come to an end") unless lottery_template.start_at < Time.now && Time.now < lottery_template.end_at
               inner_app = inner_app? request
-              follow = activity.follows.create! user: @session_user, inner_app: inner_app
-              lottery = follow.generate_lottery! activity, @session_user, lottery_template
+              # follow = activity.follows.create! user: @session_user, inner_app: inner_app
+              # lottery = follow.generate_lottery! activity, @session_user, lottery_template
+              lottery = ::Operate::LotteryHandler.operate_result_for_follow activity, @session_user, lottery_template, inner_app
               {lottery_uuid:  lottery.uuid}
             rescue ActiveRecord::RecordNotFound
               app_uuid_error              
