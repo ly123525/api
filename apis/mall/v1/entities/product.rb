@@ -67,7 +67,7 @@ module V1
         end  
         expose :work_score_pre_tips do |m, o|
           if o[:user].try(:account).present? && o[:user].account.work_score > 0
-            "您有"
+            "现有"
           else
             "工分不足, 立刻邀请好友赚工分"
           end  
