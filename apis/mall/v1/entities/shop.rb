@@ -37,7 +37,7 @@ module V1
           "lvsent://gogo.cn/im/chats?im_user_name=#{m.im_user_name}"
         end
         expose :sales_volume do |m, o|
-          "已拼单：#{m.winning_orders.count + m.fake_sold_count}件"
+          "已拼单：#{m.sales_volume}万件"
         end
         expose :product_count do |m, o|
           "商品数量：#{m.products.count}件"
@@ -46,7 +46,7 @@ module V1
                     
       class Shop < SimpleShop
         expose :sales_volume do |m, o|
-          "已拼单：#{m.winning_orders.count + m.fake_sold_count}件"
+          "已拼单：#{m.sales_volume}万件"
         end
         expose :product_count do |m, o|
           "商品数量：#{m.products.count}件"
