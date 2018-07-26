@@ -21,7 +21,7 @@ module V1
           end 
         end
         expose :status_image do |m, o|
-          "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" if m.created? || m.applied?
+          "#{ENV['IMAGE_DOMAIN']}/app/my_tuihuanhuo_icon_white.png?x-oss-process=style/120w" unless m.closed? || m.rejected?
         end
         expose :created_at do |m, o|
           m.created_at.localtime.strftime('%y/%m/%d %H:%M:%S')
