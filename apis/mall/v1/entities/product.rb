@@ -187,7 +187,7 @@ module V1
           o[:style].uuid rescue nil
         end
         expose :image do |m, o|
-          o[:style].style_cover.image.style_url('180w') rescue m.styles.recommended.last.style_cover.image.style_url('180w')
+          o[:style].style_cover.image.style_url('180w') rescue nil
         end
         expose :max_quantity do |m, o|
           100
