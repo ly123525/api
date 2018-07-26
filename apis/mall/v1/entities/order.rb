@@ -169,7 +169,7 @@ module V1
           else
           [
             {title: "订单编号", content: m.number},
-            {title: "支付方式", content: m.try(:real_payment).try(:payment_method_name)},
+            {title: "支付方式", content: m.total_fee.zero? ? '趣币支付' : m.try(:real_payment).try(:payment_method_name)},
             {title: '下单时间', content: m.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S')}
           ]
           end
