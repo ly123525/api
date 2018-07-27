@@ -61,9 +61,9 @@ module V1
               user_and_token = ::Account::User.wx_unionid_login!(user_info.result, params[:type])
               client_info_record(request, user_and_token[1])
               inviter_user = ::Account::User.find_uuid params[:inviter_uuid] rescue nil
-              logger.info "====================inviter_user========#{inviter_user}"
-              logger.info "====================user========#{user_and_token[1]}"
-              logger.info "====================count========#{user_and_token[1].tokens.count}"
+              logger.info "====================inviter_user========#{inviter_user.present?}"
+              logger.info "====================user========#{(user_and_token[1]).id}"
+              logger.info "====================count========#{(user_and_token[1]).tokens.count}"
               ::Operate::CommuneHandler.work_score user_and_token[0], inviter_user
               present user_and_token[0], with: ::V1::Entities::User::UserForLogin, token: user_and_token[1].token
             rescue Exception => ex
