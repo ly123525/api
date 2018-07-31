@@ -251,7 +251,11 @@ module V1
           m.product.on_sale?
         end
         expose :service_note do |m,o|
-          m.product.service_note
+          [
+            {label: '平台售后', desc: '该商品由全民拼平台提供售后服务，质量问题的售后由平台承担运费，非质量问题由买家承担运费。', icon: ''},
+            {label: '满30元包邮', desc: '该商品满30元即可包邮', icon: ''},
+            {label: '48小时内发货', desc: '自拼单成功时间起，卖家承诺48小时内发货', icon: ''}
+          ]
         end
         expose :sold_count do |m, o|
           "已拼#{m.product.sold_count+m.product.fake_sold_count}件 #{m.product.mini_purchase_quantity}件起拼"
